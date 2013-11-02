@@ -1,0 +1,185 @@
+name: WaterCloset
+main: com.github.lyokofirelyte.WC.WCMain
+author: lyokofirelyte
+prefix: WCV4
+depend: [Vault, WCAPI]
+version: 4
+
+commands:
+   watercloset:
+      description: WC Root Command
+      usage: /watercloset
+   wc:
+      description: WC Root Command
+      usage: /wc
+   member:
+      description: Member Command
+      usage: /member <player>
+   o:
+      description: Staff Chat
+      usage: /o <message>
+      permission: wa.staff
+   l:
+      description: Alliance Chat
+      usage: /l <message>
+   waa:
+      description: WAA Help Menu
+      usage: /waa help
+   root:
+      description: WC Options
+      usage: /options
+   wcstats:
+      description: WC Stats (!stats)
+      usage: /wcstats
+   nick:
+      description: NICKNAMES BITCHES!
+      usage: /nick <nick>
+   getnick:
+      description: VTE Command
+      usage: You don't.
+      permission: vte.nick
+   stringbuilder:
+      description: VTE Command
+      usage: You don't.
+      permission: vte.stringbuilder
+   itemname:
+      description: VTE Command
+      usage: You don't.
+      permission: vte.itemname
+   timestamp:
+      description: VTE Command
+      usage: You don't.
+      permission: vte.timestamp
+   blame:
+      description: Blame someone!
+      usage: /blame
+   msg:
+      description: Message people all the things.
+      usage: I don't know, maybe /msg <player> <message>?
+   tell:
+      description: Message people all the things.
+      usage: I don't know, maybe /tell <player> <message>?
+   t:
+      description: Message people all the things.
+      usage: I don't know, maybe /t <player> <message>?
+   r:
+      description: Reply to someone.
+      usage: /r <message>.
+   forcefield:
+      description: It's a fucking forcefield.
+      usage: /forcefield
+      permission: ff.use
+   ff:
+      description: It's a fucking shortcut for /forcefield.
+      usage: /ff
+      permission: ff.use
+   report:
+      description: Report someone for aboose.
+      usage: /report <player> <reason>
+   mail:
+      description: Send a mail to someone.
+      usage: /mail
+   search:
+      description: Search the global database of help!
+      usage: /search <query>
+   home:
+      description: WC Home Command
+      usage: /home <name>
+   sethome:
+      description: WC Home Command
+      usage: /sethome <name>
+   delhome:
+      description: WC Home Command
+      usage: /delhome <name>
+   remhome:
+      description: WC Home Command
+      usage: /remhome <name>
+   bday:
+      description: aaa
+      usage: aaa
+      permission: wa.admin
+   warp:
+      description: WC Warp Command
+      usage: /warp <dest> or /warp <page>
+      permission: wa.mod2
+   w:
+      description: WC Warp Command
+      usage: /w <dest> or /w <page>
+      permission: wa.mod2
+   ww:
+      description: WC Image Command
+      usage: /ww <images>
+      permission: wa.mod2
+   remwarp:
+      description: WC Warp Command
+      usage: /remwarp <warp>
+      permission: wa.mod2
+   delwarp:
+      description: WC Warp Command
+      usage: /delwarp <warp>
+      permission: wa.mod2
+   setwarp:
+      description: WC Warp Command
+      usage: /setwarp <warp>
+      permission: wa.mod2
+   back:
+      description: WC Back Command
+      usage: /back or /back <1-6>
+      permission: wa.mod2
+   bk:
+      description: WC Back Command
+      usage: /back or /back <1-6>
+   rankup:
+      description: WC Rankup Command
+      usage: /rankup
+   google:
+      description: WC Google Command
+      usage: /google <query>
+   invsee:
+      description: WC Inventory Spy
+      usage: /invsee <player> or /invsee <player> f
+      permission: wa.mod
+   reboot:
+      description: WC Reboot Command
+      usage: /reboot
+      permission: wa.admin
+permissions:
+    spleef.admin:
+        description: Use admin stuff.
+        default: op
+    wa.staff:
+        description: WA Staff.
+        default: op
+    wa.mod:
+        description: WA Staff.
+        default: op
+    wa.mod2:
+        description: WA Staff.
+        default: op
+    wa.security:
+        description: WA Staff.
+        default: op
+    wa.statesman:
+        description: Double Mobs.
+        default: false
+    wa.citizen:
+        description: Chat Colors.
+        default: op
+    wa.emperor:
+        description: emperor.
+        default: op
+    wa.shirian:
+        description: shirian.
+        default: op
+    wa.serf:
+        description: serf.
+        default: op
+    wa.national:
+        description: national.
+        default: op
+    wa.admin:
+        description: Admin.
+        default: op
+    wa.enderpearl:
+        description: Use ender pearls.
+        default: op
