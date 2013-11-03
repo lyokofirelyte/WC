@@ -1,9 +1,12 @@
 package com.github.lyokofirelyte.WC;
 
+import static com.github.lyokofirelyte.WC.Util.Utils.AS;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -17,6 +20,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.kitteh.tag.TagAPI;
 
 import com.github.lyokofirelyte.WC.Commands.WCBack;
 import com.github.lyokofirelyte.WC.Commands.WCHelp;
@@ -26,6 +30,7 @@ import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WC.Commands.WCRanks;
 import com.github.lyokofirelyte.WC.Commands.WCReboot;
 import com.github.lyokofirelyte.WC.Commands.WCReport;
+import com.github.lyokofirelyte.WC.Commands.WCSell;
 import com.github.lyokofirelyte.WC.Commands.WCWarps;
 import com.github.lyokofirelyte.WC.Extras.StaticField;
 import com.github.lyokofirelyte.WC.Extras.TimeStampEX;
@@ -38,6 +43,7 @@ import com.github.lyokofirelyte.WC.Listener.WCJoin;
 import com.github.lyokofirelyte.WC.Listener.WCMiscEvents;
 import com.github.lyokofirelyte.WC.Listener.WCQuit;
 import com.github.lyokofirelyte.WC.Listener.WCTP;
+import com.github.lyokofirelyte.WC.Listener.WCTags;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.RebootManager;
@@ -67,9 +73,12 @@ public class WCMain extends JavaPlugin {
   private String password;
   private Connection conn;
   
+  public TagAPI tagapi;
   public WCAPI api;
   public WCManager wcm;
   public RebootManager rm;
+  
+  private int msg = 0;
 
   public void onEnable() {
 
@@ -89,7 +98,7 @@ public class WCMain extends JavaPlugin {
 	  pm.registerEvents(new WCMenus(this), this);
 	  pm.registerEvents(new WCMail(this),this);
 	  pm.registerEvents(new WCInvSee(this),this);
-	  pm.registerEvents(new WCMenus(this),this);
+	  pm.registerEvents(new WCTags(this),this);
 	
 	  this.vaultMgr.hookSetup();
 	    
@@ -104,7 +113,10 @@ public class WCMain extends JavaPlugin {
 	  password = config.getString("password");
 	    
 	  Plugin WCAPI = Bukkit.getServer().getPluginManager().getPlugin("WCAPI");
-	  this.api = (WCAPI) WCAPI;
+	  Plugin TagAPI = Bukkit.getServer().getPluginManager().getPlugin("TagAPI");
+	  
+	  api = (WCAPI) WCAPI;
+	  tagapi = (TagAPI) TagAPI;
 	    
 	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
@@ -118,6 +130,9 @@ public class WCMain extends JavaPlugin {
 	    
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { updateBoard();} }, 2L, 200L);
+	  
+	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+	  public void run() { sendAnnounce();} }, 2L, 12000L);
 
 	  getLogger().log(Level.INFO, "WaterCloset is ready! Hooked with API!");
     
@@ -179,6 +194,8 @@ public class WCMain extends JavaPlugin {
     getCommand("sethome").setExecutor(new WCHome(this));
     getCommand("remhome").setExecutor(new WCHome(this));
     getCommand("delhome").setExecutor(new WCHome(this));
+    
+    getCommand("sell").setExecutor(new WCSell(this));
     
     getCommand("bday").setExecutor(new TraceFW(this));
     
@@ -266,56 +283,70 @@ public class WCMain extends JavaPlugin {
   public static void s2(Player p, String s){
 	   p.sendMessage(Utils.AS(s));
   }
+  
+  public void sendAnnounce(){
+		
+	List<String> messages = config.getStringList("Announcements");
+	Bukkit.broadcastMessage(AS(messages.get(msg)));
+		
+		if (msg == messages.size() - 1){
+			msg = 0;
+		} else {
+			msg = msg + 1;
+		}
+  }
 	  
-	  public void updateBoard(){
+  public void updateBoard(){
 		  
-		  for (Player p : Bukkit.getOnlinePlayers()){
+	  for (Player p : Bukkit.getOnlinePlayers()){
 		  
-			    WCPlayer wcp = wcm.getWCPlayer(p.getName());
-			    WCAlliance wca = wcm.getWCAlliance(wcp.getAlliance());
+		 WCPlayer wcp = wcm.getWCPlayer(p.getName());
+		 WCAlliance wca = wcm.getWCAlliance(wcp.getAlliance());
 			    
-			    Objective localObjective = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
-				ScoreboardManager manager = Bukkit.getScoreboardManager();
+		 Objective localObjective = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
+		 ScoreboardManager manager = Bukkit.getScoreboardManager();
 				
-				if (localObjective != null){
+			if (localObjective != null){
 					
-					Scoreboard board = manager.getNewScoreboard();
+				Scoreboard board = manager.getNewScoreboard();	
+				Objective o1 = board.registerNewObjective("wa", "dummy");
+				o1.setDisplaySlot(DisplaySlot.SIDEBAR);
+				
+				if (p.getDisplayName().length() > 16){
+					o1.setDisplayName(p.getDisplayName().substring(0, 16));
+				} else {
+					o1.setDisplayName(p.getDisplayName());
+				}
 					
-					Objective o1 = board.registerNewObjective("wa", "dummy");
-					o1.setDisplaySlot(DisplaySlot.SIDEBAR);
-					if (p.getDisplayName().length() > 16){
-						o1.setDisplayName(p.getDisplayName().substring(0, 16));
+				Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
+				Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
+				Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
+				Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
+				Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
+				Score alliance2;
+					
+				if (!wcp.getInAlliance()){
+					Score alliance = o1.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
+					alliance.setScore(1);
+				} else {
+					String completed = (wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
+					
+					if (completed.length() >= 16){
+						alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
 					} else {
-						o1.setDisplayName(p.getDisplayName());
+						alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed));
 					}
 					
-					Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
-					Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
-					Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
-					Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
-					Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
-					Score alliance2;
+					alliance2.setScore(wca.getMemberCount());
+				}
 					
-					if (!wcp.getInAlliance()){
-						Score alliance = o1.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
-						alliance.setScore(1);
-					} else {
-						String completed = (wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
-						if (completed.length() >= 16){
-							alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
-						} else {
-							alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed));
-						}
-						alliance2.setScore(wca.getMemberCount());
-					}
-					
-					paragons.setScore(wcp.getParagonLevel());
-					balance.setScore((int) WCVault.econ.getBalance(p.getName()));
-					rank.setScore(1);
-					online.setScore(Bukkit.getOnlinePlayers().length);
-					options.setScore(0);
-					p.setScoreboard(board);
-				} 
-	  	}
-	  }	
+				paragons.setScore(wcp.getParagonLevel());
+				balance.setScore((int) WCVault.econ.getBalance(p.getName()));
+				rank.setScore(1);
+				online.setScore(Bukkit.getOnlinePlayers().length);
+				options.setScore(0);
+				p.setScoreboard(board);
+			} 
+	  }
+  }	
 }

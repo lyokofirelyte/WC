@@ -81,6 +81,13 @@
       <version>1.6.4-R0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>net.milkbowl.vault</groupId>
+      <artifactId>Vault</artifactId>
+      <version>1.2.27</version>
+      <scope>system</scope>
+      <systemPath>C:\Users\Lyoko Firelyte\workspace\WCCore\src\lib\VaultCompile.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <mainClass>com.github.lyokofirelyte.WC.WCMain</mainClass>

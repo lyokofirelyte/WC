@@ -67,11 +67,11 @@ public class WCBlockBreak implements Listener{
 		        ItemMeta paragonName = paragon.getItemMeta();
 		        lore = new ArrayList<String>();
 		        
-		        lore.add("�7�oI should return this");
-		        lore.add("�7�oto the shrine near spawn.");
+		        lore.add("§7§oI should return this");
+		        lore.add("§7§oto the shrine near spawn.");
 		        paragonName.setLore(lore);
 		        
-		        paragonName.setDisplayName("�9�lREFINED PARAGON");
+		        paragonName.setDisplayName("§9§lREFINED PARAGON");
 		        paragonName.addEnchant(Enchantment.DURABILITY, 10, true);
 		        paragon.setItemMeta(paragonName);
 		        	if (p.getInventory().firstEmpty() == -1){
@@ -109,11 +109,11 @@ public class WCBlockBreak implements Listener{
 	        ItemMeta paragonName = paragon.getItemMeta();
 	        lore = new ArrayList<String>();
 	        
-	        lore.add("�7�oI should return this");
-	        lore.add("�7�oto the shrine near spawn.");
+	        lore.add("§7§oI should return this");
+	        lore.add("§7§oto the shrine near spawn.");
 	        paragonName.setLore(lore);
 	        
-	        paragonName.setDisplayName("�a�lAQUATIC PARAGON");
+	        paragonName.setDisplayName("§a§lAQUATIC PARAGON");
 	        paragonName.addEnchant(Enchantment.DURABILITY, 10, true);
 	        paragon.setItemMeta(paragonName);
 	        	if (e.getPlayer().getInventory().firstEmpty() == -1){
@@ -129,7 +129,7 @@ public class WCBlockBreak implements Listener{
 		        fplayer.playFirework(e.getPlayer().getWorld(), e.getPlayer().getLocation(),
 	            FireworkEffect.builder().with(Type.BURST).withColor(Color.BLUE).build());
 	        }	
-	        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found an �aaquatic &dparagon from fishing!"));
+	        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found an §aaquatic &dparagon from fishing!"));
 		}
 		}
 	}
@@ -149,11 +149,11 @@ public class WCBlockBreak implements Listener{
 			        ItemMeta paragonName = paragon.getItemMeta();
 			        lore = new ArrayList<String>();
 			        
-			        lore.add("�7�oI should return this");
-			        lore.add("�7�oto the shrine near spawn.");
+			        lore.add("§7§oI should return this");
+			        lore.add("§7§oto the shrine near spawn.");
 			        paragonName.setLore(lore);
 			        
-			        paragonName.setDisplayName("�6�lINFERNO PARAGON");
+			        paragonName.setDisplayName("§6§lINFERNO PARAGON");
 			        paragonName.addEnchant(Enchantment.DURABILITY, 10, true);
 			        paragon.setItemMeta(paragonName);
 			        	if (e.getPlayer().getInventory().firstEmpty() == -1){
@@ -169,7 +169,7 @@ public class WCBlockBreak implements Listener{
 				        fplayer.playFirework(e.getPlayer().getWorld(), e.getPlayer().getLocation(),
 			            FireworkEffect.builder().with(Type.BURST).withColor(Color.ORANGE).build());
 			        }	
-			        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found an �4inferno &dparagon from setting fires."));
+			        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found an §4inferno &dparagon from setting fires."));
 				}
 			}
 		}
@@ -238,52 +238,52 @@ public class WCBlockBreak implements Listener{
 	
 		case STONE: case MOSSY_COBBLESTONE: case COBBLESTONE:
 			
-			dropParagon(e, e.getPlayer(), 9, e.getBlock().getType(), "�7�lMINERAL PARAGON", "&7mineral");
+			dropParagon(e, e.getPlayer(), 9, e.getBlock().getType(), "§7§lMINERAL PARAGON", "&7mineral");
 			break;
 			
 		case ENDER_STONE:
 			
-			dropParagon(e, e.getPlayer(), 0, Material.ENDER_STONE, "�d�lDRAGON PARAGON", "&ddragon");
+			dropParagon(e, e.getPlayer(), 0, Material.ENDER_STONE, "§d§lDRAGON PARAGON", "&ddragon");
 			break;
 			
 		case WOOD: case LOG:
 			
-			dropParagon(e, e.getPlayer(), 7, Material.WOOD, "�6�lNATURE PARAGON", "&6nature");
+			dropParagon(e, e.getPlayer(), 7, Material.WOOD, "§6§lNATURE PARAGON", "&6nature");
 			break;
 			
 		case DIAMOND_ORE: case LAPIS_ORE: case GLOWING_REDSTONE_ORE: case REDSTONE_ORE: case EMERALD_ORE: case GOLD_ORE:
 			
-			dropParagon(e, e.getPlayer(), 11, e.getBlock().getType(), "�b�lCRYSTAL PARAGON", "&bcrystal");
+			dropParagon(e, e.getPlayer(), 11, e.getBlock().getType(), "§b§lCRYSTAL PARAGON", "&bcrystal");
 			break;
 			
 		case SAND:
 			
-			dropParagon(e, e.getPlayer(), 4, Material.SAND, "�e�lSUN PARAGON", "&esun");
+			dropParagon(e, e.getPlayer(), 4, Material.SAND, "§e§lSUN PARAGON", "&esun");
 			break;
 			
 		case NETHERRACK: case GLOWSTONE: case SOUL_SAND:
 			
-			dropParagon(e, e.getPlayer(), 14, e.getBlock().getType(), "�c�lHELL PARAGON", "&chell");
+			dropParagon(e, e.getPlayer(), 14, e.getBlock().getType(), "§c§lHELL PARAGON", "&chell");
 			break;
 			
 		case GRASS: case DIRT: case GRAVEL:
 			
-			dropParagon(e, e.getPlayer(), 12, e.getBlock().getType(), "�8�lEARTH PARAGON", "&8earth");
+			dropParagon(e, e.getPlayer(), 12, e.getBlock().getType(), "§8§lEARTH PARAGON", "&8earth");
 			break;
 			
 		case COAL_ORE: case IRON_ORE:
 			
-			dropParagon(e, e.getPlayer(), 15, e.getBlock().getType(), "�1�lINDUSTRIAL PARAGON", "&1industrial");
+			dropParagon(e, e.getPlayer(), 15, e.getBlock().getType(), "§1§lINDUSTRIAL PARAGON", "&1industrial");
 			break;
 			
 		case WATER_LILY: case CACTUS: case YELLOW_FLOWER: case RED_ROSE: case PUMPKIN: case MELON_BLOCK: case SUGAR_CANE_BLOCK:
 			
-			dropParagon(e, e.getPlayer(), 1, e.getBlock().getType(), "�6�lLIFE PARAGON", "&6life");
+			dropParagon(e, e.getPlayer(), 1, e.getBlock().getType(), "§6§lLIFE PARAGON", "&6life");
 			break;
 			
 		case ICE: case SNOW_BLOCK: case SNOW: case SNOW_BALL:
 			
-			dropParagon(e, e.getPlayer(), 15, e.getBlock().getType(), "�1�lFRO�9�lST PARAGON", "&1fro&9st");
+			dropParagon(e, e.getPlayer(), 15, e.getBlock().getType(), "§1§lFRO§9§lST PARAGON", "&1fro&9st");
 			break;
 		
 		default: 
@@ -306,8 +306,8 @@ public class WCBlockBreak implements Listener{
         ItemMeta paragonName = paragon.getItemMeta();
         lore = new ArrayList<String>();
         
-        lore.add("�7�oI should return this");
-        lore.add("�7�oto the shrine near spawn.");
+        lore.add("§7§oI should return this");
+        lore.add("§7§oto the shrine near spawn.");
         paragonName.setLore(lore);
         
         paragonName.setDisplayName(disp);

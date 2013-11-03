@@ -22,6 +22,9 @@ commands:
    l:
       description: Alliance Chat
       usage: /l <message>
+   sell:
+      description: WC Sell Command
+      usage: /sell price
    waa:
       description: WAA Help Menu
       usage: /waa help

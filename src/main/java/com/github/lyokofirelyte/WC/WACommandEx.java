@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.kitteh.tag.TagAPI;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 import com.github.lyokofirelyte.WC.Util.Utils;
@@ -79,6 +80,8 @@ public class WACommandEx implements CommandExecutor {
 	                    AS("&a| &3/waa request &f// &3Request an alliance formation"), 
 	                    AS("&a| &3/waa approve <alliance> &f// &3(STAFF) Approve an alliance for tier upgrade"), 
 	                    AS("&a| &3/waa accept &f// &3Accept an alliance invite"), 
+	                    AS("&a| &3/waa doors &f// &3Toggle doors"), 
+	                    AS("&a| &3/waa mobs &f// &3Toggle mobs"), 
 	                    AS("&a| &3/waa decline &f// &3Decline an alliance invite"), 
 	                    AS("&a| &3/waa pay <alliance> &f// &3Give money to an alliance")});
 	                    break;
@@ -186,7 +189,7 @@ public class WACommandEx implements CommandExecutor {
 	    			    wcaCurrent = plugin.wcm.getWCAlliance(args[2]);
 	    			    
 	    			    if (wcaCurrent == null){
-	    			    	s(p, "That alliance does not exist! Check /waa list");
+	    			    	s(p, "That alliance does not exist!");
 	    			    	break;
 	    			    }
 	    			    
@@ -248,6 +251,11 @@ public class WACommandEx implements CommandExecutor {
 	    		 
 	    		 case "list":
 	    			 
+	    			   if (!wcp.getInChat()){
+	    				   s(p, "You're not in a chat.");
+	    				   break;
+	    			   }
+	    			   
 	    			   wcaCurrent = plugin.wcm.getWCAlliance(wcp.getCurrentChat());
 	    			   s(p, wcp.getCurrentChat() + " @ " + wcaCurrent.getChatUsers().size());
 	    			   StringBuilder sb = new StringBuilder();
@@ -256,8 +264,10 @@ public class WACommandEx implements CommandExecutor {
 	    					   sb.append(Bukkit.getPlayer(s).getDisplayName() + "&d, ");
 	    				   }
 	    			   }
+	    			  
 	    			  String msg = sb.toString().trim();
-	 			      msg = msg.substring(0, msg.length() - 5);
+	    			  int meh = msg.length() - 5;
+	 			      msg = msg.substring(0, meh);
 	 			      s(p, msg);
 	 			    
 	 			 break;
@@ -337,7 +347,7 @@ public class WACommandEx implements CommandExecutor {
 	    			    	break;
 	    			    }
 	    			    
-	    			    if (!Bukkit.getOfflinePlayer(args[4]).hasPlayedBefore()){
+	    			    if (!Bukkit.getOfflinePlayer(args[3]).hasPlayedBefore()){
 	    			    	s(p, "That player has never logged in before!");
 	    			    	break;
 	    			    }
@@ -346,14 +356,14 @@ public class WACommandEx implements CommandExecutor {
 	    			    
 	    			    	case "add":
 	    			    		
-	    			    		wca.addChatAdmin(args[4]);
+	    			    		wca.addChatAdmin(args[3]);
 	    			    		updateAlliance(wca, wcp.getAlliance());
 	    			    		s(p, "Added!");
 	    			    	    break;
 	    			        
 	    			    	case "rem":
 	    			    		
-	    			    		wca.remChatAdmin(args[4]);
+	    			    		wca.remChatAdmin(args[3]);
 	    			    		updateAlliance(wca, wcp.getAlliance());
 	    			    		s(p, "Removed!");
 	    			    		break;
@@ -425,6 +435,90 @@ public class WACommandEx implements CommandExecutor {
 	        	 
 	          break;
 	          
+	          case "doors":
+	        	  
+	        	  	if (!wcp.getAllianceRank().equals("Leader") || !p.getWorld().getName().equals("world")){
+	        	  		s(p, "Only the leader can do that! (in the survival world)");
+	        	  		break;
+	        	  	}
+	        	  	
+	        	  	if (!wcp.getInAlliance()){
+	        	  		s(p, "You must be in an alliance...");
+	        	  		break;
+	        	  	}
+	        	  	
+	        	  	if (wca.getTier() < 2){
+	        	  		s(p, "You must be tier 2 or higher to use this!");
+	        	  		break;
+	        	  	}
+	        	  		  	
+	        	  	if (!p.isOp()){
+	        	  		wcp.setWCOP(true);
+	        	  		p.setOp(true);
+	        	  	}
+	        	  	
+	        	  	if (wca.getDoorLocks()){
+	        	  		
+		        	  	wca.setDoorLocks(true);
+		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " use allow");
+		        	  	s(p, "You've turned your door locks on!");
+		        	  	
+	        	  	} else {
+	        	  		
+	        	  		wca.setDoorLocks(false);
+		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " use deny");
+		        	  	s(p, "You've turned your door locks off!");
+	        	  	}
+	        	  	
+	        	  	if (p.isOp()){
+	        	  		wcp.setWCOP(false);
+	        	  		p.setOp(false);
+	        	  	}
+
+	          break;
+	          
+	          case "mobs":
+	        	  
+	        	  	if (!wcp.getAllianceRank().equals("Leader") || !p.getWorld().getName().equals("world")){
+	        	  		s(p, "Only the leader can do that! (in the survival world)");
+	        	  		break;
+	        	  	}
+	        	  	
+	        	  	if (!wcp.getInAlliance()){
+	        	  		s(p, "You must be in an alliance...");
+	        	  		break;
+	        	  	}
+	        	  	
+	        	  	if (wca.getTier() < 3){
+	        	  		s(p, "You must be tier 3 or higher to use this!");
+	        	  		break;
+	        	  	}
+	        	  		  	
+	        	  	if (!p.isOp()){
+	        	  		wcp.setWCOP(true);
+	        	  		p.setOp(true);
+	        	  	}
+	        	  	
+	        	  	if (wca.getMobSpawn()){
+	        	  		
+		        	  	wca.setMobSpawn(true);
+		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " mob-spawning allow");
+		        	  	s(p, "You've mob-spawning on!");
+		        	  	
+	        	  	} else {
+	        	  		
+	        	  		wca.setMobSpawn(false);
+		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " mob-spawning  deny");
+		        	  	s(p, "You've mob-spawning off!");
+	        	  	}
+	        	  	
+	        	  	if (p.isOp()){
+	        	  		wcp.setWCOP(false);
+	        	  		p.setOp(false);
+	        	  	}
+
+	          break;
+	          
 	          case "create":
 	        	  
 	        	     if (!p.hasPermission("wa.staff")){
@@ -473,6 +567,7 @@ public class WACommandEx implements CommandExecutor {
 	        	     String newNick = plugin.wcm.getCompleted(wcpCurrent.getNick(), args[3], args[4]);
 	        	     
 	        	     Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + args[2] + " " + newNick);
+	        	     TagAPI.refreshPlayer(Bukkit.getPlayer(args[2]));
 	        	     
 	        	     WCAlliance wcaCurrent = new WCAlliance(args[1]);
 	        	     wcaCurrent.setTier(0);
@@ -547,6 +642,7 @@ public class WACommandEx implements CommandExecutor {
 	        	  			WCPlayer btemp = plugin.wcm.getWCPlayer(b.getName());
 	        	  				if (btemp.getAlliance().equals(wcp.getAlliance())){
 	        	  					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + b.getName() + " " + plugin.wcm.getCompleted(btemp.getNick(), args[1], args[2]));
+	        	  					TagAPI.refreshPlayer(b);
 	        	  				}
 	        	  		}
 	        	  		
@@ -608,6 +704,8 @@ public class WACommandEx implements CommandExecutor {
 	        	    updateAlliance(wcaCurrent, wcp.getAlliance());
 	        	    alliance = plugin.wcm.getCompleted(wcp.getInvite(), wcaCurrent.getColor1(), wcaCurrent.getColor2());
 	        	    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + p.getName() + " " + plugin.wcm.getCompleted(wcp.getNick(), wcaCurrent.getColor1(), wcaCurrent.getColor2()));
+        	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + Bukkit.getPlayer(args[1]).getName() + " group add " + wcp.getInvite());
+	        	    TagAPI.refreshPlayer(p);
 	        	    Utils.bc(p.getDisplayName() + " has joined " + alliance + "&d!");
 	        	    p.performCommand("wc sidebar");
 	        	    p.performCommand("wc sidebar");
@@ -661,6 +759,11 @@ public class WACommandEx implements CommandExecutor {
 	        	    
 	        	    if (wca.getTier() >= 8){
 	        	    	s(p, "Your alliance is already at max!");
+	        	    	break;
+	        	    }
+	        	    
+	        	    if (!wca.getApproved()){
+	        	    	s(p, "Your alliance needs to be approved by staff first!");
 	        	    	break;
 	        	    }
 	        	    
@@ -734,11 +837,12 @@ public class WACommandEx implements CommandExecutor {
 	        	    			wcpCurrent.setInChat(false);
 	        	    			String completed = plugin.wcm.getCompleted(wcpCurrent.getNick(), "7", "8");
 	        	    			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + a.getName() + " " + completed);
+	        	    			TagAPI.refreshPlayer(a);
 	        	    			updatePlayer(wcpCurrent, a.getName());
 	        	    		}
 	        	    }
 	        	    
-
+        	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex group " + wcpp + " delete");
 	        	  	Utils.bc(AS(p.getDisplayName() + " &dhas disbanded their alliance! D:"));
 	        	    p.performCommand("wc sidebar");
 	        	    p.performCommand("wc sidebar");
@@ -782,6 +886,8 @@ public class WACommandEx implements CommandExecutor {
 	        	    updateAll(wcaCurrent, wcpCurrent, rawr, Bukkit.getPlayer(args[1]).getName());
 	        	    Utils.bc(Bukkit.getPlayer(args[1]).getDisplayName() + " &dwas kicked from their alliance by " + p.getName() + "&d!");
         	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + Bukkit.getPlayer(args[1]).getName() + " " + plugin.wcm.getCompleted(wcpCurrent.getNick(), "7","8"));
+        	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + Bukkit.getPlayer(args[1]).getName() + " group remove " + rawr);
+        	    	TagAPI.refreshPlayer(Bukkit.getPlayer(args[1]));
         	    	Bukkit.getPlayer(args[1]).performCommand("wc sidebar");
         	    	Bukkit.getPlayer(args[1]).performCommand("wc sidebar");
         	    	

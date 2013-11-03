@@ -12,11 +12,10 @@ import com.github.lyokofirelyte.WC.WCMain;
 
 	public class WCReport implements CommandExecutor {
 		
-		  WCMain plugin;
-		  public WCReport(WCMain instance)
-		  {
-		    this.plugin = instance;
-		  }
+	 WCMain plugin;
+	 public WCReport(WCMain instance){
+	 this.plugin = instance;
+	 }
 
 	  
 	  private Connection conn;

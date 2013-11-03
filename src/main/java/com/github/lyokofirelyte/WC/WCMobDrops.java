@@ -14,9 +14,11 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -45,14 +47,18 @@ public class WCMobDrops implements Listener {
 	
 	List <Integer> laserFwTasks = new ArrayList<Integer>();
 	
-	
-	 @SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.NORMAL)
+	 
+	  @SuppressWarnings("deprecation")
+	  @EventHandler(priority = EventPriority.NORMAL)
 	  public void onPlayerBadTouch(PlayerInteractEvent event){
-		 
+
 
 		 	  	if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
+		 	  		if (event.getPlayer().getItemInHand().getType().equals(Material.GOLDEN_CARROT) && event.getPlayer().hasPermission("wa.staff")){
+		 	  			staffTool(event.getPlayer());
+		 	  		} else {
 		 	  		cookie(event, event.getPlayer());
+		 	  		}
 		 	  	} 
 		 		 
 	    	  	if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -106,6 +112,58 @@ public class WCMobDrops implements Listener {
 		        }
 	    	}
 	    }
+
+	private void staffTool(Player p) {
+
+  	  final Entity proj1 = (Snowball) p.launchProjectile(Snowball.class);
+	  Vector vec = p.getEyeLocation().getDirection();
+	  proj1.setVelocity(vec.multiply(2));
+	  p.getWorld().playSound(p.getLocation(), Sound.GHAST_FIREBALL, 3.0F, 0.5F);
+	      
+			final List<Color> colors = new ArrayList<Color>();
+			colors.add(Color.RED);
+			colors.add(Color.WHITE);
+			colors.add(Color.BLUE);
+			colors.add(Color.ORANGE);
+			colors.add(Color.FUCHSIA);
+			colors.add(Color.AQUA);
+			colors.add(Color.PURPLE);
+			colors.add(Color.GREEN);
+			colors.add(Color.TEAL);
+			colors.add(Color.YELLOW);
+
+	      
+	      int laserTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+				
+				public void run(){
+					
+					Random rand = new Random();
+					int nextInt = rand.nextInt(10);
+				
+					
+					FireworkShenans fplayer = new FireworkShenans();
+					try {
+						   fplayer.playFirework(proj1.getWorld(), proj1.getLocation(),
+								   FireworkEffect.builder().with(Type.BURST).withColor(colors.get(nextInt)).build());
+					   } catch (IllegalArgumentException e2) {
+					   } catch (Exception e2) {
+			    	 } 
+				}
+			}, 2L, 0L);
+ 
+	      laserFwTasks.add(laserTask);
+	      
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				 
+		  		   public void run() 
+		  		   {
+		  			Bukkit.getServer().getScheduler().cancelTask(laserFwTasks.get(laserFwTasks.size()-1));
+		  			laserFwTasks.remove(laserFwTasks.get(laserFwTasks.size()-1));
+		  		   }
+			 }
+		     , 20L);
+		
+	}
 
 	private void cookie(PlayerInteractEvent e, Player p) {
 		

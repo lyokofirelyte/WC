@@ -44,9 +44,9 @@ import static com.github.lyokofirelyte.WC.WCMain.s;
 
 public class WCCommands implements CommandExecutor {
 	
-	private int groove;
-	private HashMap<String, Long> rainoffCooldown = new HashMap<String, Long>();
-	private HashMap<String, Long> dragonCooldown = new HashMap<String, Long>();
+  private int groove;
+  private HashMap<String, Long> rainoffCooldown = new HashMap<String, Long>();
+  private HashMap<String, Long> dragonCooldown = new HashMap<String, Long>();
 	
   WCMain plugin;
   WCPlayer wcp;
@@ -254,6 +254,18 @@ public class WCCommands implements CommandExecutor {
     	  sender.sendMessage(AS(WC + "You've changed your color to &" + args[1] + "this."));
     	  wcp.setGlobalColor(args[1]);
     	  updatePlayer(wcp, p.getName());
+    	  
+      break;
+      
+      case "poke":
+    	  
+    	  if (wcp.getAllowPokes()){
+    		  wcp.setAllowPokes(false);
+    		  s(p, "Pokes off.");
+    	  } else {
+    		  wcp.setAllowPokes(true);
+    		  s(p, "Pokes on.");
+    	  }
     	  
       break;
  	      	  

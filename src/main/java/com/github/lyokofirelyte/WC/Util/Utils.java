@@ -24,7 +24,7 @@ public class Utils {
 	public static String WC = "§dWC §5// §d";
 	
 	public static void bc(String s){
-		Bukkit.broadcastMessage(Utils.AS(s));
+		Bukkit.broadcastMessage(WC + Utils.AS(s));
 	}
 	
     public static List<Location> circle (Player player, Location loc, Integer r, Integer h, Boolean hollow, Boolean sphere, int plus_y) {

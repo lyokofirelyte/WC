@@ -88,7 +88,7 @@ public class WCChannels implements CommandExecutor, Listener {
 		
 	}
   
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.LOW)
   public void onPlayerChat(AsyncPlayerChatEvent e){
 	  
 	  p = e.getPlayer();

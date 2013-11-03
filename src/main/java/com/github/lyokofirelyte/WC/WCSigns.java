@@ -42,10 +42,10 @@ public class WCSigns implements Listener {
 			File warpFile = new File(plugin.getDataFolder() + File.separator + "Warps", signLine2.toLowerCase() + ".yml");
 			
 			if (!warpFile.exists()) {
-				e.setLine(0, Utils.AS("&f//&4Warp&f//"));
-				e.setLine(1, Utils.AS("&cINVALID"));
-				e.setLine(2, Utils.AS("&cWARP!"));
-				e.setLine(3, Utils.AS("&7&oSee /warp"));
+				e.setLine(0, ("§f//§4Warp§f//"));
+				e.setLine(1, ("§cINVALID"));
+				e.setLine(2, ("§cWARP!"));
+				e.setLine(3, ("§7§oSee /warp"));
 				return;
 			}
 			
@@ -85,11 +85,11 @@ public class WCSigns implements Listener {
 				a.printStackTrace();
 			}
 			
-			e.setLine(0, Utils.AS("&f//&1Warp&f//"));
+			e.setLine(0, ("§f//§1Warp§f//"));
 			if (e.getLine(2) != null && e.getLine(2).contains(".")){
-				e.setLine(1, "&e" + e.getLine(1));
+				e.setLine(1, "§e" + e.getLine(1));
 			} else {
-				e.setLine(1, "&b" + e.getLine(1));
+				e.setLine(1, "§b" + e.getLine(1));
 			}
 			e.setLine(2, "");
 			e.setLine(3, "");
@@ -97,9 +97,9 @@ public class WCSigns implements Listener {
 		
 		if (signLine1.equalsIgnoreCase("enderdragon")){
 			
-			e.setLine(0, Utils.AS("&5// WC //"));
-			e.setLine(1, Utils.AS("&aSPAWN DRAGON"));
-			e.setLine(2, Utils.AS("&5[ press ]"));
+			e.setLine(0, ("§5// WC //"));
+			e.setLine(1, ("§aSPAWN DRAGON"));
+			e.setLine(2, ("§5[ press ]"));
 			
 			String world = e.getBlock().getLocation().getWorld().getName();
 			double x = e.getBlock().getLocation().getX();
@@ -130,15 +130,15 @@ public class WCSigns implements Listener {
 				String signLine1 = sign.getLine(0);
 				String signLine2 = sign.getLine(1);
 				
-				if (signLine1.equals(Utils.AS("&f//&1Warp&f//"))){
+				if (signLine1.equals("§f//§1Warp§f//")){
 					
 					YamlConfiguration warpLoad = new YamlConfiguration();
-					File warpFile = new File(plugin.getDataFolder() + File.separator + "Warps", signLine2.replace("&b", "").replace("&e", "").toLowerCase() + ".yml");
+					File warpFile = new File(plugin.getDataFolder() + File.separator + "Warps", signLine2.replace("§b", "").replace("§e", "").toLowerCase() + ".yml");
 					if (!warpFile.exists()) {
-						sign.setLine(0, Utils.AS("&f//&4Warp&f//"));
-						sign.setLine(1, Utils.AS("&cINVALID"));
-						sign.setLine(2, Utils.AS("&cWARP!"));
-						sign.setLine(3, Utils.AS("&7&oSee /warp"));
+						sign.setLine(0, ("§f//§4Warp§f//"));
+						sign.setLine(1, ("§cINVALID"));
+						sign.setLine(2, ("§cWARP!"));
+						sign.setLine(3, ("§7§oSee /warp"));
 						sign.update(true);
 						return;
 					}
@@ -184,15 +184,10 @@ public class WCSigns implements Listener {
 				List<String> list = plugin.datacore.getStringList("EnderDragonSigns." + w);
 				
 				if (list.contains(loc)){
-					
 					p.performCommand("wc dragonspawn");
-					
 				}
-				
 			}
-			
 		}
-		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)

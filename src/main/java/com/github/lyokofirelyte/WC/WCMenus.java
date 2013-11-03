@@ -1,5 +1,9 @@
 package com.github.lyokofirelyte.WC;
 
+import static com.github.lyokofirelyte.WC.WCMain.s;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,19 +11,31 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WC.Util.WCVault;
+import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 public class WCMenus implements Listener, CommandExecutor {
 	
@@ -29,11 +45,13 @@ public class WCMenus implements Listener, CommandExecutor {
 	}
 	
 	public List <Material> mats = new ArrayList<Material>();
+	public static List <String> allianceMenu = new ArrayList<String>();
 	public static List <String> menu = new ArrayList<String>();
 	public static Map <String, String> staffTools = new HashMap<>();
 	public static List <String> lores = new ArrayList<String>();
 	public static Map <String, Inventory> invs = new HashMap<String, Inventory>();
 	public static Map <String, String> playerSelection = new HashMap<>();
+	public static Map <String, String> playerTemp = new HashMap<>();
 	public static Map <String, String> colorSelection = new HashMap<>();
 	public static Map <String, String> openInvs = new HashMap<>();
 	public static Map <String, String> actions = new HashMap<>();
@@ -43,6 +61,7 @@ public class WCMenus implements Listener, CommandExecutor {
 	Boolean poke = true;
 	Boolean setup = false;
 	String sel;
+	Chest chest;
 	public String colorType;
 	Player p;
 	
@@ -53,6 +72,9 @@ public class WCMenus implements Listener, CommandExecutor {
 			colorSelection.put(((Player)sender).getName(), "red");
 			
 			if (setup == false){
+				p = ((Player)sender);
+				playerSelection.put(p.getName(), "NO"); // We don't want a null pointer here. :D
+				playerTemp.put(p.getName(), "NO");
 				setup = true;
 				setUp();
 			
@@ -85,7 +107,29 @@ public class WCMenus implements Listener, CommandExecutor {
 		menu.add("*CHOOSE REASON");
 		menu.add("*SELECT PROOF");
 		menu.add("*CONFIRM THIS BAN?");
-
+		menu.add("THE CLOSET - TRADE CENTRE");
+		menu.add("ALLIANCE FRONT DESK");
+		menu.add("INVITE TO ALLIANCE");
+		menu.add("KICK FROM CHAT");
+		menu.add("BAN FROM CHAT");
+		menu.add("UNBAN FROM CHAT");
+		menu.add("ADD ADMIN");
+		menu.add("REMOVE ADMIN");
+		menu.add("VISIT ALLIANCE");
+		menu.add("SELECT LEADER");
+		menu.add("REQUEST TO JOIN AN ALLIANCE");
+		
+		allianceMenu.add("ALLIANCES");
+		allianceMenu.add("INVITE");
+		allianceMenu.add("LEADER");
+		allianceMenu.add("VISIT");
+		allianceMenu.add("CHAT -> BAN");
+		allianceMenu.add("CHAT -> UNBAN");
+		allianceMenu.add("CHAT -> ADMIN+");
+		allianceMenu.add("CHAT -> ADMIN-");
+		allianceMenu.add("CHAT -> KICK");
+		allianceMenu.add("CHAT -> VISIT");
+		
 		// Inventory references, on hover name -> inv
 		openInvs.put("STAFF SECTION", "staffMenu");
 		openInvs.put("CHAT", "chatMenu");
@@ -98,6 +142,17 @@ public class WCMenus implements Listener, CommandExecutor {
 		openInvs.put("WATERCLOSET CORE v4", "mainMenu");
 		openInvs.put("OTHERS", "statViewMenu");
 		openInvs.put("NO!", "mainMenu");
+		openInvs.put("THE CLOSET", "closet");
+		openInvs.put("ALLIANCES", "allianceHomeMenu");
+		openInvs.put("INVITE", "allianceInviteMenu");
+		openInvs.put("LEADER", "allianceLeaderMenu");
+		openInvs.put("CHAT -> VISIT", "allianceVisitMenu");
+		openInvs.put("CHAT -> BAN", "allianceBanMenu");
+		openInvs.put("CHAT -> UNBAN", "allianceUnbanMenu");
+		openInvs.put("CHAT -> ADMIN+", "allianceAdminMenu");
+		openInvs.put("CHAT -> ADMIN-", "allianceAdmin-Menu");
+		openInvs.put("CHAT -> KICK", "allianceKickMenu");
+		openInvs.put("ALLIANCE FRONT DESK", "allianceHomeMenu");
 		
 		// on hover ban -> inv open
 		openInvs.put("BANNING", "banTypeMenu");
@@ -130,7 +185,81 @@ public class WCMenus implements Listener, CommandExecutor {
 		actions.put("FIREWORKS", "wc fwtoggle");
 		actions.put("ME", "wcstats");
 		
-		// store invs in hashmap
+		// on hover -> alliance action
+		actions.put("UPGRADE", "waa upgrade");
+		actions.put("INFO", "waa info");
+		actions.put("DISBAND", "waa disband");
+		actions.put("CHAT -> LEAVE", "waa chat leave");
+		actions.put("CHAT -> JOIN", "waa chat join");
+		actions.put("CHAT -> LIST", "waa chat list");
+		actions.put("COLORS", "waa colors");
+		actions.put("DOORS", "waa doors");
+		actions.put("MOBS", "waa mobs");
+		actions.put("DONATE", "waa pay");
+		
+		// store invs in hashmap		
+		inv = Bukkit.createInventory(null, 54, "§3THE CLOSET - TRADE CENTRE");
+		invs.put("closetStore", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§aREQUEST TO JOIN AN ALLIANCE");
+		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v4", 53, "§b<<---<", 1, inv);
+		invs.put("allianceRequestMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3SELECT LEADER");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceLeaderMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3KICK FROM CHAT");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceKickMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3BAN FROM CHAT");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		
+		invs.put("allianceBanMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3UNBAN FROM CHAT");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceUnbanMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3INVITE TO ALLIANCE");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceInviteMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3VISIT ALLIANCE");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceVisitMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3REMOVE ADMIN");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceAdmin-Menu", inv);
+		
+		inv = Bukkit.createInventory(null, 54, "§3ADD ADMIN");
+		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b<<---<", 1, inv);
+		invs.put("allianceAdminMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 27, "§3ALLIANCE FRONT DESK");
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bLEADER", 0, "§9Change leaders", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bCOLORS", 1, "§9/waa colors", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bINVITE", 2, "§9Invite someone!", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bDOORS", 3, "§9Toggle Doors", 1, inv);
+		inv = addToInv(Material.TNT, "§cDISBAND", 4, "§cDisband your alliance - THERE IS NO CONFIRMATION", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bMOBS", 5, "§9Toggle Mobs", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bUPGRADE", 6, "§9Increase your tier", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bDONATE", 7, "§9/waa pay <alliance> <amount>", 1, inv);
+		inv = addToInv(Material.GLOWSTONE_DUST, "§bINFO", 8, "§9General alliance info", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> JOIN", 9, "§2Join your alliance chat", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> VISIT", 10, "§2Visit a different alliance chat", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> LEAVE", 11, "§2Leave your alliance chat", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> KICK", 12, "§2Remove someome from your chat", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> BAN", 13, "§2Ban someone from your chat", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> UNBAN", 14, "§2Unban someone from your chat", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> LIST", 15, "§2Who is in your chat?", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> ADMIN+", 16, "§2Add a chat admin", 1, inv);
+		inv = addToInv(Material.REDSTONE, "§aCHAT -> ADMIN-", 17, "§2Remove a chat admin", 1, inv);
+		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v4", 22, "§b<<---<", 1, inv);
+		invs.put("allianceHomeMenu", inv);
+		
 		inv = Bukkit.createInventory(null, 9, "§c*CONFIRM THIS BAN?");
 		inv = addToInv(Material.INK_SACK, "§aYES!", 3, "§2Fire teh lazorz!", 2, inv);
 		inv = addToInv(Material.INK_SACK, "§aNO!", 5, "§2Meh.", 3, inv);
@@ -189,7 +318,10 @@ public class WCMenus implements Listener, CommandExecutor {
 		inv = addToInv(Material.INK_SACK, "§aCHAT", 0, "§3Chat Options", 9, inv);
 		inv = addToInv(Material.INK_SACK, "§4TOGGLES", 1, "§cToggle Options", 1, inv);
 		inv = addToInv(Material.INK_SACK, "§6STATS", 2, "§eStat Viewer", 5, inv);
-		inv = addToInv(Material.INK_SACK, "§5STAFF SECTION", 3, "§dStaff only", 8, inv);
+		inv = addToInv(Material.INK_SACK, "§aTHE CLOSET", 3, "§3General Store Trading", 12, inv);
+		inv = addToInv(Material.INK_SACK, "§3ALLIANCES", 4, "§aAlliance controls", 2, inv);
+		inv = addToInv(Material.INK_SACK, "§5STAFF SECTION", 5, "§dStaff only", 8, inv);
+		inv = addToInv(Material.INK_SACK, "§d?!?!?!?!", 6, "§5!?!?!!???!!?!?!", 12, inv);
 		inv = addToInv(Material.FLINT, "§bCLOSE", 8, "§b<<---<", 1, inv);
 		invs.put("mainMenu", inv);
 		
@@ -234,6 +366,22 @@ public class WCMenus implements Listener, CommandExecutor {
 		plugin.getLogger().log(Level.INFO, "/options menu has been set up.");
 	}
 	
+	public void openCloset(Player p){
+
+		inv = invs.get("closetStore");
+		Location chestLoc = new Location(Bukkit.getWorld("hbd"), 41.0, 75.0, -520.0);
+		Block block = chestLoc.getBlock();
+		BlockState bs = block.getState();
+		
+		if(bs instanceof Chest) {
+		  chest = (Chest)bs;
+		  Inventory inv2 = chest.getInventory();
+		  inv.setContents(inv2.getContents());
+		  p.openInventory(inv);
+		  invs.put("closetStore", inv);
+		}
+	}
+	
 	public void updateMonitorInventory(String menu){
 		int x = 0;
 		inv = invs.get(menu);
@@ -257,6 +405,20 @@ public class WCMenus implements Listener, CommandExecutor {
 		
 	    String n = e.getInventory().getTitle().substring(2);
 	    
+		if (n.contains("TRADE")){
+
+			p = ((Player)e.getWhoClicked());
+			e.setCancelled(true);
+			
+			if (e.getClick() == ClickType.RIGHT && p.hasPermission("wa.mod") && e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR)){
+				tryItemRemove(p, e.getCurrentItem(), e.getCurrentItem().getItemMeta().getLore());
+			} else if (e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR)){
+				closetClick(p, e.getCurrentItem(), e.getCurrentItem().getItemMeta().getLore());
+			}
+		
+			return;
+		}
+	    
 			if (menu.contains(n) && e.getWhoClicked() instanceof Player && e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()){
 				
 				p = ((Player)e.getWhoClicked());		
@@ -267,15 +429,53 @@ public class WCMenus implements Listener, CommandExecutor {
 						return;
 					}
 					
+					if (d.equals("?!?!?!?!")){
+						e.setCancelled(true);
+						p.performCommand("wc fork");
+						return;
+					}
+					
 					if (d.contains("COLOR")){
 						colorSelection.put(p.getName(), d);
 					}
 					
-					if (d.contains("STAFF") || d.contains("OTHER")){
+					if (d.contains("THE CLOSET")){
+						e.setCancelled(true);
+						openCloset(p);
+						return;
+					}
+					
+					if (n.equals("REQUEST TO JOIN AN ALLIANCE") && !d.equals("WATERCLOSET CORE v4")){
+						e.setCancelled(true);
+						allianceReq(p, d);
+						return;
+					}
+					
+					if (d.equals("ALLIANCES")){
+						WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
+							if (!wcp.getInAlliance()){
+								e.setCancelled(true);
+								updateVisitInventory();
+								open(p, "allianceRequestMenu");
+								return;
+							}
+					}
+					
+					if (d.contains("STAFF") || d.contains("OTHER") || allianceMenu.contains(d)){
 						updateTools(p);
 						playerSelection.put(p.getName(), d);
+							if (d.contains("VISIT")){
+								updateVisitInventory();
+							}
 						updateMonitorInventory("staffMenu");
 						updateMonitorInventory("statViewMenu");
+						updateMonitorInventory("allianceInviteMenu");
+						updateMonitorInventory("allianceKickMenu");
+						updateMonitorInventory("allianceBanMenu");
+						updateMonitorInventory("allianceUnbanMenu");
+						updateMonitorInventory("allianceAdminMenu");
+						updateMonitorInventory("allianceAdmin-Menu");
+						updateMonitorInventory("allianceLeaderMenu");
 					}
 					
 					if (openInvs.containsKey(d)) {
@@ -283,7 +483,7 @@ public class WCMenus implements Listener, CommandExecutor {
 						if (n.contains("*")){
 							setBanOption(p.getName(), d);
 						}
-
+						
 						open(p, openInvs.get(d));
 						
 					} else if (actions.containsKey(d)){
@@ -333,6 +533,13 @@ public class WCMenus implements Listener, CommandExecutor {
 								WCMain.s(p, "Selected " + Bukkit.getPlayer(d).getDisplayName() + "&d. Choose an action from the utility bar!");
 							}
 							
+							if (allianceMenu.contains(playerSelection.get(p.getName()))){
+								e.setCancelled(true);
+								playerTemp.put(p.getName(), d);
+								updateActions(p);
+								p.performCommand(actions.get(playerSelection.get(p.getName())));
+							}
+							
 					} else if (staffTools.containsKey(e.getCurrentItem().getType().toString()) && n.equals("STAFF OPTIONS")){
 							
 							if (playerSelection.get(p.getName()) == null){
@@ -347,6 +554,136 @@ public class WCMenus implements Listener, CommandExecutor {
 			}	
 	}
 	
+	private void allianceReq(Player p, String n) {
+		
+		WCAlliance wca = plugin.wcm.getWCAlliance(n);
+		
+		if (!Bukkit.getOfflinePlayer(wca.getLeader()).isOnline()){
+			plugin.wcm.setupPlayer(wca.getLeader());
+		}
+		
+		WCPlayer wcpCurrent = plugin.wcm.getWCPlayer(wca.getLeader());
+	  	List<String> mail = wcpCurrent.getMail();
+	  	mail.add("&6system &4// &6" + p.getDisplayName() + " &6is interested in joining your alliance!.");
+	  	wcpCurrent.setMail(mail);
+	  	plugin.wcm.updatePlayerMap(wca.getLeader(), wcpCurrent); 
+	  	WCMain.s(p, "Request sent.");
+	  	if (Bukkit.getPlayer(wca.getLeader()).isOnline()){
+	  		Bukkit.getPlayer(wca.getLeader()).sendMessage(Utils.WC + "You've recieved a new mail! Check it with /mail read.");
+	  	} else {
+	  		try {
+				plugin.wcm.savePlayer(wca.getLeader());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	  	}
+	}
+
+	private void updateVisitInventory() {
+		
+		File file = new File("./plugins/WaterCloset/Alliances/list.yml");
+		YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+		List<String> alliances = yaml.getStringList("Alliances");
+		inv = invs.get("allianceVisitMenu");
+		Inventory inv2 = invs.get("allianceRequestMenu");
+		int x = 0;
+			for (String a : alliances){
+				WCAlliance wca = plugin.wcm.getWCAlliance(a);
+				inv = addToInv(Material.SKULL_ITEM, "§7" + a, x, plugin.wcm.getCompleted2(a, wca.getColor1(), wca.getColor2()) + " §7// " + wca.getChatUserCount() + " §7in chat", 3, inv);
+				inv2 = addToInv(Material.SKULL_ITEM, "§7" + a, x, plugin.wcm.getCompleted2(a, wca.getColor1(), wca.getColor2()) + " §7// " + wca.getChatUserCount() + " §7in chat", 3, inv2);
+				x++;
+				invs.put("allianceVisitMenu", inv);
+				invs.put("allianceRequestMenu", inv2);
+			}
+	}
+
+	private void tryItemRemove(Player p, ItemStack currentItem, List<String> lore) {
+		
+		String seller = lore.get(1);
+		int x = 0;
+		
+		if (Bukkit.getPlayer(seller) == null){
+			WCMain.s(p, "That player is not online to return the item to.");
+			return;
+		}
+		
+		Player sellerPlayer = Bukkit.getPlayer(seller);
+		
+		for (ItemStack item : sellerPlayer.getInventory().getContents()) {
+			   if (item != null) {
+				   x++;
+			   }
+		 }
+		  
+		 if (x >= 27){
+			 s(p, "They have no room in their inventory.");
+			 return;
+		 }
+		 
+		 currentItem.getItemMeta().setLore(null);
+		 sellerPlayer.getInventory().addItem(currentItem);
+		 chest.getInventory().remove(currentItem);
+		 s(sellerPlayer, "Your item was returned to you from The Closet by " + p.getDisplayName() + "&d.");
+		 s(p, "Returned the item to seller!");
+		 
+		 for (HumanEntity a : invs.get("closetStore").getViewers()){
+			 openCloset((Player)a);
+			 WCMain.s((Player)a, "Store refreshed because of purchase.");
+		 }	
+	}
+
+	private void closetClick(Player p, ItemStack i, List<String> lore) {
+		
+		if (lore == null || lore.size() == 0){
+			return;
+		}
+		
+		int price = Integer.parseInt(lore.get(0));
+		String seller = lore.get(1);
+		String buyer = p.getName();
+		
+		if (!WCVault.econ.has(p.getName(), price)){
+			WCMain.s(p, "You don't have enough money! D:");
+			return;
+		}
+		
+		WCMain.s(p, "Purchased for " + price + "&d!");
+		
+		WCVault.econ.depositPlayer(seller, price);
+		WCVault.econ.withdrawPlayer(buyer, price);
+		chest.getInventory().remove(i);
+		
+		for (HumanEntity a : invs.get("closetStore").getViewers()){
+			openCloset((Player)a);
+			WCMain.s((Player)a, "Store refreshed because of purchase.");
+		}
+			
+		ItemMeta im = i.getItemMeta();
+		im.setLore(null);
+		i.setItemMeta(im);
+		
+		p.getInventory().addItem(i);
+		
+		if (!Bukkit.getOfflinePlayer(seller).isOnline()){
+			plugin.wcm.setupPlayer(seller);
+		}
+		
+		WCPlayer wcpCurrent = plugin.wcm.getWCPlayer(seller);
+	  	List<String> mail = wcpCurrent.getMail();
+	  	mail.add("&6system &4// &6" + p.getDisplayName() + " &6has purchased your " + i.getType().toString().toLowerCase() + "&6.");
+	  	wcpCurrent.setMail(mail);
+	  	plugin.wcm.updatePlayerMap(seller, wcpCurrent); 
+	  	
+	  	if (Bukkit.getPlayer(seller).isOnline()){
+	  		Bukkit.getPlayer(seller).sendMessage(Utils.WC + "You've recieved a new mail! Check it with /mail read.");
+	  	} else {
+	  		try {
+				plugin.wcm.savePlayer(seller);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	  	}
+	}
 
 	public void normalCommand(Player p, String d, String colorType){
 		switch (d){
@@ -453,6 +790,18 @@ public class WCMenus implements Listener, CommandExecutor {
 				break;
 	}
 		
+	}
+	
+	public void updateActions(Player p){
+		actions.put("ALLIANCE", "waa chat visit " + playerTemp.get(p.getName()));
+		actions.put("INVITE", "waa invite " + playerTemp.get(p.getName()));
+		actions.put("LEADER", "waa leader " + playerTemp.get(p.getName()));
+		actions.put("CHAT -> VISIT", "waa chat visit " + playerTemp.get(p.getName()));
+		actions.put("CHAT -> BAN", "waa chat ban " + playerTemp.get(p.getName()));
+		actions.put("CHAT -> UNBAN", "waa chat unban " + playerTemp.get(p.getName()));
+		actions.put("CHAT -> ADMIN+", "waa chat admin add " + playerTemp.get(p.getName()));
+		actions.put("CHAT -> ADMIN-", "waa chat admin rem " + playerTemp.get(p.getName()));
+		actions.put("CHAT -> KICK", "waa chat kick " + playerTemp.get(p.getName()));
 	}
 	
 	public static Inventory addToInv(Material mat, String displayName, int slot, String lore, int id, Inventory inv) {
