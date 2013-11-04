@@ -2,6 +2,7 @@ package com.github.lyokofirelyte.WC.Listener;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -13,17 +14,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.kitteh.tag.TagAPI;
 
-import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCJoin implements Listener {
@@ -40,15 +35,15 @@ plugin = instance;
 	  
     final Player p = event.getPlayer();
     
-    List<String> userList = plugin.datacore.getStringList("Users.Total");
+    List<String> userList = plugin.datacore.getStringList("ALL2");
     
     if (!userList.contains(p.getName())){
     	userList.add(p.getName());
-    	plugin.datacore.set("Users.Total", userList);
+    	plugin.datacore.set("ALL2", userList);
+    	userTransfer(p);
     }
 
 	userCreate(p);
-
     plugin.wcm.setupPlayer(p.getName());
     
     WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
@@ -56,7 +51,7 @@ plugin = instance;
     
     event.setJoinMessage(null);
    
-	setBoard(p, wcp, wca);
+	setBoard(p);
 	 
     List <String> joinMessages = plugin.config.getStringList("Core.JoinMessages");
     Random rand = new Random();
@@ -106,53 +101,9 @@ plugin = instance;
   }
 
 
-	public void setBoard(Player p, WCPlayer wcp, WCAlliance wca){
-		
-		
-		Objective localObjective = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		
-		if (localObjective == null){
-			
-			Scoreboard board = manager.getNewScoreboard();
-			
-			Objective o1 = board.registerNewObjective("wa", "dummy");
-			o1.setDisplaySlot(DisplaySlot.SIDEBAR);
-			if (p.getDisplayName().length() > 16){
-				o1.setDisplayName(p.getDisplayName().substring(0, 16));
-			} else {
-				o1.setDisplayName(p.getDisplayName());
-			}
-			
-			Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
-			Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
-			Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
-			Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
-			Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
-			Score alliance2;
-			
-			if (!wcp.getInAlliance()){
-				Score alliance = o1.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
-				alliance.setScore(1);
-			} else {
-				String completed = (plugin.wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
-				if (completed.length() >= 16){
-					alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
-				} else {
-					alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed));
-				}
-				alliance2.setScore(wca.getMemberCount());
-			}
-			
-			paragons.setScore(wcp.getParagonLevel());
-			balance.setScore((int) WCVault.econ.getBalance(p.getName()));
-			rank.setScore(1);
-			online.setScore(Bukkit.getOnlinePlayers().length);
-			options.setScore(0);
-			p.setScoreboard(board);
-		} else {
-			p.setScoreboard(manager.getNewScoreboard());
-		}
+	public void setBoard(Player p){
+		 ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(p, false);
+		 plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
 	}
 	
 	public void userCreate(Player p) {
@@ -176,6 +127,12 @@ plugin = instance;
 			yaml.set("AllianceColor", "b");
 			yaml.set("LastChat", "Hugh_Jasses");
 			yaml.set("Alliance", "ForeverAlone");
+			yaml.set("Pokes", true);
+			yaml.set("Emotes", true);
+			yaml.set("ItemThrow", true);
+			yaml.set("Fireworks", true);
+			yaml.set("Scoreboard", true);
+			yaml.set("HomeSounds", true);
 			try {
 				yaml.save(file);
 			} catch (IOException e) {
@@ -188,5 +145,77 @@ plugin = instance;
 			plugin.wcm.updatePlayerMap(name, wcp);  
 			wcp = plugin.wcm.getWCPlayer(name);
 	 }
+	 
+
+	private void userTransfer(Player p) {
+		
+		if (plugin.datacore.getInt("Users." + p.getName() + ".MasterExp") > 0){
+			
+			File file = new File("./plugins/WaterCloset/Users/" + p.getName() + ".yml");
+			File file2 = new File("./plugins/WaterCloset/WAAlliances/config.yml");
+			File essFile = new File("./plugins/WaterCloset/oldusers/" + p.getName().toLowerCase() + ".yml");
+			
+			if (!file.exists()){
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				plugin.getLogger().log(Level.INFO, "New user file created for " + p.getName() + "!");
+			}
+			
+			YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+			YamlConfiguration yaml2 = YamlConfiguration.loadConfiguration(file2);
+			YamlConfiguration essYaml = YamlConfiguration.loadConfiguration(essFile);
+			
+			yaml.set("Chat.GlobalColor", "f");
+			yaml.set("Chat.PMColor", "d");
+			yaml.set("Inviter", "empty");
+			yaml.set("Invite", "empty");
+			yaml.set("AllianceRank2", yaml2.getString("Users." + p.getName() + ".AllianceRank2"));
+			yaml.set("AllianceColor", "b");
+			yaml.set("LastChat", "Hugh_Jasses");
+			yaml.set("Alliance", yaml2.getString("Users." + p.getName() + ".Alliance"));
+			yaml.set("Pokes", true);
+			yaml.set("Emotes", true);
+			yaml.set("ItemThrow", true);
+			yaml.set("Fireworks", true);
+			yaml.set("HomeSounds", true);
+			yaml.set("SideBar", true);
+			yaml.set("InAlliance", yaml2.getBoolean("Users." + p.getName() + ".InAlliance"));
+			yaml.set("InChat", yaml2.getBoolean("Users." + p.getName() + "inChat"));
+			yaml.set("DisHandle", yaml2.getBoolean("Users." + p.getName() + "disHandeled"));
+			yaml.set("ChatGuest", yaml2.getBoolean("Users." + p.getName() + "chatGuest"));
+			yaml.set("ParagonLevel", plugin.datacore.getInt("Users." + p.getName() + ".ParagonLevel"));
+			yaml.set("HasNick", false);
+			yaml.set("HasInvite", false);
+			yaml.set("DepositExp", false);
+			yaml.set("DeathCount", plugin.datacore.getInt("Users." + p.getName() + ".DeathCount"));
+			yaml.set("Balance", Integer.parseInt(essYaml.getString("money")));
+			yaml.set("Scoreboard", true);
+			yaml.set("Exp", plugin.datacore.getInt("Users." + p.getName() + ".MasterExp"));
+			
+			List <String> homeList = yaml.getStringList("Homes.List");
+			List<String> newHomeList = new ArrayList<>();
+			int x = 0;
+				for (String a : homeList){
+					newHomeList.add(homeList.get(x) + " " + yaml.getString("Homes." + a));
+					x++;
+				}
+			yaml.set("HomeList", newHomeList); 
+			yaml.set("BlocksMined", 0);
+			
+			try {
+				yaml.save(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			plugin.getLogger().log(Level.INFO, "Settings transfered from WCV3 -> WCV4 for " + p.getDisplayName() + "!");
+			WCMain.s(p, "&6system &f-> " + p.getDisplayName() + " &dwe tried to move your data from WCV3 -> WCV4!");
+			WCMain.s(p, "&6system &f-> " + p.getDisplayName() + " &dIf anything got lost, mail Hugs!");
+			WCMain.s(p, "&c@log + 24 settings & " + homeList.size() + " &chomes moved with " + essYaml.getInt("money") + " &cbalance");
+		}
+	}
 	
 }

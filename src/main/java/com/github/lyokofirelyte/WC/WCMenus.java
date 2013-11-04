@@ -3,7 +3,6 @@ package com.github.lyokofirelyte.WC;
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
@@ -184,6 +184,7 @@ public class WCMenus implements Listener, CommandExecutor {
 		actions.put("POKES", "wc poke");
 		actions.put("FIREWORKS", "wc fwtoggle");
 		actions.put("ME", "wcstats");
+		actions.put("EMOTES", "wc emotes");
 		
 		// on hover -> alliance action
 		actions.put("UPGRADE", "waa upgrade");
@@ -311,6 +312,7 @@ public class WCMenus implements Listener, CommandExecutor {
 		inv = addToInv(Material.STICK, "§bPOKES", 3, "§9Allowing pokes", 12, inv);
 		inv = addToInv(Material.DIAMOND_SWORD, "§4PVP", 4, "§9Toggle PVP Mode", 9, inv);
 		inv = addToInv(Material.FIREWORK, "§dFIREWORKS", 5, "§9Toggle paragon fireworks", 11, inv);
+		inv = addToInv(Material.CAKE, "§3EMOTES", 6, "§9Toggle auto-emotes on chat", 1, inv);
 		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v4", 8, "§b<<---<", 1, inv);
 		invs.put("toggleMenu", inv);
 		
@@ -369,7 +371,7 @@ public class WCMenus implements Listener, CommandExecutor {
 	public void openCloset(Player p){
 
 		inv = invs.get("closetStore");
-		Location chestLoc = new Location(Bukkit.getWorld("hbd"), 41.0, 75.0, -520.0);
+		Location chestLoc = new Location(Bukkit.getWorld("world"), -272.0, 61.0, -134.0);
 		Block block = chestLoc.getBlock();
 		BlockState bs = block.getState();
 		
@@ -405,9 +407,9 @@ public class WCMenus implements Listener, CommandExecutor {
 		
 	    String n = e.getInventory().getTitle().substring(2);
 	    
-		if (n.contains("TRADE")){
-
+		if (n.contains("TRADE")){ 
 			p = ((Player)e.getWhoClicked());
+			p.playSound(p.getLocation(), Sound.CLICK, 3F, 0.5F);
 			e.setCancelled(true);
 			
 			if (e.getClick() == ClickType.RIGHT && p.hasPermission("wa.mod") && e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR)){
@@ -421,7 +423,8 @@ public class WCMenus implements Listener, CommandExecutor {
 	    
 			if (menu.contains(n) && e.getWhoClicked() instanceof Player && e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()){
 				
-				p = ((Player)e.getWhoClicked());		
+				p = ((Player)e.getWhoClicked());	
+				p.playSound(p.getLocation(), Sound.CLICK, 3F, 0.5F);
 				String d = e.getCurrentItem().getItemMeta().getDisplayName().substring(2);
 				
 					if (d.equals("CLOSE")){
@@ -557,26 +560,17 @@ public class WCMenus implements Listener, CommandExecutor {
 	private void allianceReq(Player p, String n) {
 		
 		WCAlliance wca = plugin.wcm.getWCAlliance(n);
+		String leader = wca.getLeader();
 		
-		if (!Bukkit.getOfflinePlayer(wca.getLeader()).isOnline()){
-			plugin.wcm.setupPlayer(wca.getLeader());
-		}
+		List<String> mail = plugin.mail.getStringList("Users." + leader + ".Mail");
 		
-		WCPlayer wcpCurrent = plugin.wcm.getWCPlayer(wca.getLeader());
-	  	List<String> mail = wcpCurrent.getMail();
-	  	mail.add("&6system &4// &6" + p.getDisplayName() + " &6is interested in joining your alliance!.");
-	  	wcpCurrent.setMail(mail);
-	  	plugin.wcm.updatePlayerMap(wca.getLeader(), wcpCurrent); 
-	  	WCMain.s(p, "Request sent.");
+	  	mail.add("mail send " + leader + "&6system &4// &6" + p.getDisplayName() + " &6is interested in joining your alliance!.");
+	  	
+	  	plugin.mail.set("Users." + leader + ".Mail", mail);
+
 	  	if (Bukkit.getPlayer(wca.getLeader()).isOnline()){
 	  		Bukkit.getPlayer(wca.getLeader()).sendMessage(Utils.WC + "You've recieved a new mail! Check it with /mail read.");
-	  	} else {
-	  		try {
-				plugin.wcm.savePlayer(wca.getLeader());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	  	}
+	  	}	
 	}
 
 	private void updateVisitInventory() {
@@ -640,17 +634,17 @@ public class WCMenus implements Listener, CommandExecutor {
 		
 		int price = Integer.parseInt(lore.get(0));
 		String seller = lore.get(1);
-		String buyer = p.getName();
 		
-		if (!WCVault.econ.has(p.getName(), price)){
+		if (WCVault.econ.getBalance(p.getName()) < price){ // @econ
 			WCMain.s(p, "You don't have enough money! D:");
 			return;
 		}
 		
+		WCVault.econ.depositPlayer(seller, price);
+		WCVault.econ.withdrawPlayer(p.getName(), price);
+	
 		WCMain.s(p, "Purchased for " + price + "&d!");
 		
-		WCVault.econ.depositPlayer(seller, price);
-		WCVault.econ.withdrawPlayer(buyer, price);
 		chest.getInventory().remove(i);
 		
 		for (HumanEntity a : invs.get("closetStore").getViewers()){
@@ -664,24 +658,14 @@ public class WCMenus implements Listener, CommandExecutor {
 		
 		p.getInventory().addItem(i);
 		
-		if (!Bukkit.getOfflinePlayer(seller).isOnline()){
-			plugin.wcm.setupPlayer(seller);
-		}
+		List<String> mail = plugin.mail.getStringList("Users." + seller + ".Mail");
 		
-		WCPlayer wcpCurrent = plugin.wcm.getWCPlayer(seller);
-	  	List<String> mail = wcpCurrent.getMail();
 	  	mail.add("&6system &4// &6" + p.getDisplayName() + " &6has purchased your " + i.getType().toString().toLowerCase() + "&6.");
-	  	wcpCurrent.setMail(mail);
-	  	plugin.wcm.updatePlayerMap(seller, wcpCurrent); 
+
+	  	plugin.mail.set("Users." + seller + ".Mail", mail);
 	  	
 	  	if (Bukkit.getPlayer(seller).isOnline()){
 	  		Bukkit.getPlayer(seller).sendMessage(Utils.WC + "You've recieved a new mail! Check it with /mail read.");
-	  	} else {
-	  		try {
-				plugin.wcm.savePlayer(seller);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 	  	}
 	}
 

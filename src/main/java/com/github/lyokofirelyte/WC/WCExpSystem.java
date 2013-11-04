@@ -6,7 +6,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 
-import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 public class WCExpSystem implements Listener {
@@ -21,20 +20,22 @@ public class WCExpSystem implements Listener {
 	  @EventHandler (priority = EventPriority.NORMAL)
 	  public void onExpGain(final PlayerExpChangeEvent e){
 		  
-		  if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".expDeposit") == false){
-		  
 		  Player p = e.getPlayer();
 		  wcp = plugin.wcm.getWCPlayer(p.getName());
+		  
+		  if (wcp.getExpDeposit()){
+
 		  int expAmount = e.getAmount();
 		  int storedAmount = wcp.getExp();
 		  wcp.setExp(storedAmount + expAmount);
+		  updatePlayer(wcp, p.getName());
 		  e.setAmount(0);
 		  
-		  	if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".expWarn") == false){
-		  		p.sendMessage(WCMail.WC + "Your xp has been stored in /wc xp. (Toggle this warning with /wc xp toggle)");
-		  	}
+		  }
 	  }
-	  	}
 	  
-	  
+	  public void updatePlayer(WCPlayer wcp, String name){
+		  plugin.wcm.updatePlayerMap(name, wcp);  
+		  wcp = plugin.wcm.getWCPlayer(name);
+	  }
 }

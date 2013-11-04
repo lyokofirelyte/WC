@@ -66,7 +66,7 @@ public class WCHome implements CommandExecutor {
 		for (String h : homes){
 			if (h.startsWith(args[0].toLowerCase())){
 				String[] hSplit = h.split(" ");
-				tpHome(Utils.createString(hSplit, 0), p, hSplit[0], wcp);
+				tpHome(Utils.createString(hSplit, 1), p, hSplit[0], wcp);
 				return;
 			}
 		}
@@ -99,7 +99,7 @@ public class WCHome implements CommandExecutor {
 		List<Location> circleblocks = Utils.circle(p, p.getLocation(), 3, 1, true, false, 0);
 		List<Location> circleblocks2 = Utils.circle(p, p.getLocation(), 3, 1, true, false, 1);
 		
-		if (!wcp.homeSounds){
+		if (wcp.homeSounds){
 			p.getWorld().playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 3.0F, 0.5F);
 		}
 			
@@ -129,7 +129,7 @@ public class WCHome implements CommandExecutor {
 		
 		for (String currentHome : homes){
 			String[] hSplit = currentHome.split(" ");
-			WCMain.s2(p, "&a| &6" + currentHome + " &f// &6" + Utils.createString(hSplit, 0));
+			WCMain.s2(p, "&a| &6" + hSplit[0]);
 		}
 	}
 
@@ -172,9 +172,10 @@ public class WCHome implements CommandExecutor {
 		float yaw = p.getLocation().getYaw();
 		float pitch = p.getLocation().getPitch();
 		String world = p.getWorld().getName();
-		String xyz = x + "," + y + "," + z + "," + yaw + "," + pitch + "," + world;
+		String xyz = Math.round(x) + "," + Math.round(y) + "," + Math.round(z) + "," + Math.round(yaw) + "," + Math.round(pitch) + "," + world;
 		
 		wcp.addHome(args[0] + " " + xyz);
+		updatePlayer(wcp, p.getName());
 		
 		WCMain.s(p, "Set home &6" + args[0] + " &dat &6" + Math.round(x) + "&f,&6 " + Math.round(y) + "&f,&6 " + Math.round(z) + "&d.");
 		
@@ -207,8 +208,20 @@ public class WCHome implements CommandExecutor {
 			}
 		}
 
-		wcp.remHome(args[0].toLowerCase());
-		WCMain.s(p, "Removal successful.");
-		WCMain.s2(p, "&aHomes remaining&f: &a" + (homeLimit - homes.size()) + "/" + homeLimit);	
+		for (String a : homes){
+			if (a.startsWith(args[0])){
+				wcp.remHome(a);
+				updatePlayer(wcp, p.getName());
+				WCMain.s(p, "Removal successful.");
+				WCMain.s2(p, "&aHomes remaining&f: &a" + (homeLimit - homes.size()) + "/" + homeLimit);	
+				return;
+			}
+		}
+
 	} 
+	
+	 public void updatePlayer(WCPlayer wcp, String name){
+			plugin.wcm.updatePlayerMap(name, wcp);  
+			wcp = plugin.wcm.getWCPlayer(name);
+	 }
 }

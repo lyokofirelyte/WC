@@ -352,7 +352,7 @@ public class WACommandEx implements CommandExecutor {
 	    			    	break;
 	    			    }
 	    			    
-	    			    switch (args[3]){
+	    			    switch (args[2]){
 	    			    
 	    			    	case "add":
 	    			    		
@@ -391,14 +391,13 @@ public class WACommandEx implements CommandExecutor {
     	  			  break;
     	  		  }
     	  		  
-    	  		  if (!WCVault.econ.has(p.getName(), Integer.parseInt(args[2]))){
+    	  		  if (WCVault.econ.getBalance(p.getName()) < Integer.parseInt(args[2])){ // @econ
     	  			  s(p, "You don't have enough money! D:");
     	  			  break;
     	  		  }
     	  		  
     	  		  wcaCurrent = plugin.wcm.getWCAlliance(args[1]);
     	  		  wcaCurrent.setBank(wcaCurrent.getBank() + Integer.parseInt(args[2]));
-    	  		  WCVault.econ.withdrawPlayer(p.getName(), Integer.parseInt(args[2]));
     	  		  updateAlliance(wcaCurrent, args[1]);
     	  		  
     	  		  s(p, "Success!");
@@ -422,7 +421,6 @@ public class WACommandEx implements CommandExecutor {
 	        		  AS("&a| &3Door Locks &f// &3" + wca.getDoorLocks()),
 	        		  AS("&a| &3Mob Spawn &f// &3" + wca.getMobSpawn()),
 	        		  AS("&a| &cTown Coords &f// &3" + wca.getCoords()),
-	        		  AS("&b// &aPerks &b//"),
 	        		  AS("&a| &3Protection Radius &f// &3" + wca.getRadius()),
 	        		  AS("&7&oSee ohsototes.com for more info on each tier!")
 	        	  });
@@ -951,9 +949,7 @@ public class WACommandEx implements CommandExecutor {
 			        AS("&a| &3Door Locks &f// &3" + wcaCurrent.getDoorLocks()),
 			        AS("&a| &3Mob Spawn &f// &3" + wcaCurrent.getMobSpawn()),
 			        AS("&a| &cTown Coords &f// &3" + wcaCurrent.getCoords()),
-			        AS("&b// &aPerks &b//"),
-			        AS("&a| &3Protection Radius &f// &3" + wcaCurrent.getRadius()),
-			        AS("&b// &aUsers &b//")});
+			        AS("&a| &3Protection Radius &f// &3" + wcaCurrent.getRadius())});
 	            	sb = new StringBuilder();
 	            	int x = 0;
 		            

@@ -15,14 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.kitteh.tag.TagAPI;
 
-import com.github.lyokofirelyte.WC.Commands.WCBack;
 import com.github.lyokofirelyte.WC.Commands.WCHelp;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
 import com.github.lyokofirelyte.WC.Commands.WCInvSee;
@@ -31,26 +25,28 @@ import com.github.lyokofirelyte.WC.Commands.WCRanks;
 import com.github.lyokofirelyte.WC.Commands.WCReboot;
 import com.github.lyokofirelyte.WC.Commands.WCReport;
 import com.github.lyokofirelyte.WC.Commands.WCSell;
+import com.github.lyokofirelyte.WC.Commands.WCSpawn;
 import com.github.lyokofirelyte.WC.Commands.WCWarps;
 import com.github.lyokofirelyte.WC.Extras.StaticField;
 import com.github.lyokofirelyte.WC.Extras.TimeStampEX;
 import com.github.lyokofirelyte.WC.Extras.TraceFW;
-import com.github.lyokofirelyte.WC.Extras.w;
 import com.github.lyokofirelyte.WC.Listener.WCBlockBreak;
 import com.github.lyokofirelyte.WC.Listener.WCBlockPlace;
 import com.github.lyokofirelyte.WC.Listener.WCDeath;
+import com.github.lyokofirelyte.WC.Listener.WCEmotes;
 import com.github.lyokofirelyte.WC.Listener.WCJoin;
 import com.github.lyokofirelyte.WC.Listener.WCMiscEvents;
+import com.github.lyokofirelyte.WC.Listener.WCParagon;
 import com.github.lyokofirelyte.WC.Listener.WCQuit;
+import com.github.lyokofirelyte.WC.Listener.WCScoreboard;
 import com.github.lyokofirelyte.WC.Listener.WCTP;
 import com.github.lyokofirelyte.WC.Listener.WCTags;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.RebootManager;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
-import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCManager;
-import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 public class WCMain extends JavaPlugin {
 	
@@ -61,10 +57,12 @@ public class WCMain extends JavaPlugin {
   public File gamesFile;
   public File helpFile;
   public File file;
+  public File mailFile;
   
   public YamlConfiguration config = new YamlConfiguration();
   public YamlConfiguration datacore = new YamlConfiguration();
   public YamlConfiguration games = new YamlConfiguration();
+  public YamlConfiguration mail = new YamlConfiguration();
   public YamlConfiguration help = new YamlConfiguration();
   public YamlConfiguration yaml;
 
@@ -99,6 +97,10 @@ public class WCMain extends JavaPlugin {
 	  pm.registerEvents(new WCMail(this),this);
 	  pm.registerEvents(new WCInvSee(this),this);
 	  pm.registerEvents(new WCTags(this),this);
+	  pm.registerEvents(new WCParagon(this),this);
+	  pm.registerEvents(new WCEmotes(this),this);
+	  pm.registerEvents(new WCScoreboard(this),this);
+	  // pm.registerEvents(new WCMoney(this),this);
 	
 	  this.vaultMgr.hookSetup();
 	    
@@ -121,7 +123,7 @@ public class WCMain extends JavaPlugin {
 	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
 	    
-	  if ((url == null) || (username == null) || (password == null) || WCAPI == null) {
+	  if ((url == null) || (username == null) || (password == null) || WCAPI == null || TagAPI == null) {
 	     Bukkit.getServer().getLogger().info("You must provide a url, username, and password in the config.yml. That or the API is missing.");
 	     Bukkit.getServer().getPluginManager().disablePlugin(this);
 	  }
@@ -134,7 +136,7 @@ public class WCMain extends JavaPlugin {
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { sendAnnounce();} }, 2L, 12000L);
 
-	  getLogger().log(Level.INFO, "WaterCloset is ready! Hooked with API!");
+	  getLogger().log(Level.INFO, "WaterCloset is ready! Hooked with WCAPI and TagAPI!");
     
   }
 
@@ -186,6 +188,9 @@ public class WCMain extends JavaPlugin {
     getCommand("l").setExecutor(new WCChannels(this));
     getCommand("o").setExecutor(new WCChannels(this));
     getCommand("wcstats").setExecutor(new WCChannels(this));
+    
+    getCommand("spawn").setExecutor(new WCSpawn(this));
+    getCommand("s").setExecutor(new WCSpawn(this));
 
     getCommand("forcefield").setExecutor(new StaticField(this));
     getCommand("ff").setExecutor(new StaticField(this));
@@ -197,6 +202,10 @@ public class WCMain extends JavaPlugin {
     
     getCommand("sell").setExecutor(new WCSell(this));
     
+    // getCommand("pay").setExecutor(new WCPay(this));
+    // getCommand("balance").setExecutor(new WCPay(this));
+    // getCommand("money").setExecutor(new WCPay(this));
+    
     getCommand("bday").setExecutor(new TraceFW(this));
     
     getCommand("warp").setExecutor(new WCWarps(this));
@@ -205,8 +214,8 @@ public class WCMain extends JavaPlugin {
     getCommand("remwarp").setExecutor(new WCWarps(this));
     getCommand("delwarp").setExecutor(new WCWarps(this));
     
-    getCommand("back").setExecutor(new WCBack(this));
-    getCommand("bk").setExecutor(new WCBack(this));
+    // getCommand("back").setExecutor(new WCBack(this));
+    // getCommand("bk").setExecutor(new WCBack(this));
     
     getCommand("rankup").setExecutor(new WCRanks(this));
     
@@ -219,10 +228,15 @@ public class WCMain extends JavaPlugin {
     getCommand("root").setExecutor(new WCMenus(this));
 
     getCommand("invsee").setExecutor(new WCInvSee(this));
-    
-    getCommand("ww").setExecutor(new w(this));
    
     getCommand("reboot").setExecutor(new WCReboot(this));
+    
+    // getCommand("tp").setExecutor(new WCTele(this));
+    // getCommand("tphere").setExecutor(new WCTele(this));
+    // getCommand("tpa").setExecutor(new WCTele(this));
+    // getCommand("tpahere").setExecutor(new WCTele(this));
+    // getCommand("tpall").setExecutor(new WCTele(this));
+    // getCommand("tpaall").setExecutor(new WCTele(this));
   }
 
   public void saveYamls() {
@@ -232,6 +246,7 @@ public class WCMain extends JavaPlugin {
       datacore.save(datacoreFile);
       games.save(gamesFile);
       help.save(helpFile);
+      mail.save(mailFile);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -243,6 +258,7 @@ public class WCMain extends JavaPlugin {
       datacore.load(datacoreFile);
       games.load(gamesFile);
       help.load(helpFile);
+      mail.load(mailFile);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -250,10 +266,10 @@ public class WCMain extends JavaPlugin {
 
   private void firstRun() throws Exception {
 	 
-    String files = "config help games datacore";
+    String files = "config help games datacore mail";
     String[] flatFiles = files.split(" ");
     
-    for (int x = 0; x < 3; x++){
+    for (int x = 0; x <= 4; x++){
     	file = new File("./plugins/WaterCloset/" + flatFiles[x] + ".yml");
     	if (!file.exists()){
     		file.createNewFile();
@@ -272,6 +288,9 @@ public class WCMain extends JavaPlugin {
 	    	case 3: 
 	    		datacore = yaml;
 	    		datacoreFile = file;
+	    	case 4:
+	    		mail = yaml;
+	    		mailFile = file;
     	}
     }
   }
@@ -295,58 +314,13 @@ public class WCMain extends JavaPlugin {
 			msg = msg + 1;
 		}
   }
-	  
+  
   public void updateBoard(){
-		  
-	  for (Player p : Bukkit.getOnlinePlayers()){
-		  
-		 WCPlayer wcp = wcm.getWCPlayer(p.getName());
-		 WCAlliance wca = wcm.getWCAlliance(wcp.getAlliance());
-			    
-		 Objective localObjective = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
-		 ScoreboardManager manager = Bukkit.getScoreboardManager();
-				
-			if (localObjective != null){
-					
-				Scoreboard board = manager.getNewScoreboard();	
-				Objective o1 = board.registerNewObjective("wa", "dummy");
-				o1.setDisplaySlot(DisplaySlot.SIDEBAR);
-				
-				if (p.getDisplayName().length() > 16){
-					o1.setDisplayName(p.getDisplayName().substring(0, 16));
-				} else {
-					o1.setDisplayName(p.getDisplayName());
-				}
-					
-				Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
-				Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
-				Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
-				Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
-				Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
-				Score alliance2;
-					
-				if (!wcp.getInAlliance()){
-					Score alliance = o1.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
-					alliance.setScore(1);
-				} else {
-					String completed = (wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
-					
-					if (completed.length() >= 16){
-						alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
-					} else {
-						alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed));
-					}
-					
-					alliance2.setScore(wca.getMemberCount());
-				}
-					
-				paragons.setScore(wcp.getParagonLevel());
-				balance.setScore((int) WCVault.econ.getBalance(p.getName()));
-				rank.setScore(1);
-				online.setScore(Bukkit.getOnlinePlayers().length);
-				options.setScore(0);
-				p.setScoreboard(board);
-			} 
+	  
+	  for (Player player : Bukkit.getOnlinePlayers()){
+		  ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(player, false);
+		  getServer().getPluginManager().callEvent(scoreboardEvent);
 	  }
-  }	
+  }
+
 }

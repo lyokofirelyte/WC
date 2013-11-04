@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCRanks implements CommandExecutor {
@@ -18,6 +19,8 @@ public class WCRanks implements CommandExecutor {
 	public WCRanks(WCMain instance){
 	plugin = instance;
 	}
+	
+	WCPlayer wcp;
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
@@ -56,17 +59,20 @@ public class WCRanks implements CommandExecutor {
 
 	private void checkCash(Player p, String newGroup, String oldGroup, String newGroupFancy) {
 	
+		wcp = plugin.wcm.getWCPlayer(p.getName());
+		
 		if (newGroup == null){
 			WCMain.s(p, "You are already the highest rank!");
 			return;
 		}
 		
 		int cost = plugin.datacore.getInt("RankCosts." + newGroup);
-			if (!WCVault.econ.has(p.getName(), cost)){
+			if (wcp.getBalance() < cost){
 				WCMain.s(p, "You need &6" + cost + " &dshinies for that rank.");
 				return;
 			}
-		WCVault.econ.withdrawPlayer(p.getName(), cost);
+			
+		wcp.setBalance(wcp.getBalance() - cost);
 		WCVault.perms.playerAddGroup(p, newGroup);
 		WCVault.perms.playerRemoveGroup(p, oldGroup);
 		Bukkit.broadcastMessage(Utils.AS(WCMail.WC + p.getDisplayName() + " &dhas been promoted to " + newGroupFancy + "&d."));	

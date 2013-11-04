@@ -25,21 +25,15 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
-import com.github.lyokofirelyte.WC.Util.Utils;
-
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
-import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 public class WCCommands implements CommandExecutor {
@@ -236,6 +230,20 @@ public class WCCommands implements CommandExecutor {
     	  	updatePlayer(wcp, p.getName());
     	  	
       break;
+      
+      case "emotes":
+    	  
+    	if (!wcp.getEmotes()){
+  	  		wcp.setEmotes(true);
+  	  		s(p, "Auto-emotes turned on!");
+  	  	} else {
+  	  		wcp.setEmotes(false);
+  	  		s(p, "Auto-emotes turned off!");
+  	  	}
+  	  	
+  	  	updatePlayer(wcp, p.getName());
+  	  	
+  	  break;
    	  
       case "globalcolor":
     	  
@@ -1277,8 +1285,13 @@ public class WCCommands implements CommandExecutor {
 			
 		case "sidebar":
 			
-			setBoard(p, wcp, plugin.wcm.getWCAlliance(wcp.getAlliance()));
-			break;
+			if (wcp.getScoreboard()){
+				wcp.setScoreboard(false);
+			} else {
+				wcp.setScoreboard(true);
+			}
+			
+		break;
 			
 		case "fwtoggle":
 			
@@ -1308,56 +1321,10 @@ public class WCCommands implements CommandExecutor {
 		map.put(player, System.currentTimeMillis());
 	}
 	
-	public void setBoard(Player p, WCPlayer wcp, WCAlliance wca){
-		
-		Objective localObjective = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
-		ScoreboardManager manager = Bukkit.getScoreboardManager();
-		
-		if (localObjective == null){
-			
-			Scoreboard board = manager.getNewScoreboard();
-			
-			Objective o1 = board.registerNewObjective("wa", "dummy");
-			o1.setDisplaySlot(DisplaySlot.SIDEBAR);
-			if (p.getDisplayName().length() > 16){
-				o1.setDisplayName(p.getDisplayName().substring(0, 16));
-			} else {
-				o1.setDisplayName(p.getDisplayName());
-			}
-			
-			
-			Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
-			Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
-			Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
-			Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
-			Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
-			Score alliance2;
-			
-			if (!wcp.getInAlliance()){
-				Score alliance = o1.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
-				alliance.setScore(1);
-			} else {
-				String completed = plugin.wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2());
-				if (completed.length() >= 16){
-					alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
-				} else {
-					alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed));
-				}
-				alliance2.setScore(wca.getMemberCount());
-			}
-			
-			paragons.setScore(wcp.getParagonLevel());
-			balance.setScore((int) WCVault.econ.getBalance(p.getName()));
-			rank.setScore(1);
-			online.setScore(Bukkit.getOnlinePlayers().length);
-			options.setScore(0);
-			p.setScoreboard(board);
-		} else {
-			p.setScoreboard(manager.getNewScoreboard());
-		}
+	public void setBoard(Player p){
+		ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(p, false);
+		plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
 	}
-
-
 
 	public void spawnWorks(Location loc, Player p){
 		

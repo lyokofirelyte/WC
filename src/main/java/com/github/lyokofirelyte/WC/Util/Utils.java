@@ -1,10 +1,13 @@
 package com.github.lyokofirelyte.WC.Util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -25,6 +28,16 @@ public class Utils {
 	
 	public static void bc(String s){
 		Bukkit.broadcastMessage(WC + Utils.AS(s));
+	}
+	
+	public static Color getRandomColor(){
+		
+		final List<Color> colors = Arrays.asList(Color.RED, Color.WHITE, Color.BLUE, Color.ORANGE, Color.FUCHSIA, Color.AQUA, Color.PURPLE, Color.GREEN, Color.TEAL, Color.YELLOW);
+	
+		Random rand = new Random();
+		int nextInt = rand.nextInt(10);
+		
+		return colors.get(nextInt);
 	}
 	
     public static List<Location> circle (Player player, Location loc, Integer r, Integer h, Boolean hollow, Boolean sphere, int plus_y) {

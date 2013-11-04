@@ -56,7 +56,7 @@ public class WCMiscEvents implements Listener {
 			wcp = plugin.wcm.getWCPlayer(((Player)ent).getName());
 			wcp2 = plugin.wcm.getWCPlayer(p.getName());
 			
-			if (!wcp.getAllowPokes() || wcp2.getAllowPokes()){
+			if (!wcp.getAllowPokes() || !wcp2.getAllowPokes()){
 				WCMain.s(p, "That person or yourself have disabled pokes.");
 			} else {
 				WCMain.s2(p, "Poked " + (((Player) ent).getDisplayName()));

@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,10 +18,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.github.lyokofirelyte.WC.Commands.WCMail;
+
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
+
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Events.PlayerEmoteEvent;
+
 import static com.github.lyokofirelyte.WC.WCMain.*;
 
 
@@ -147,6 +152,18 @@ public class WCChannels implements CommandExecutor, Listener {
 
 	  e.setCancelled(true);
 	  globalChat(p, e.getMessage(), wcp, wca);
+	  
+	  List<String> emotes = plugin.datacore.getStringList("EmotesList");
+	  
+	  for (String s : emotes){
+		  
+	 	if (e.getMessage().contains(s)){
+	  		PlayerEmoteEvent emote = new PlayerEmoteEvent(s, e.getPlayer(), e.getMessage());
+	  		plugin.getServer().getPluginManager().callEvent(emote);
+	  		return;
+	  	}
+	 	
+	  }
   }
   
 
@@ -159,8 +176,13 @@ public class WCChannels implements CommandExecutor, Listener {
 			wcp = plugin.wcm.getWCPlayer(bleh.getName());
 			wcpCurrent = plugin.wcm.getWCPlayer(p.getName());
 			
+			if (message.contains(bleh.getName())){
+				bleh.playSound(bleh.getLocation(), Sound.ORB_PICKUP, 3F, 0.5F);
+				message = message.replace(bleh.getName(), "&b" + bleh.getDisplayName() + "&r");
+			}
+			
 			if (message.contains("&r")){
-				message = message.replace("&r", wcp.getGlobalColor());
+				message = message.replace("&r", "&" + wcp.getGlobalColor());
 			}
 				  
 			String prefix = WCVault.chat.getPlayerPrefix(p);
@@ -241,7 +263,7 @@ public class WCChannels implements CommandExecutor, Listener {
         	 wcpCurrent = plugin.wcm.getWCPlayer(currentPlayer.getName());
         	 wcpCurrent.setLastChat(p.getName());
         	 updatePlayer(wcpCurrent, currentPlayer.getName());
-             currentPlayer.sendMessage(AS("&" + wcp.getPMColor() + "<- " + p.getDisplayName() + " §f// &" + wcp.getPMColor() + message2));
+             currentPlayer.sendMessage(AS("&" + wcpCurrent.getPMColor() + "<- " + p.getDisplayName() + " §f// &" + wcpCurrent.getPMColor() + message2));
              sender.sendMessage(AS("&" + wcp.getPMColor() + "-> " + currentPlayer.getDisplayName() + " §f// &" + wcp.getPMColor() + message2));
              break;
           }
@@ -252,7 +274,7 @@ public class WCChannels implements CommandExecutor, Listener {
     case "r":
 
     	p = ((Player)sender);
-    	wcp = plugin.wcm.getWCPlayer(sender.getName());
+    	wcp = plugin.wcm.getWCPlayer(p.getName());
     	
     	if (Bukkit.getPlayer(wcp.getLastChat()) == null){
     		s(p, "That player is not online.");
@@ -264,7 +286,7 @@ public class WCChannels implements CommandExecutor, Listener {
         updatePlayer(wcpCurrent, wcp.getLastChat());
         
         Bukkit.getPlayer(wcp.getLastChat()).sendMessage(AS("&" + wcpCurrent.getGlobalColor() + "<- " + p.getDisplayName() + " §f// &" + wcpCurrent.getGlobalColor() + createString(args, 0)));
-        sender.sendMessage(AS("&" + wcp.getGlobalColor() + "-> " + ((Player)sender).getDisplayName() + " §f// &" + wcp.getGlobalColor() + createString(args, 0)));
+        sender.sendMessage(AS("&" + wcp.getGlobalColor() + "-> " + Bukkit.getPlayer(wcp.getLastChat()).getDisplayName() + " §f// &" + wcp.getGlobalColor() + createString(args, 0)));
         break;
     }
 

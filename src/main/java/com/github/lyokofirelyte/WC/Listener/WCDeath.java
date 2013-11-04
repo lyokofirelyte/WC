@@ -18,6 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.WCMobDrops;
 
@@ -27,6 +28,8 @@ public class WCDeath implements Listener{
 	public WCDeath(WCMain instance){
 	plugin = instance;
 	}
+	
+	WCPlayer wcp;
 
 	  @EventHandler(priority=EventPriority.NORMAL)
 	  public void EDBEE(EntityDamageByEntityEvent e) {
@@ -59,9 +62,10 @@ public class WCDeath implements Listener{
 		if (ent instanceof Player){
 
 			Player p = (Player) ent;
-			int deaths = plugin.datacore.getInt("Users." + p.getName() + ".DeathCount");
+			wcp = plugin.wcm.getWCPlayer(p.getName());
+			int deaths = wcp.getDeathCount();
 			deaths++;
-			plugin.datacore.set("Users." + p.getName() + ".DeathCount", deaths);
+			wcp.setDeathCount(deaths);
 			((PlayerDeathEvent) e).setDeathMessage(null);
 			String message = null;
 

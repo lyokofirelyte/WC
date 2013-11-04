@@ -59,7 +59,7 @@ public class WCSell implements CommandExecutor {
 				return true;
 			}
 
-			Location chestLoc = new Location(Bukkit.getWorld("hbd"), 41.0, 75.0, -520.0);
+			Location chestLoc = new Location(Bukkit.getWorld("world"), -272.0, 61.0, -134.0);
 			Block block = chestLoc.getBlock();
 			BlockState bs = block.getState();
 			

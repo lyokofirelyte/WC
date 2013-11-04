@@ -15,6 +15,7 @@ commands:
    member:
       description: Member Command
       usage: /member <player>
+      permission: wa.staff
    o:
       description: Staff Chat
       usage: /o <message>
@@ -22,6 +23,12 @@ commands:
    l:
       description: Alliance Chat
       usage: /l <message>
+   spawn:
+      description: WC Spawn
+      usage: /spawn
+   s:
+      description: WC Spawn
+      usage: /s
    sell:
       description: WC Sell Command
       usage: /sell price
@@ -109,10 +116,6 @@ commands:
       description: WC Warp Command
       usage: /w <dest> or /w <page>
       permission: wa.mod2
-   ww:
-      description: WC Image Command
-      usage: /ww <images>
-      permission: wa.mod2
    remwarp:
       description: WC Warp Command
       usage: /remwarp <warp>
@@ -125,13 +128,6 @@ commands:
       description: WC Warp Command
       usage: /setwarp <warp>
       permission: wa.mod2
-   back:
-      description: WC Back Command
-      usage: /back or /back <1-6>
-      permission: wa.mod2
-   bk:
-      description: WC Back Command
-      usage: /back or /back <1-6>
    rankup:
       description: WC Rankup Command
       usage: /rankup
@@ -182,6 +178,12 @@ permissions:
         default: op
     wa.admin:
         description: Admin.
+        default: op
+    wa.continental:
+        description: tpa.
+        default: op
+    wa.immortal:
+        description: tpahere.
         default: op
     wa.enderpearl:
         description: Use ender pearls.
