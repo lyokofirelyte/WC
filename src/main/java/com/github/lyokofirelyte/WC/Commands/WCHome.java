@@ -161,9 +161,17 @@ public class WCHome implements CommandExecutor {
 			return;
 		}
 
-		if (homes.size() >= homeLimit && !homes.contains(args[0])){
+		if (homes.size() >= homeLimit){
 			viewHomes(pName, homes, homeLimit, p);
 			return;
+		}
+		
+		for (String a : homes){
+			if (a.startsWith(args[0])){
+				homes.remove(a);
+				wcp.remHome(args[0]);
+				updatePlayer(wcp, p.getName());
+			}
 		}
 		
 		double x = p.getLocation().getX();

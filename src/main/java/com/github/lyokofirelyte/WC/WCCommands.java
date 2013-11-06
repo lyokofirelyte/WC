@@ -215,7 +215,7 @@ public class WCCommands implements CommandExecutor {
         			}
     	  }
     	  
-    	  break;
+      break;
    		
       case "homesounds":
     	 
@@ -1322,7 +1322,7 @@ public class WCCommands implements CommandExecutor {
 	}
 	
 	public void setBoard(Player p){
-		ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(p, false);
+		ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(p);
 		plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
 	}
 

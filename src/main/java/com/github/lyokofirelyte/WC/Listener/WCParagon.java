@@ -58,11 +58,11 @@ public class WCParagon implements Listener {
         lore.add("§7§oto the shrine near spawn.");
         paragonMeta.setLore(lore);
         
-        paragonMeta.setDisplayName("§" + e.getColor() + "§l" + e.getParagon());
+        paragonMeta.setDisplayName(Utils.AS(e.getParagon().toUpperCase() + " PARAGON"));
         paragonMeta.addEnchant(Enchantment.DURABILITY, 10, true);
         paragon.setItemMeta(paragonMeta);
         
-        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) &" + e.getColor() + e.getParagon() + " &dparagon from harvesting " + e.getMat().toString().toLowerCase() + " &6" + e.getBlocksMined() + " &dtimes."));
+        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from harvesting " + e.getMat().toString().toLowerCase() + " &6" + e.getBlocksMined() + " &dtimes."));
         
         wcp.setBlocksMined(0);
         

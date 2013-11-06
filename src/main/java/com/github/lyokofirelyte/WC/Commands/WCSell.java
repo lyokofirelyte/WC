@@ -12,12 +12,14 @@ import org.bukkit.block.Chest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WC.WCMenus;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
@@ -94,6 +96,11 @@ public class WCSell implements CommandExecutor {
 			  s(p, "&7&oYou've put up an item for sale! (See the shop via /root -> closet");
 			  s2(p, "&7&oYou can cancel this offer by just buying it back.");
 			  bc(p.getDisplayName() + " &dhas put an item up for sale in The Closet!");
+			  
+				for (HumanEntity a : WCMenus.invs.get("closetStore").getViewers()){
+					WCMenus.openCloset((Player)a);
+					WCMain.s((Player)a, "Store refreshed because of sell addition.");
+				}
 			}
 			
 		}

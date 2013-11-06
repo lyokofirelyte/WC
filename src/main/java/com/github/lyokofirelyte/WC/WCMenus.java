@@ -57,11 +57,11 @@ public class WCMenus implements Listener, CommandExecutor {
 	public static Map <String, String> actions = new HashMap<>();
 	public static Map <String, String> banActions = new HashMap<>();
 	
-	public Inventory inv;
+	public static Inventory inv;
 	Boolean poke = true;
 	Boolean setup = false;
 	String sel;
-	Chest chest;
+	static Chest chest;
 	public String colorType;
 	Player p;
 	
@@ -368,7 +368,7 @@ public class WCMenus implements Listener, CommandExecutor {
 		plugin.getLogger().log(Level.INFO, "/options menu has been set up.");
 	}
 	
-	public void openCloset(Player p){
+	public static void openCloset(Player p){
 
 		inv = invs.get("closetStore");
 		Location chestLoc = new Location(Bukkit.getWorld("world"), -272.0, 61.0, -134.0);

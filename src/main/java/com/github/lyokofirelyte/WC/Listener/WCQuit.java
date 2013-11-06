@@ -21,29 +21,27 @@ public class WCQuit implements Listener {
   }
 
   @EventHandler(priority=EventPriority.HIGH)
-  public boolean onPlayerQuit(final PlayerQuitEvent event) {
+  public boolean onPlayerQuit(final PlayerQuitEvent e) {
+	  
+	e.setQuitMessage(null);
 	  
 	try {
-		plugin.wcm.savePlayer(event.getPlayer().getName());
-	} catch (IOException e) {
-		e.printStackTrace();
+		plugin.wcm.savePlayer(e.getPlayer().getName());
+	} catch (IOException ee) {
+		ee.printStackTrace();
 	}  
 	    
     List <String> quitMessages = this.plugin.config.getStringList("Core.QuitMessages");
+    
     Random rand = new Random();
     int randomNumber = rand.nextInt(quitMessages.size());
     final String quitMessage = (String)quitMessages.get(randomNumber);
-    event.setQuitMessage(null);
 
     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable()
-    {
-      public void run()
-      {
-        Player p = event.getPlayer();
+    { public void run() {
+        Player p = e.getPlayer();
         Bukkit.broadcastMessage("§e" + quitMessage.replace("%p", new StringBuilder("§7").append(p.getDisplayName()).append("§e").toString()).replace(" ", " §e"));
-      }
-    }
-    , 5L);
+    } } , 5L);
 
     return true;
   }

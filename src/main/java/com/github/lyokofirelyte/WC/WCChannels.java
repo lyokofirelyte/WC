@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,6 +23,7 @@ import static com.github.lyokofirelyte.WC.Util.Utils.*;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.PlayerEmoteEvent;
 
 import static com.github.lyokofirelyte.WC.WCMain.*;
@@ -36,6 +36,7 @@ public class WCChannels implements CommandExecutor, Listener {
   WCAlliance wca;
   WCPlayer wcp;
   WCPlayer wcpCurrent;
+  WCSystem system;
   List<String> chatUsers;
   Player p;
   
@@ -58,34 +59,28 @@ public class WCChannels implements CommandExecutor, Listener {
 		}
 		
 		String message[] = s.split(" ");
-		OfflinePlayer player = Bukkit.getOfflinePlayer(message[1].toString());
-		wcp = plugin.wcm.getWCPlayer(player.getName());
+		wcp = plugin.wcm.getWCPlayer(message[1]);
 		wca = plugin.wcm.getWCAlliance(wcp.getAlliance());
 		
-			if (player.hasPlayedBefore() == false){
+			if (wcp == null){
 				p.sendMessage(WCMail.WC + "That player has never logged in before!");
 				return;
 			}
-			
-			if (wcp.getAlliance().equals("ForeverAlone")){
-				wcp.setAllianceRank("Guest");
-				updatePlayer(wcp, player.getName());
-			}
-			
+					
 		p.sendMessage(new String[]{
-			AS(WCMail.WC + "Inspecting player " + player.getName() + "."),
+			AS(WCMail.WC + "Inspecting player " + message[1] + "."),
 			AS("&1| &a&oglobal rank&f: " + WCVault.chat.getPlayerPrefix("world", message[1])),
 			AS("&1| &f> > > < < <"),
 			AS("&1| &b&oalliance&f: " + plugin.wcm.getCompleted(wcp.getAlliance(), wca.getColor1(), wca.getColor2())),
 			AS("&1| &b&oalliance ranking&f: " + wcp.getAllianceRank()),
 			AS("&1| &f> > > < < <"),
 			AS("&1| &6&oparagon level&f: " + wcp.getParagonLevel()),
-			AS("&1| &6&oshiny balance&f: " + WCVault.econ.getBalance(player.getName())),
+			AS("&1| &6&oshiny balance&f: " + WCVault.econ.getBalance(message[1])),
 			AS("&1| &6&odeath count&f: " + wcp.getDeathCount()),
 			AS("&1| &f> > > < < <"),
 		});
 		
-		if (player.isOnline()){
+		if (Bukkit.getPlayer(message[1]) != null){
 			p.sendMessage(AS("&1| &c&ostatus&f: &aONLINE"));
 		} else {
 			p.sendMessage(AS("&1| &c&ostatus&f: &4OFFLINE"));	
@@ -107,24 +102,6 @@ public class WCChannels implements CommandExecutor, Listener {
 	  }
 
 	  if (e.isCancelled()){
-		  return;
-	  }
-	  
-	  if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".ObeliskTemp")){
-		  e.setCancelled(true);
-		  
-		  if (plugin.config.getStringList("Obelisks.Names").contains(e.getMessage().toLowerCase())){
-			  plugin.datacore.set("Users." + e.getPlayer().getName() + ".ObeliskSelection", true);
-		  	  plugin.datacore.set("Users." + e.getPlayer().getName() + ".ObeliskLocation", e.getMessage().toLowerCase());
-		  	  e.getPlayer().sendMessage(WC + "Alright! Now just right click the glowstone and you're ready to go!");
-		      plugin.datacore.set("Users." + e.getPlayer().getName() + ".ObeliskTemp", null);
-		  } else if (e.getMessage().equals("##")){
-			  plugin.datacore.set("Users." + e.getPlayer().getName() + ".ObeliskTemp", null);
-		  		e.getPlayer().sendMessage(WC + "Cancelled your teleport!");
-		  } else {
-			  e.getPlayer().sendMessage(WC + "That location does not exist. Try again or type ## to cancle.");
-		  }  
-		  
 		  return;
 	  }
 
@@ -151,9 +128,10 @@ public class WCChannels implements CommandExecutor, Listener {
 	  }  
 
 	  e.setCancelled(true);
-	  globalChat(p, e.getMessage(), wcp, wca);
+	  globalChat(p, e.getMessage());
+	  system = plugin.wcm.getWCSystem("system");
 	  
-	  List<String> emotes = plugin.datacore.getStringList("EmotesList");
+	  List<String> emotes = system.getEmotes();
 	  
 	  for (String s : emotes){
 		  
@@ -162,17 +140,13 @@ public class WCChannels implements CommandExecutor, Listener {
 	  		plugin.getServer().getPluginManager().callEvent(emote);
 	  		return;
 	  	}
-	 	
 	  }
   }
-  
 
-
-  public void globalChat(Player p, String message, WCPlayer wcp, WCAlliance wca){
+  public void globalChat(Player p, String message){
 
 		for (Player bleh : Bukkit.getOnlinePlayers()){
 			
-			WCPlayer wcpCurrent = wcp;
 			wcp = plugin.wcm.getWCPlayer(bleh.getName());
 			wcpCurrent = plugin.wcm.getWCPlayer(p.getName());
 			
@@ -285,8 +259,8 @@ public class WCChannels implements CommandExecutor, Listener {
         wcpCurrent.setLastChat(p.getName());
         updatePlayer(wcpCurrent, wcp.getLastChat());
         
-        Bukkit.getPlayer(wcp.getLastChat()).sendMessage(AS("&" + wcpCurrent.getGlobalColor() + "<- " + p.getDisplayName() + " §f// &" + wcpCurrent.getGlobalColor() + createString(args, 0)));
-        sender.sendMessage(AS("&" + wcp.getGlobalColor() + "-> " + Bukkit.getPlayer(wcp.getLastChat()).getDisplayName() + " §f// &" + wcp.getGlobalColor() + createString(args, 0)));
+        Bukkit.getPlayer(wcp.getLastChat()).sendMessage(AS("&" + wcpCurrent.getPMColor() + "<- " + p.getDisplayName() + " §f// &" + wcpCurrent.getPMColor() + createString(args, 0)));
+        sender.sendMessage(AS("&" + wcp.getPMColor() + "-> " + Bukkit.getPlayer(wcp.getLastChat()).getDisplayName() + " §f// &" + wcp.getPMColor() + createString(args, 0)));
         break;
     }
 
@@ -359,7 +333,7 @@ public class WCChannels implements CommandExecutor, Listener {
 
         for (String a : chatUsers){
           if (Bukkit.getOfflinePlayer(a).isOnline()) {
-            Bukkit.getPlayer(a).sendMessage("§c§oOh! §4// " + p.getDisplayName() + "§f: " + createString(args, 0));
+            Bukkit.getPlayer(a).sendMessage("§c§oOh! §4// " + p.getDisplayName() + "§f: §c" + createString(args, 0));
           }
         }
         

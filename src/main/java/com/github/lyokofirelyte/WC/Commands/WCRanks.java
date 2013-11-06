@@ -67,12 +67,12 @@ public class WCRanks implements CommandExecutor {
 		}
 		
 		int cost = plugin.datacore.getInt("RankCosts." + newGroup);
-			if (wcp.getBalance() < cost){
+			if (WCVault.econ.getBalance(p.getName()) < cost){
 				WCMain.s(p, "You need &6" + cost + " &dshinies for that rank.");
 				return;
 			}
 			
-		wcp.setBalance(wcp.getBalance() - cost);
+		WCVault.econ.withdrawPlayer(p.getName(), cost);
 		WCVault.perms.playerAddGroup(p, newGroup);
 		WCVault.perms.playerRemoveGroup(p, oldGroup);
 		Bukkit.broadcastMessage(Utils.AS(WCMail.WC + p.getDisplayName() + " &dhas been promoted to " + newGroupFancy + "&d."));	

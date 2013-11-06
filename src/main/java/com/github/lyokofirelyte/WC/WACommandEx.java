@@ -15,6 +15,8 @@ import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 public class WACommandEx implements CommandExecutor {
@@ -210,7 +212,9 @@ public class WACommandEx implements CommandExecutor {
 	    			    wcp.setAllianceRank2("Guest");
 	    			    updateAll(wcaCurrent, wcp, args[2], p.getName());
 	    			    for (String currentMember : wcaCurrent.getChatUsers()){
-    			  			s(Bukkit.getPlayer(currentMember), p.getDisplayName() + " &dhas joined alliance chat!");
+	    			    	if (Bukkit.getPlayer(currentMember) != null){
+	    			    		s(Bukkit.getPlayer(currentMember), p.getDisplayName() + " &dhas joined alliance chat!");
+	    			    	}
     			  		}
 	    			    
 	    		  break;
@@ -397,6 +401,8 @@ public class WACommandEx implements CommandExecutor {
     	  		  }
     	  		  
     	  		  wcaCurrent = plugin.wcm.getWCAlliance(args[1]);
+    	  		  
+    	  		  WCVault.econ.withdrawPlayer(p.getName(), Integer.parseInt(args[2]));
     	  		  wcaCurrent.setBank(wcaCurrent.getBank() + Integer.parseInt(args[2]));
     	  		  updateAlliance(wcaCurrent, args[1]);
     	  		  
@@ -553,7 +559,7 @@ public class WACommandEx implements CommandExecutor {
 	        	     
 	        	     wcpCurrent = plugin.wcm.getWCPlayer(Bukkit.getPlayer(args[2]).getName());
 	        	     
-	        	     if (!wcpCurrent.getAlliance().equals("ForeverAlone")){
+	        	     if (wcpCurrent.getInAlliance()){
 	        	    	 s(p, "That player is already in an alliance!");
 	        	    	 break;
 	        	     }
@@ -605,8 +611,8 @@ public class WACommandEx implements CommandExecutor {
 	        	     
 	        	     updateAll(wcaCurrent, wcpCurrent, args[1], Bukkit.getPlayer(args[2]).getName());
 	        	     
-	        	     p.performCommand("wc sidebar");
-	        	     p.performCommand("wc sidebar");
+	        		 ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(Bukkit.getPlayer(args[2]));
+	        		 plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
 
 	          break;
 	         
@@ -702,11 +708,11 @@ public class WACommandEx implements CommandExecutor {
 	        	    updateAlliance(wcaCurrent, wcp.getAlliance());
 	        	    alliance = plugin.wcm.getCompleted(wcp.getInvite(), wcaCurrent.getColor1(), wcaCurrent.getColor2());
 	        	    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + p.getName() + " " + plugin.wcm.getCompleted(wcp.getNick(), wcaCurrent.getColor1(), wcaCurrent.getColor2()));
-        	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + Bukkit.getPlayer(args[1]).getName() + " group add " + wcp.getInvite());
+        	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + p.getName() + " group add " + wcp.getInvite());
 	        	    TagAPI.refreshPlayer(p);
 	        	    Utils.bc(p.getDisplayName() + " has joined " + alliance + "&d!");
-	        	    p.performCommand("wc sidebar");
-	        	    p.performCommand("wc sidebar");
+	        		scoreboardEvent = new ScoreboardUpdateEvent(p);
+	        		plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
 	        	    
 	         break;
 	          
@@ -833,7 +839,7 @@ public class WACommandEx implements CommandExecutor {
 	        	    			wcpCurrent.setInAlliance(false);
 	        	    			wcpCurrent.setAllianceRank("Guest");
 	        	    			wcpCurrent.setInChat(false);
-	        	    			String completed = plugin.wcm.getCompleted(wcpCurrent.getNick(), "7", "8");
+	        	    			String completed = plugin.wcm.getCompleted(wcpCurrent.getNick(), "7", "7");
 	        	    			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + a.getName() + " " + completed);
 	        	    			TagAPI.refreshPlayer(a);
 	        	    			updatePlayer(wcpCurrent, a.getName());

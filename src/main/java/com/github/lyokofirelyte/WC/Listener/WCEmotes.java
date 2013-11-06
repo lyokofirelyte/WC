@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.PlayerEmoteEvent;
 
 public class WCEmotes implements Listener {
@@ -20,14 +21,17 @@ public class WCEmotes implements Listener {
 	}
 	
 	WCPlayer wcp;
-	static List<String> emotes;
+	WCSystem wcs;
+    List<String> emotes;
+	List<String> emoteActions;
 	
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onEmote(PlayerEmoteEvent e){
 		
 		wcp = plugin.wcm.getWCPlayer(e.getPlayer().getName());
-		emotes = plugin.datacore.getStringList("EmotesList");
-		List<String> emoteActions = plugin.datacore.getStringList("EmoteActions");
+		wcs = plugin.wcm.getWCSystem("system");
+		emotes = wcs.getEmotes();
+		emoteActions = wcs.getEmoteActions();
 		
 		if (!wcp.getEmotes()){
 			e.setCancelled(true);
@@ -39,8 +43,4 @@ public class WCEmotes implements Listener {
   		Bukkit.broadcastMessage(Utils.AS(e.getSentence()));
 	}
 
-
-	public static List<String> getEmoteList(){
-		return emotes;
-	}
 }

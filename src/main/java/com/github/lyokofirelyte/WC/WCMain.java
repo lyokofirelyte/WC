@@ -43,10 +43,11 @@ import com.github.lyokofirelyte.WC.Listener.WCTP;
 import com.github.lyokofirelyte.WC.Listener.WCTags;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
-import com.github.lyokofirelyte.WCAPI.RebootManager;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
 import com.github.lyokofirelyte.WCAPI.WCManager;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
+import com.github.lyokofirelyte.WCAPI.Manager.RebootManager;
 
 public class WCMain extends JavaPlugin {
 	
@@ -59,11 +60,11 @@ public class WCMain extends JavaPlugin {
   public File file;
   public File mailFile;
   
-  public YamlConfiguration config = new YamlConfiguration();
-  public YamlConfiguration datacore = new YamlConfiguration();
-  public YamlConfiguration games = new YamlConfiguration();
-  public YamlConfiguration mail = new YamlConfiguration();
-  public YamlConfiguration help = new YamlConfiguration();
+  public YamlConfiguration config;
+  public YamlConfiguration datacore;
+  public YamlConfiguration games;
+  public YamlConfiguration mail;
+  public YamlConfiguration help;
   public YamlConfiguration yaml;
 
   private String url;
@@ -75,6 +76,7 @@ public class WCMain extends JavaPlugin {
   public WCAPI api;
   public WCManager wcm;
   public RebootManager rm;
+  public InventoryManager invManager;
   
   private int msg = 0;
 
@@ -102,13 +104,13 @@ public class WCMain extends JavaPlugin {
 	  pm.registerEvents(new WCScoreboard(this),this);
 	  // pm.registerEvents(new WCMoney(this),this);
 	
-	  this.vaultMgr.hookSetup();
+	  vaultMgr.hookSetup();
 	    
-	    try {
-	      firstRun();
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	    }
+	  try {
+	    firstRun();
+	  } catch (Exception e) {
+	    e.printStackTrace();
+	  }
 	
 	  url = config.getString("url");
 	  username = config.getString("username");
@@ -122,6 +124,7 @@ public class WCMain extends JavaPlugin {
 	    
 	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
+	  invManager = new InventoryManager(api);
 	    
 	  if ((url == null) || (username == null) || (password == null) || WCAPI == null || TagAPI == null) {
 	     Bukkit.getServer().getLogger().info("You must provide a url, username, and password in the config.yml. That or the API is missing.");
@@ -157,16 +160,9 @@ public class WCMain extends JavaPlugin {
 	    
 	  getLogger().info("WaterCloset has been disabled.");
   }
-
-  public WCManager getWCM(){
-	  return wcm;
-  }
-  
-  public RebootManager getRebootManager(){
-	  return rm;
-  }
   
   private void registerCommands() {
+	  
     getCommand("watercloset").setExecutor(new WCCommands(this));
     getCommand("wc").setExecutor(new WCCommands(this));
     getCommand("blame").setExecutor(new WCCommands(this));
@@ -279,18 +275,23 @@ public class WCMain extends JavaPlugin {
 	    	case 0: 
 	    		config = yaml;
 	    		configFile = file;
+	    		break;
 	    	case 1:
 	    		help = yaml;
 	    		helpFile = file;
+	    		break;
 	    	case 2: 
 	    		games = yaml;
 	    		gamesFile = file;
+	    		break;
 	    	case 3: 
 	    		datacore = yaml;
 	    		datacoreFile = file;
+	    		break;
 	    	case 4:
 	    		mail = yaml;
 	    		mailFile = file;
+	    		break;
     	}
     }
   }
@@ -318,7 +319,7 @@ public class WCMain extends JavaPlugin {
   public void updateBoard(){
 	  
 	  for (Player player : Bukkit.getOnlinePlayers()){
-		  ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(player, false);
+		  ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(player);
 		  getServer().getPluginManager().callEvent(scoreboardEvent);
 	  }
   }
