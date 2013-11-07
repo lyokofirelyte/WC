@@ -32,6 +32,7 @@ import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
@@ -338,6 +339,57 @@ public class WCCommands implements CommandExecutor {
     	  		s(p, "You WILL throw items by shift-right clicking.");
     	  	}
     	  	
+      break;
+      
+      case "setwalkwaystart":
+    	  
+    	  if (p.hasPermission("wa.staff") && args.length == 2){
+
+    	  		
+    	  	double x = p.getLocation().getBlockX();
+    	  	double y = p.getLocation().getBlockY();
+    	  	double z = p.getLocation().getBlockZ();
+    	  		
+		  	double x2 = p.getEyeLocation().getDirection().getX();
+		  	double y2 = p.getEyeLocation().getDirection().getY();
+		  	double z2 = p.getEyeLocation().getDirection().getZ();
+		  	
+		  	WCSystem system = plugin.wcm.getWCSystem("system");
+    	  	
+    	    system.addWalkWayStart(args[0] + "," + x + "," + y + "," + z  + "," + x2 + "," + y2 + "," + z2);
+    	    plugin.wcm.updateSystem("system", system);
+
+    	  	s(p, "Location set!");
+    	  }
+    	  
+      break;
+      
+      case "setwalkwaystop":
+    	   
+    	  if (p.hasPermission("wa.staff") && args.length == 2){
+
+    		WCSystem system = plugin.wcm.getWCSystem("system");
+    		
+    		double x = p.getLocation().getBlockX();
+      	  	double y = p.getLocation().getBlockY();
+      	  	double z = p.getLocation().getBlockZ();
+      	  	
+      	    system.addWalkWayEnd(args[0] + "," + x + "," + y + "," + z);
+      	    plugin.wcm.updateSystem("system", system);
+
+      	  	s(p, "Location set!");
+      	  }
+    	  
+      break;
+      
+      case "killwalkways":
+    	  
+    	  if (p.hasPermission("wa.staff")){
+    		  WCSystem system = plugin.wcm.getWCSystem("system");
+    		  system.setWalkWayStarts(new ArrayList<String>());
+    		  system.setWalkWayEnds(new ArrayList<String>());
+    	  }
+    	  
       break;
       
       case "fork":

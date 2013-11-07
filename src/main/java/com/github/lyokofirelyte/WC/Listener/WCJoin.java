@@ -37,7 +37,6 @@ plugin = instance;
     event.setJoinMessage(null);
 
 	userCreate(p);
-	plugin.wcm.setupPlayer(p.getName());
 	wcp = plugin.wcm.getWCPlayer(p.getName());
 	wca = plugin.wcm.getWCAlliance(wcp.getAlliance());
 
@@ -123,6 +122,8 @@ plugin = instance;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			plugin.wcm.setupPlayer(p.getName());
 		}
 	}
 	

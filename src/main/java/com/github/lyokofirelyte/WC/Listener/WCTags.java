@@ -15,6 +15,8 @@ public class WCTags implements Listener {
 	WCPlayer wcp;
 	WCAlliance wca;
 	
+	String completed;
+	
     public WCTags(WCMain instance){
     plugin = instance;
 	}
@@ -23,7 +25,13 @@ public class WCTags implements Listener {
     public void onTag(PlayerReceiveNameTagEvent e){
     	wcp = plugin.wcm.getWCPlayer(e.getNamedPlayer().getName());
     	wca = plugin.wcm.getWCAlliance(wcp.getAlliance());
-    	String completed = plugin.wcm.getCompleted2(e.getNamedPlayer().getName(), wca.getColor1(), wca.getColor2());
+    	
+    	if (wca.equals("ForeverAlone")){
+    		completed = "§7" + wcp.getNick();
+    	} else {
+    		completed = plugin.wcm.getCompleted2(e.getNamedPlayer().getName(), wca.getColor1(), wca.getColor2());
+    	}
+    	
     	e.setTag(completed);
     }
 }

@@ -20,12 +20,15 @@ import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCCommands;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCSystem;
 
 public class WCMiscEvents implements Listener {
 	
@@ -147,5 +150,60 @@ public class WCMiscEvents implements Listener {
 	      }
 	    }
 	 }
+	  
+	  
+	  @EventHandler(priority = EventPriority.NORMAL)
+	  public void onMove(final PlayerMoveEvent e){
+		 
+		  WCSystem system = plugin.wcm.getWCSystem("system");
+		  
+		  List<String> starts = system.getWalkWayStarts();
+		  List<String> ends = system.getWalkWayEnds();
+		  
+		  	for (String s : starts){
+		  		String[] split = s.split(",");
+		  		
+		  		double x = Double.parseDouble(split[1]);
+		  		double y = Double.parseDouble(split[2]);
+		  		double z = Double.parseDouble(split[3]);
+		 
+		  		
+		  		if (x == e.getPlayer().getLocation().getBlockX() && y == e.getPlayer().getLocation().getBlockY() && z == e.getPlayer().getLocation().getBlockZ()){
+
+		  		  final Vector vec = new Vector(Double.parseDouble(split[4]), Double.parseDouble(split[5]), Double.parseDouble(split[6]));
+		  		  
+		  		  if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".HAZTASK") == false){
+
+			  		  int task = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+			  		  public void run() { movingWalkway(vec, e.getPlayer());} }, 0L, 5L);
+			  		  
+			  		  plugin.datacore.set("Users." + e.getPlayer().getName() + ".MTask", task);
+			  		  plugin.datacore.set("Users." + e.getPlayer().getName() + ".HAZTASK", true);
+			  		  break;
+			  		  
+		  		  }
+		  		}
+		  	}
+		  	
+		  	for (String s : ends){
+		  		String[] split = s.split(",");
+		  		
+		  		double x = Double.parseDouble(split[1]);
+		  		double y = Double.parseDouble(split[2]);
+		  		double z = Double.parseDouble(split[3]);	
+		  		
+		  		if (x == e.getPlayer().getLocation().getBlockX() && y == e.getPlayer().getLocation().getBlockY() && z == e.getPlayer().getLocation().getBlockZ()){
+		  			Bukkit.getScheduler().cancelTask(plugin.datacore.getInt("Users." + e.getPlayer().getName() + ".MTask"));
+		  			plugin.datacore.set("Users." + e.getPlayer().getName() + ".HAZTASK", false);
+		  			WCMain.s(e.getPlayer(), "You've reached the end of the moving walkway!");
+		  			break;
+		  		}
+		  	}
+		  
+	  }
+
+	  private void movingWalkway(Vector vec, Player p) {
+		p.setVelocity(vec);
+	  }
 	
 }
