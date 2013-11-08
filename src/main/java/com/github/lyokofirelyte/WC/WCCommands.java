@@ -48,6 +48,7 @@ public class WCCommands implements CommandExecutor {
   String WC = "§dWC §5// §d";
   Boolean home;
   Boolean homeSet;
+  public int task;
   Player p;
   List <Integer> laserFwTasks = new ArrayList<Integer>();
   int ltask = -1;
@@ -112,7 +113,16 @@ public class WCCommands implements CommandExecutor {
     	  bc(AS(p.getDisplayName() + " &6has enabled PVP mode."));
     	  
       break;
-         
+      
+      case "vec":
+    	  
+    	  if (p.hasPermission("wa.staff")){
+    	  
+    		  p.setVelocity(new Vector(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3])));
+    	  }
+    	  
+      break;
+    	  
       case "fling":
 
     	  
@@ -573,20 +583,6 @@ public class WCCommands implements CommandExecutor {
 
     	  if (args.length == 1 || args.length == 2){
     		  
-    		  if (args.length == 2 && args[1].equalsIgnoreCase("toggle")){
-        		  
-    			  Boolean toggle = plugin.datacore.getBoolean("Users." + sender.getName() + ".expWarn");
-    		  		if (toggle){
-    		  			plugin.datacore.set("Users." + sender.getName() + ".expWarn", false);
-    		  			s(p, "You will recieve notifications when your XP is stored into the database.");
-    		  		} else {
-    		  			plugin.datacore.set("Users." + sender.getName() + ".expWarn", true);
-    		  			s(p, "You will NOT recieve notifications when your XP is stored into the database.");
-    		  		}
-    		  	
-    		  		break;
-    		  }
-    		  
     		  int xp = wcp.getExp();
     		  s(p, "You currently have §6" + xp + " §dexp stored. (/wc xp take <amount>)");
     		  int l30 = (xp / 825);
@@ -614,11 +610,15 @@ public class WCCommands implements CommandExecutor {
     			  break;
     		  }
     		  
-    		  plugin.datacore.set("Users." + sender.getName() + ".expDeposit", true);
+    		  wcp.setDepositExp(true);
+    		  updatePlayer(wcp, p.getName());
+    		  
     		  wcp.setExp(xp-Integer.parseInt(args[2]));
     		  p.giveExp(Integer.parseInt(args[2]));
     		  s(p, "You've taken some XP out of your storage facility.");
-    		  plugin.datacore.set("Users." + sender.getName() + ".expDeposit", false);
+    		  
+    		  wcp.setDepositExp(false);
+    		  updatePlayer(wcp, p.getName());
     		  break;
     	  }
     	  

@@ -23,7 +23,7 @@ public class WCExpSystem implements Listener {
 		  Player p = e.getPlayer();
 		  wcp = plugin.wcm.getWCPlayer(p.getName());
 		  
-		  if (wcp.getExpDeposit()){
+		  if (!wcp.getExpDeposit()){
 
 		  int expAmount = e.getAmount();
 		  int storedAmount = wcp.getExp();

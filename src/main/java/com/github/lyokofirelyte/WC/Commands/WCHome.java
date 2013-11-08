@@ -64,7 +64,7 @@ public class WCHome implements CommandExecutor {
 		}
 		
 		for (String h : homes){
-			if (h.startsWith(args[0].toLowerCase())){
+			if (h.toLowerCase().startsWith(args[0].toLowerCase())){
 				String[] hSplit = h.split(" ");
 				tpHome(Utils.createString(hSplit, 1), p, hSplit[0], wcp);
 				return;
@@ -207,7 +207,7 @@ public class WCHome implements CommandExecutor {
 		int x = 0;
 
 		for (String h : homes){
-			if (!h.startsWith(args[0].toLowerCase())){
+			if (!h.toLowerCase().startsWith(args[0].toLowerCase())){
 				x++;
 					if (x >= homes.size()){
 						viewHomes(pName, homes, homeLimit, p);

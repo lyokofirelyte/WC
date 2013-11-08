@@ -82,24 +82,17 @@ public class WCBlockPlace implements Listener{
 	
 	
 		if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".ObeliskPlaceMode")){
-			
+	
 			plugin.datacore.set("Users." + e.getPlayer().getName() + ".ObeliskPlaceMode", false);
 			double x = e.getBlock().getLocation().getX();
 			double y = e.getBlock().getLocation().getY();
 			double z = e.getBlock().getLocation().getZ();
 			
-			String xyz = x + "," + y + "," + z;
-			String latest = plugin.datacore.getString("Obelisks.Latest");
-			String type = plugin.datacore.getString("Obelisks.LatestType");
+			WCSystem system = plugin.wcm.getWCSystem("system");
 			
-			plugin.config.set("Obelisks.Locations." + xyz + ".X", x);
-			plugin.config.set("Obelisks.Locations." + xyz + ".Y", y);
-			plugin.config.set("Obelisks.Locations." + xyz + ".Z", z);
-			plugin.config.set("Obelisks.Locations." + xyz + ".Name", latest);
-			plugin.config.set("Obelisks.Locations." + xyz + ".Type", type);
-			plugin.config.set("Obelisks.ListGrab." + latest, xyz);
-			
-			e.getPlayer().sendMessage(Utils.AS(WCMail.WC + "Location set for " + latest));
+			system.addObelisk(plugin.datacore.getString("Obelisks.Latest") + " " + x + " " + y + " " + z);
+			plugin.wcm.updateSystem("system", system);
+			WCMain.s(e.getPlayer(), "Added!");
 			return;
 		}
 		

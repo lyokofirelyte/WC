@@ -36,6 +36,7 @@ import com.github.lyokofirelyte.WC.Listener.WCDeath;
 import com.github.lyokofirelyte.WC.Listener.WCEmotes;
 import com.github.lyokofirelyte.WC.Listener.WCJoin;
 import com.github.lyokofirelyte.WC.Listener.WCMiscEvents;
+import com.github.lyokofirelyte.WC.Listener.WCObelisk;
 import com.github.lyokofirelyte.WC.Listener.WCParagon;
 import com.github.lyokofirelyte.WC.Listener.WCQuit;
 import com.github.lyokofirelyte.WC.Listener.WCScoreboard;
@@ -102,6 +103,7 @@ public class WCMain extends JavaPlugin {
 	  pm.registerEvents(new WCParagon(this),this);
 	  pm.registerEvents(new WCEmotes(this),this);
 	  pm.registerEvents(new WCScoreboard(this),this);
+	  pm.registerEvents(new WCObelisk(this),this);
 	  // pm.registerEvents(new WCMoney(this),this);
 	
 	  vaultMgr.hookSetup();
