@@ -63,9 +63,11 @@ public class WCDeath implements Listener{
 
 			Player p = (Player) ent;
 			wcp = plugin.wcm.getWCPlayer(p.getName());
+			wcp.setLastLocation(p.getLocation());
 			int deaths = wcp.getDeathCount();
 			deaths++;
 			wcp.setDeathCount(deaths);
+			plugin.wcm.updatePlayerMap(p.getName(), wcp);
 			((PlayerDeathEvent) e).setDeathMessage(null);
 			String message = null;
 
@@ -91,7 +93,7 @@ public class WCDeath implements Listener{
 
 		Random rand = new Random();
 		List<String> dML = plugin.config.getStringList("Core.DeathMessages." + dc.toString());
-		int dMN = rand.nextInt(dML.size());
+		int dMN = rand.nextInt(dML.size()-1);
 		String message = dML.get(dMN);
 
 		int deaths = plugin.datacore.getInt("Users." + p.getName() + ".DeathCount");
@@ -117,7 +119,7 @@ public class WCDeath implements Listener{
 
 		}
 
-		int dMN = rand.nextInt(dML.size());
+		int dMN = rand.nextInt(dML.size()-1);
 		String message = dML.get(dMN);
 
 		int deaths = plugin.datacore.getInt("Users." + p.getName() + ".DeathCount");

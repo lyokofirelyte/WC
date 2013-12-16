@@ -28,15 +28,9 @@ public class WCEmotes implements Listener {
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onEmote(PlayerEmoteEvent e){
 		
-		wcp = plugin.wcm.getWCPlayer(e.getPlayer().getName());
 		wcs = plugin.wcm.getWCSystem("system");
 		emotes = wcs.getEmotes();
 		emoteActions = wcs.getEmoteActions();
-		
-		if (!wcp.getEmotes()){
-			e.setCancelled(true);
-			return;
-		}
 
 		e.setSentence(e.getPlayer().getDisplayName() + " &d" + emoteActions.get(emotes.indexOf(e.getEmote())));
 		

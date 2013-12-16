@@ -8,11 +8,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.kitteh.tag.TagAPI;
+//import org.kitteh.tag.TagAPI;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
@@ -395,15 +394,16 @@ public class WACommandEx implements CommandExecutor {
     	  			  break;
     	  		  }
     	  		  
-    	  		  if (WCVault.econ.getBalance(p.getName()) < Integer.parseInt(args[2])){ // @econ
+    	  		  if (wcp.getBalance() < Integer.parseInt(args[2])){ 
     	  			  s(p, "You don't have enough money! D:");
     	  			  break;
     	  		  }
     	  		  
     	  		  wcaCurrent = plugin.wcm.getWCAlliance(args[1]);
     	  		  
-    	  		  WCVault.econ.withdrawPlayer(p.getName(), Integer.parseInt(args[2]));
+    	  		  wcp.setBalance(wcp.getBalance() - Integer.parseInt(args[2]));
     	  		  wcaCurrent.setBank(wcaCurrent.getBank() + Integer.parseInt(args[2]));
+    	  		  updatePlayer(wcp, p.getName());
     	  		  updateAlliance(wcaCurrent, args[1]);
     	  		  
     	  		  s(p, "Success!");
@@ -461,7 +461,7 @@ public class WACommandEx implements CommandExecutor {
 	        	  		p.setOp(true);
 	        	  	}
 	        	  	
-	        	  	if (wca.getDoorLocks()){
+	        	  	if (!wca.getDoorLocks()){
 	        	  		
 		        	  	wca.setDoorLocks(true);
 		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " use allow");
@@ -474,7 +474,7 @@ public class WACommandEx implements CommandExecutor {
 		        	  	s(p, "You've turned your door locks off!");
 	        	  	}
 	        	  	
-	        	  	if (p.isOp()){
+	        	  	if (p.isOp() && wcp.isWCOp()){
 	        	  		wcp.setWCOP(false);
 	        	  		p.setOp(false);
 	        	  	}
@@ -503,17 +503,17 @@ public class WACommandEx implements CommandExecutor {
 	        	  		p.setOp(true);
 	        	  	}
 	        	  	
-	        	  	if (wca.getMobSpawn()){
+	        	  	if (!wca.getMobSpawn()){
 	        	  		
 		        	  	wca.setMobSpawn(true);
 		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " mob-spawning allow");
-		        	  	s(p, "You've mob-spawning on!");
+		        	  	s(p, "You've turned mob-spawning on!");
 		        	  	
 	        	  	} else {
 	        	  		
 	        	  		wca.setMobSpawn(false);
 		        	  	p.performCommand("rg flag " + wcp.getAlliance() + " mob-spawning  deny");
-		        	  	s(p, "You've mob-spawning off!");
+		        	  	s(p, "You've turned mob-spawning off!");
 	        	  	}
 	        	  	
 	        	  	if (p.isOp()){
@@ -568,11 +568,6 @@ public class WACommandEx implements CommandExecutor {
 	        	     wcpCurrent.setAllianceRank("Leader");
 	        	     wcpCurrent.setInAlliance(true);
 	        	     
-	        	     String newNick = plugin.wcm.getCompleted(wcpCurrent.getNick(), args[3], args[4]);
-	        	     
-	        	     Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + args[2] + " " + newNick);
-	        	     TagAPI.refreshPlayer(Bukkit.getPlayer(args[2]));
-	        	     
 	        	     WCAlliance wcaCurrent = new WCAlliance(args[1]);
 	        	     wcaCurrent.setTier(0);
 	        	     wcaCurrent.setColors(args[3], args[4]);
@@ -613,6 +608,8 @@ public class WACommandEx implements CommandExecutor {
 	        	     
 	        		 ScoreboardUpdateEvent scoreboardEvent = new ScoreboardUpdateEvent(Bukkit.getPlayer(args[2]));
 	        		 plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
+	        		 
+	        	     Bukkit.getPlayer(args[2]).performCommand("nick " + wcpCurrent.getNick());
 
 	          break;
 	         
@@ -646,7 +643,6 @@ public class WACommandEx implements CommandExecutor {
 	        	  			WCPlayer btemp = plugin.wcm.getWCPlayer(b.getName());
 	        	  				if (btemp.getAlliance().equals(wcp.getAlliance())){
 	        	  					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + b.getName() + " " + plugin.wcm.getCompleted(btemp.getNick(), args[1], args[2]));
-	        	  					TagAPI.refreshPlayer(b);
 	        	  				}
 	        	  		}
 	        	  		
@@ -703,14 +699,16 @@ public class WACommandEx implements CommandExecutor {
 	        	    wcp.setAllianceRank("Member");
 	        	    wcp.setHasInvite(false);
 	        	    updatePlayer(wcp, p.getName());
+	        	    
 	        	    wcaCurrent = plugin.wcm.getWCAlliance(wcp.getInvite());
 	        	    wcaCurrent.addMember(p.getName());
 	        	    updateAlliance(wcaCurrent, wcp.getAlliance());
 	        	    alliance = plugin.wcm.getCompleted(wcp.getInvite(), wcaCurrent.getColor1(), wcaCurrent.getColor2());
-	        	    Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + p.getName() + " " + plugin.wcm.getCompleted(wcp.getNick(), wcaCurrent.getColor1(), wcaCurrent.getColor2()));
+	        	    
+	        	    p.performCommand("nick " + wcp.getNick());
         	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + p.getName() + " group add " + wcp.getInvite());
-	        	    TagAPI.refreshPlayer(p);
 	        	    Utils.bc(p.getDisplayName() + " has joined " + alliance + "&d!");
+	        	    
 	        		scoreboardEvent = new ScoreboardUpdateEvent(p);
 	        		plugin.getServer().getPluginManager().callEvent(scoreboardEvent);
 	        	    
@@ -839,18 +837,16 @@ public class WACommandEx implements CommandExecutor {
 	        	    			wcpCurrent.setInAlliance(false);
 	        	    			wcpCurrent.setAllianceRank("Guest");
 	        	    			wcpCurrent.setInChat(false);
-	        	    			String completed = plugin.wcm.getCompleted(wcpCurrent.getNick(), "7", "7");
-	        	    			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + a.getName() + " " + completed);
-	        	    			TagAPI.refreshPlayer(a);
 	        	    			updatePlayer(wcpCurrent, a.getName());
+	        	    			a.performCommand("nick " + wcpCurrent.getNick());
+	        	    			a.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+	        	        	  	Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent(a));
 	        	    		}
 	        	    }
 	        	    
         	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex group " + wcpp + " delete");
 	        	  	Utils.bc(AS(p.getDisplayName() + " &dhas disbanded their alliance! D:"));
-	        	    p.performCommand("wc sidebar");
-	        	    p.performCommand("wc sidebar");
-	        	  	
+	        	  	  	
 	          break;
 	          
 	          case "kick":
@@ -887,13 +883,13 @@ public class WACommandEx implements CommandExecutor {
 	        	    wcpCurrent.setAlliance("ForeverAlone");
 	        	    wcpCurrent.setInAlliance(false);
 	        	    wcpCurrent.setAllianceRank("Guest");
+	        	    wcpCurrent.setInChat(false);
 	        	    updateAll(wcaCurrent, wcpCurrent, rawr, Bukkit.getPlayer(args[1]).getName());
 	        	    Utils.bc(Bukkit.getPlayer(args[1]).getDisplayName() + " &dwas kicked from their alliance by " + p.getName() + "&d!");
-        	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + Bukkit.getPlayer(args[1]).getName() + " " + plugin.wcm.getCompleted(wcpCurrent.getNick(), "7","8"));
+        	    	Bukkit.getPlayer(args[1]).performCommand("nick " + wcpCurrent.getNick());
         	    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + Bukkit.getPlayer(args[1]).getName() + " group remove " + rawr);
-        	    	TagAPI.refreshPlayer(Bukkit.getPlayer(args[1]));
-        	    	Bukkit.getPlayer(args[1]).performCommand("wc sidebar");
-        	    	Bukkit.getPlayer(args[1]).performCommand("wc sidebar");
+        	    	Bukkit.getPlayer(args[1]).setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        			Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent(Bukkit.getPlayer(args[1])));
         	    	
 	          break;
 	          
@@ -1029,7 +1025,7 @@ public class WACommandEx implements CommandExecutor {
     		return true;
     	}
     	
-    	if (!args[0].substring(0, 2).equalsIgnoreCase(p.getName().substring(0, 2))){
+    	if (!args[0].substring(0, 3).equalsIgnoreCase(p.getName().substring(0, 3))){
     		s(p, "Your nick must start with the first three letters of your name.");
     		return true;
     	}
@@ -1039,13 +1035,23 @@ public class WACommandEx implements CommandExecutor {
     		return true;
     	}
     	
+    	if (args[0].contains("&") || args[0].contains("§")){
+    		s(p, "Your color will be updated automatically based on which alliance you are in.");
+    		args[0].replaceAll("&", ""); args[0].replaceAll("§", "");
+    	}
+    	
     	wcp.setNick(args[0]);
     	wcp.setHasNick(true);
-    	updatePlayer(wcp, p.getName());
     	
-    	Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "enick " + p.getName() + " " + plugin.wcm.getCompleted(wcp.getNick(), wca.getColor1(), wca.getColor2()));
-    	p.performCommand("wc sidebar");
-    	p.performCommand("wc sidebar");
+		if (plugin.wcm.getCompleted2(wcp.getNick(), wca.getColor1(), wca.getColor2()).length() > 16){
+			p.setPlayerListName(Utils.AS(plugin.wcm.getCompleted2(wcp.getNick(), wca.getColor1(), wca.getColor2()).substring(0, 16)));
+		} else {
+			p.setPlayerListName(Utils.AS(plugin.wcm.getCompleted2(wcp.getNick(), wca.getColor1(), wca.getColor2())));
+		}
+		
+    	updatePlayer(wcp, p.getName());
+    	p.setDisplayName(plugin.wcm.getCompleted(wcp.getNick(), wca.getColor1(), wca.getColor2()));
+    	s(p, "Updated!");
     }
 	return true;
   }

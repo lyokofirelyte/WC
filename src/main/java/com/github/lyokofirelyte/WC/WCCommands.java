@@ -25,21 +25,24 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
+import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WC.Util.WCVault;
+
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
-import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 public class WCCommands implements CommandExecutor {
 	
-  private int groove;
   private HashMap<String, Long> rainoffCooldown = new HashMap<String, Long>();
   private HashMap<String, Long> dragonCooldown = new HashMap<String, Long>();
 	
@@ -67,7 +70,7 @@ public class WCCommands implements CommandExecutor {
 			  sender.sendMessage(AS(WC + "Usage: /google <query>"));
 		  } else {
 			  Bukkit.broadcastMessage(AS(WC + "Google: http://lmgtfy.com/?q=") + createString(args, 0).replace(" ", "+"));
-			  Bukkit.broadcastMessage(AS("&5~" + p.getDisplayName()));  
+			  Bukkit.broadcastMessage(AS("&5~" + ((Player)sender).getDisplayName()));  
 		  }
 		  return true;
 	  }
@@ -87,18 +90,233 @@ public class WCCommands implements CommandExecutor {
 		  return true;
 	  }
 	  
+	  if (cmd.getName().equals("ping")){
+		  p = ((Player)sender);
+		  if (args.length == 0){
+			  s(p, "PONG!");
+		  } else {
+			  s(p, Utils.createString(args, 0));
+		  }
+		  return true;
+	  }
+	  
     if (cmd.getName().equalsIgnoreCase("wc") || cmd.getName().equalsIgnoreCase("watercloset")) {
 
       p = ((Player)sender);
       wcp = plugin.wcm.getWCPlayer(p.getName());
 
       if (args.length < 1) {
-        s(p, "I'm not sure what you mean. Try /wc help or /wc ?");
+        s(p, "I'm not sure what you mean. Try /wc help or /wc ?. Also, /root is very helpful.");
         return true;
       }
       
       switch (args[0].toLowerCase()){
       
+      case "hugdebug":
+    	  
+    	  if (p.getName().equals("Hugh_Jasses")){
+    		  p.getInventory().addItem(plugin.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, 1));
+  			  ItemStack i = plugin.invManager.makeItem("§3Soul Split", "", true, Enchantment.DURABILITY, 10, 0, Material.ARROW, 1);
+  			  ItemMeta im = i.getItemMeta();
+  			  List<String> lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3Steals life from monsters");
+  			  lore.add("§3and adds to patrol members");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+  			  i = plugin.invManager.makeItem("§3Defender Shield", "", true, Enchantment.DURABILITY, 10, 0, Material.BOWL, 1);
+  			  im = i.getItemMeta();
+  			  lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3The wearer takes 25%");
+  			  lore.add("§3of other patrol member's");
+  			  lore.add("§3incoming damage");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+  			  i = plugin.invManager.makeItem("§3Teleport Cube", "", true, Enchantment.DURABILITY, 10, 0, Material.GLASS, 1);
+  			  im = i.getItemMeta();
+  			  lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3Allows teleportation to");
+  			  lore.add("§3other patrol members while");
+  			  lore.add("§3worn. /ptp <member>");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+  			  i = plugin.invManager.makeItem("§3Build Charm", "", true, Enchantment.DURABILITY, 10, 0, Material.APPLE, 1);
+  			  im = i.getItemMeta();
+  			  lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3Allows building in");
+  			  lore.add("§3hotspot zones while worn");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+  			  i = plugin.invManager.makeItem("§3Quick Bone", "", true, Enchantment.DURABILITY, 10, 0, Material.BONE, 1);
+  			  im = i.getItemMeta();
+  			  lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3Allows faster walk speed");
+  			  lore.add("§3while worn");
+  			  lore.add("§4UNLOCK AT LEVEL 10");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+  			  i = plugin.invManager.makeItem("§3Majjykk Stick", "", true, Enchantment.DURABILITY, 10, 0, Material.STICK, 1);
+  			  im = i.getItemMeta();
+  			  lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3Randomly blocks attacks");
+  			  lore.add("§3from incoming monsters");
+  			  lore.add("§4UNLOCK AT LEVEL 20");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+  			  i = plugin.invManager.makeItem("§3Destruction Ward", "", true, Enchantment.DURABILITY, 10, 0, Material.PORTAL, 1);
+  			  im = i.getItemMeta();
+  			  lore = new ArrayList<String>();
+  			  lore.add("§b§lPATROL ITEM");
+  			  lore.add("§3Monsters will randomly");
+  			  lore.add("§3explode during combat");
+  			  lore.add("§4UNLOCK AT LEVEL 25");
+  			  im.setLore(lore);
+  			  i.setItemMeta(im);
+  			  p.getInventory().addItem(i);
+    	  }
+    	  
+      break;
+      
+      case "rootshortcut":
+    	 
+    	  if (wcp.getRootShortCut()){
+    		  wcp.setRootShortCut(false);
+    		  s(p, "You won't trigger the root menu with shift-left click anymore.");
+    	  } else {
+    		  wcp.setRootShortCut(true);
+    		  s(p, "You will trigger the root menu with shift-left click now.");
+    	  }
+    	  
+    	  updatePlayer(wcp, p.getName());
+    	  
+      break;
+      
+      case "sideboardcoords":
+    	  
+    	  if (wcp.getScoreboardCoords()){
+    		  wcp.setScoreboardCoords(false);
+    		  s(p, "Coord display inactive.");
+    	  } else {
+    		  wcp.setScoreboardCoords(true);
+    		  s(p, "Coord display active.");
+    	  }
+    	  
+    	  updatePlayer(wcp, p.getName());
+  
+      break;
+      
+      case "spawnadd":
+    	  
+    	  if (args.length != 3){
+    		  s(p, "/wc spawnadd <player> <team>");
+    		  s(p, "Valid teams: yellow, pink, cyan, red, green, blue, magenta, orange");
+    		  break;
+    	  }
+    	  
+    	  String valids = "yellow pink cyan red green blue magenta orange";
+    	  
+    	  if (!valids.contains(args[2])){
+    		  s(p, "Valid teams: yellow, pink, cyan, red, green, blue, magenta, orange");
+    		  break;
+    	  }
+    	  
+    	  if (!Bukkit.getOfflinePlayer(args[1]).hasPlayedBefore()){
+    		  s(p, "That player is invalid.");
+    		  break;
+    	  }
+    	  
+    	  if (plugin.datacore.getStringList(args[2] + ".Team").contains(args[1])){
+    		  s(p, "That player is already on that team.");
+    		  break;
+    	  }
+    	  
+    	  List<String> list = plugin.datacore.getStringList(args[2] + ".Team");
+    	  list.add(args[1]);
+    	  plugin.datacore.set(args[2] + ".Team", list);
+    	  s(p, "Added!");
+    	  
+      break;
+      
+      case "spawnbuild":
+    	  
+    	  List<String> list1 = plugin.datacore.getStringList("yellow.Team");
+    	  List<String> list2 = plugin.datacore.getStringList("pink.Team");
+    	  List<String> list3 = plugin.datacore.getStringList("cyan.Team");
+    	  List<String> list4 = plugin.datacore.getStringList("red.Team");
+    	  List<String> list5 = plugin.datacore.getStringList("green.Team");
+    	  List<String> list6 = plugin.datacore.getStringList("blue.Team");
+    	  List<String> list7 = plugin.datacore.getStringList("magenta.Team");
+    	  List<String> list8 = plugin.datacore.getStringList("orange.Team");
+    	  
+    	  if (list1.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn1");
+    		  break;
+    	  }
+    	  
+    	  if (list2.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn2");
+    		  break;
+    	  }
+    	  
+    	  if (list3.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn3");
+    		  break;
+    	  }
+    	  
+    	  if (list4.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn4");
+    		  break;
+    	  }
+    	  
+    	  if (list5.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn5");
+    		  break;
+    	  }
+    	  
+    	  if (list6.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn6");
+    		  break;
+    	  }
+    	  
+    	  if (list7.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn7");
+    		  break;
+    	  }
+    	  
+    	  if (list8.contains(p.getName())){
+    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn8");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You don't have a team.");
+    	  
+      break;
+      
+      case "nameplate":
+    	  
+    	  if (wcp.getNamePlate()){
+    		  wcp.setNamePlate(false);
+    		  s(p, "Your name-plate is now default. You will need to re-log for others to see your skin.");
+    	  } else {
+    		  wcp.setNamePlate(true);
+    		  s(p, "Your name-plate now has alliance colors. You will need to re-log for this to take effect.");
+    	  }
+    	  
+    	  updatePlayer(wcp, p.getName());
+    	  
+      break;
+
       case "pvp":
     	  
     	  if (wcp.getPVP()){
@@ -113,15 +331,6 @@ public class WCCommands implements CommandExecutor {
     	  bc(AS(p.getDisplayName() + " &6has enabled PVP mode."));
     	  
       break;
-      
-      case "vec":
-    	  
-    	  if (p.hasPermission("wa.staff")){
-    	  
-    		  p.setVelocity(new Vector(Double.parseDouble(args[1]), Double.parseDouble(args[2]), Double.parseDouble(args[3])));
-    	  }
-    	  
-      break;
     	  
       case "fling":
 
@@ -134,12 +343,12 @@ public class WCCommands implements CommandExecutor {
                 e1.setVelocity(e1.getLocation().getDirection().multiply(-5));
                 }
 
-        		List<Location> circleblocks = circle(pq, pq.getLocation(), 1, 1, true, false, 0);
-        		List<Location> circleblocks2 = circle(pq, pq.getLocation(), 2, 1, true, false, 1);
-        		List<Location> circleblocks3 = circle(pq, pq.getLocation(), 3, 1, true, false, 1);
-        		List<Location> circleblocks4 = circle(pq, pq.getLocation(), 4, 1, true, false, 1);
-        		List<Location> circleblocks5 = circle(pq, pq.getLocation(), 5, 1, true, false, 1);
-        		List<Location> circleblocks6 = circle(pq, pq.getLocation(), 6, 1, true, false, 1);
+        		List<Location> circleblocks = circle(pq.getLocation(), 1, 1, true, false, 0);
+        		List<Location> circleblocks2 = circle(pq.getLocation(), 2, 1, true, false, 1);
+        		List<Location> circleblocks3 = circle(pq.getLocation(), 3, 1, true, false, 1);
+        		List<Location> circleblocks4 = circle(pq.getLocation(), 4, 1, true, false, 1);
+        		List<Location> circleblocks5 = circle(pq.getLocation(), 5, 1, true, false, 1);
+        		List<Location> circleblocks6 = circle(pq.getLocation(), 6, 1, true, false, 1);
         		pq.getWorld().playSound(pq.getLocation(), Sound.BLAZE_HIT, 3.0F, 0.5F);
         		long delay = 0L;
         		
@@ -288,41 +497,31 @@ public class WCCommands implements CommandExecutor {
     	  
       break;
  	      	  
-      case "hamdrax":
+      case "paragonhamdrax":
     	  
-    	  	Boolean aval = plugin.datacore.getBoolean("Users." + p.getName() + ".Hamdrax");
-    	  		if (aval){
-    	  			plugin.datacore.set("Users." + p.getName() + ".Hamdrax", false);
-		    	    ArrayList<String> lore;
-		    	    ItemStack token = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-			        ItemMeta name = token.getItemMeta();
-			        lore = new ArrayList<String>();
-			        name.addEnchant(Enchantment.DIG_SPEED, 5, true);
-			        name.addEnchant(Enchantment.DURABILITY, 3, true);
-			        name.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 10, true);
-			        name.addEnchant(Enchantment.PROTECTION_FIRE, 10, true);
-			        name.setDisplayName("§a§o§lHAMDRAX OF " + p.getDisplayName());
-			        lore.add("§7§oForm: Pick");
-			        name.setLore(lore);
-			        token.setItemMeta((ItemMeta)name);
-			        token.setDurability((short) 780);
-			        p.getInventory().addItem(token);
-			        p.updateInventory();
-    	  		} else {
-    	  			s(p, "You need to purchase this @ the paragon shop!");
-    	  		}
-    	  		
+    	  if (checkInv(p, 64)){
+    		  
+	    	    ItemStack hamdrax = plugin.invManager.makeItem(AS("§a§o§lHAMDRAX OF " + p.getDisplayName()), "§7§oForm: Pick", true, Enchantment.DIG_SPEED, 5, 1, Material.DIAMOND_PICKAXE, 1);
+	    	    hamdrax.getItemMeta().addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 10, true);
+	    	    hamdrax.getItemMeta().addEnchant(Enchantment.DURABILITY, 3, true);
+	    	    hamdrax.getItemMeta().addEnchant(Enchantment.PROTECTION_FIRE, 10, true);
+		        hamdrax.setDurability((short) 780);
+		        p.getInventory().addItem(hamdrax);
+		        p.updateInventory();
+		        Bukkit.broadcastMessage(AS(WC + p.getDisplayName() + " has purchased a Hamdrax!"));
+		        break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this. (64 tokens)");
+    	  
 	  break;
 
-      case "hamrepair":
-
-    	  aval = plugin.datacore.getBoolean("Users." + p.getName() + ".HamdraxRepair");
+      case "paragonhamdraxrepair":
     	  
-	  		if (aval){
+    	  if (checkInv(p, 15)){
 	    	  if (p.getItemInHand().hasItemMeta()){
 					if (p.getItemInHand().getItemMeta().hasLore() && p.getItemInHand().getItemMeta().hasDisplayName()){
 						if (p.getItemInHand().getItemMeta().getDisplayName().toString().contains("HAMDRAX")){
-							plugin.datacore.set("Users." + p.getName() + ".HamdraxRepair", false);
 							p.getItemInHand().setDurability((short) 0);
 							s(p, "All good! :D");
 							break;
@@ -330,13 +529,270 @@ public class WCCommands implements CommandExecutor {
 					}
 				}
 	    	  s(p, "Please hold the hamdrax in your hand!");
+			  returnItem(p, 15);
 	    	  break;
 	  		}
 			
-			s(p, "You need to purchase this @ the paragon shop!");
+			s(p, "You lack the funds to do this (15 tokens).");
 			
 	  break;
-					
+	  
+      case "paragonback":
+    	  
+    	  if (checkInv(p, 10)){
+    		  wcp.setParagonBacks(wcp.getParagonBacks() + 1);
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    		  s(p, "Added 1 back!");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (10 tokens).");
+    	  
+      break;
+      
+      case "paragontp":
+    	  
+    	  if (checkInv(p, 15)){
+    		  wcp.setParagonTps(wcp.getParagonTps() + 3);
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    		  s(p, "Added 3 Tps!");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (15 tokens).");
+    	  
+      break;
+      
+      case "paragonhearts":
+    	  
+    	  if (checkInv(p, 10)){
+    		  p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 99999, 1));
+    		  s(p, "Boosted!");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (10 tokens).");
+    	  
+      break;
+      
+      case "paragonarmor":
+    	  
+    	  if (checkInv(p, 5)){
+    		  p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 1));
+    		  s(p, "Boosted!");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (5 tokens).");
+    	  
+      break;
+      
+      case "paragonarmor2":
+    	  
+    	  if (checkInv(p, 20)){
+    		  p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 99999, 2));
+    		  s(p, "Boosted!");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (20 tokens).");
+    	  
+      break;
+      
+      case "paragonhome":
+    	  
+    	  if (checkInv(p, 10)){
+    		  if (wcp.getParagonSpecialHomeSet()){
+    			  s(p, "You already have you home set. You can change the location by purchasing a reset token.");
+    			  returnItem(p, 10);
+    			  break;
+    		  }
+    		  wcp.setParagonSpecialHomeSet(true);
+    		  wcp.setParagonSpecialHome(p.getLocation());
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    		  s(p, "Home set! Use /wc home to return here. To set a new one, purchase a reset token from /root.");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (10 tokens).");
+    	  
+      break;
+      
+      case "paragonresethome":
+    	  
+    	  if (checkInv(p, 20)){
+    		  if (!wcp.getParagonSpecialHomeSet()){
+    			  s(p, "You don't have a home set, so why waste money?");
+    			  returnItem(p, 20);
+    			  break;
+    		  }
+    		  wcp.setParagonSpecialHomeSet(false);
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    		  s(p, "You can now re-purchase a WC special home. Yes, you have to buy it again. :)");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (20 tokens).");
+    	  
+      break;
+      
+      case "paragonteleport":
+    	  
+    	  if (checkInv(p, 30)){
+    		  if (p.getInventory().firstEmpty() == -1){
+    			  s(p, "You inventory is full.");
+    			  returnItem(p, 30);
+    			  break;
+    		  }
+    		  p.getInventory().addItem(plugin.invManager.makeItem("§aTELEPORT PAD", "§2Connect two with active redstone", false, Enchantment.OXYGEN, 0, 1, Material.DAYLIGHT_DETECTOR, 1));
+    		  s(p, "Purchase complete.");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this. (30 tokens).");
+    	  
+      break;
+      
+      case "paragonspawnegg":
+    	  
+    	  int count = 0;
+    	  
+    	  if (checkInv(p, 25)){
+    		  for (ItemStack i : p.getInventory()){
+    			  if (i == null || i.getType().equals(Material.AIR)){
+    				  count++;
+    			  }
+    		  }
+    		  if (count < 5){
+    			  s(p, "Your inventory is full. You should fix that. You need 5 slots open.");
+    			  returnItem(p, 25);
+    			  break;
+    		  }
+    		  p.getInventory().addItem(new ItemStack(Material.MONSTER_EGG, 1, (byte) 90));
+    		  p.getInventory().addItem(new ItemStack(Material.MONSTER_EGG, 1, (byte) 95));
+    		  p.getInventory().addItem(new ItemStack(Material.MONSTER_EGG, 1, (byte) 91));
+    		  p.getInventory().addItem(new ItemStack(Material.MONSTER_EGG, 1, (byte) 92));
+    		  p.getInventory().addItem(new ItemStack(Material.MONSTER_EGG, 1, (byte) 120));
+    		  s(p, "Purchase complete.");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (25 tokens).");
+    	  
+      break;
+      
+      case "paragonobelisk":
+
+    	  if (checkInv(p, 80)){
+    		  if (wcp.getInAlliance() && wcp.getAllianceRank().equals("Leader")){
+    			  if (plugin.wcm.getWCAlliance(wcp.getAlliance()).getTier() >= 6){
+    				  for (String s : plugin.systemYaml.getStringList("TotalUsers")){
+    					  if (WCVault.perms.has("world", s, "wa.staff")){
+    						  WCPlayer receiver = plugin.wcm.getWCPlayer(s);
+    						  List<String> mail = receiver.getMail();
+    						  mail.add("&5| &6system &f// &d" + p.getName() + " &dis approved for an obelisk!");
+    						  receiver.setMail(mail);
+    						  updatePlayer(receiver, s);
+    						  if (Bukkit.getOfflinePlayer(s).isOnline()){
+    							  s(Bukkit.getPlayer(s), "Mail received about an obelisk! Check it with /mail read.");
+    						  }
+    					  }
+    				  }
+    			  }
+    		  }
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (80 tokens), you are not a leader, or you are not tier 6. One or more of those things.");
+    	  
+      break;
+      
+      case "joinmessage":
+    	  
+    	  if (wcp.getMessageCount() < 1){
+    		  s(p, "You don't have any messages left to set.");
+    		  break;
+    	  }
+    	  
+    	  if (args.length == 1){
+    		  s(p, "/wc joinmessage <message>.");
+    		  break;
+    	  }
+    	  
+    	  wcp.setJoinMessage(Utils.createString(args, 1));
+    	  wcp.setMessageCount(wcp.getMessageCount() - 1);
+    	  updatePlayer(wcp, p.getName());
+    	  s(p, "Your join message has been changed! You have " + wcp.getMessageCount() + " &dchanges left.");
+    	  
+      break;
+      
+      case "quitmessage":
+    	  
+    	  if (wcp.getMessageCount() < 1){
+    		  s(p, "You don't have any messages left to set.");
+    		  break;
+    	  }
+    	  
+    	  if (args.length == 1){
+    		  s(p, "/wc quitmessage <message>.");
+    		  break;
+    	  }
+    	  
+    	  wcp.setQuitMessage(Utils.createString(args, 1));
+    	  wcp.setMessageCount(wcp.getMessageCount() - 1);
+    	  updatePlayer(wcp, p.getName());
+    	  s(p, "Your quit message has been changed! You have " + wcp.getMessageCount() + " &dchanges left.");
+    	  
+      break;
+      
+      case "paragonmessage":
+    	  
+    	  if (checkInv(p, 20)){
+    		  wcp.setMessageCount(wcp.getMessageCount() + 4);
+    		  updatePlayer(wcp, p.getName());
+    		  s(p, "You have added 4 changes. Setting a join or quit message will take one of your allowed changes. Type /wc joinmessage <message> and /wc quitmessage <message>.");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (20 tokens).");
+    	  
+      break;
+      
+      case "paragonmarket":
+    	  
+    	  if (checkInv(p, 20)){
+    		  if (wcp.getParagonMarket()){
+    			  s(p, "You already have /wc market.");
+    			  break;
+    		  }
+    		  wcp.setParagonMarket(true);
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    		  s(p, "You can now use /wc market to TP directly to the market.");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (20 tokens).");
+    	  
+      break;
+      
+      case "paragonmoney":
+    	  
+    	  if (checkInv(p, 45)){
+    		  if (wcp.getParagonMoney()){
+    			  s(p, "You have already claimed your cash.");
+    			  break;
+    		  }
+    		  wcp.setParagonMoney(true);
+    		  wcp.setBalance(wcp.getBalance() + 85000);
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    		  s(p, "Money!");
+    		  break;
+    	  }
+    	  
+    	  s(p, "You lack the funds to do this (45 tokens).");
+    	  
+      break;
+      			
       case "throw":
     	  	  
     	  	if (wcp.itemThrow()){
@@ -349,57 +805,6 @@ public class WCCommands implements CommandExecutor {
     	  		s(p, "You WILL throw items by shift-right clicking.");
     	  	}
     	  	
-      break;
-      
-      case "setwalkwaystart":
-    	  
-    	  if (p.hasPermission("wa.staff") && args.length == 2){
-
-    	  		
-    	  	double x = p.getLocation().getBlockX();
-    	  	double y = p.getLocation().getBlockY();
-    	  	double z = p.getLocation().getBlockZ();
-    	  		
-		  	double x2 = p.getEyeLocation().getDirection().getX();
-		  	double y2 = p.getEyeLocation().getDirection().getY();
-		  	double z2 = p.getEyeLocation().getDirection().getZ();
-		  	
-		  	WCSystem system = plugin.wcm.getWCSystem("system");
-    	  	
-    	    system.addWalkWayStart(args[0] + "," + x + "," + y + "," + z  + "," + x2 + "," + y2 + "," + z2);
-    	    plugin.wcm.updateSystem("system", system);
-
-    	  	s(p, "Location set!");
-    	  }
-    	  
-      break;
-      
-      case "setwalkwaystop":
-    	   
-    	  if (p.hasPermission("wa.staff") && args.length == 2){
-
-    		WCSystem system = plugin.wcm.getWCSystem("system");
-    		
-    		double x = p.getLocation().getBlockX();
-      	  	double y = p.getLocation().getBlockY();
-      	  	double z = p.getLocation().getBlockZ();
-      	  	
-      	    system.addWalkWayEnd(args[0] + "," + x + "," + y + "," + z);
-      	    plugin.wcm.updateSystem("system", system);
-
-      	  	s(p, "Location set!");
-      	  }
-    	  
-      break;
-      
-      case "killwalkways":
-    	  
-    	  if (p.hasPermission("wa.staff")){
-    		  WCSystem system = plugin.wcm.getWCSystem("system");
-    		  system.setWalkWayStarts(new ArrayList<String>());
-    		  system.setWalkWayEnds(new ArrayList<String>());
-    	  }
-    	  
       break;
       
       case "fork":
@@ -460,83 +865,6 @@ public class WCCommands implements CommandExecutor {
       }
   	  
   	  break;
-  	    	  
-      case "cookietop":
-    	  
-      	List <String> cookieUsers = plugin.datacore.getStringList("Users.Total");
-      	List <Integer> Cookielevels = new ArrayList<Integer>();
-      	int s = 0;
-      		
-      		for (String current : cookieUsers){
-      			int paragonLevel = plugin.datacore.getInt("Users." + current + ".Cookies");
-      				if (Cookielevels.contains(Integer.valueOf(paragonLevel)) == false){
-      					Cookielevels.add(Integer.valueOf(paragonLevel));
-      				}
-      		}
-      		
-      		for (int top : Cookielevels){
-      			if (top > s){
-      				s = top;
-      			}
-      		}
-      		
-      		Cookielevels.remove(Integer.valueOf(s));
-      		
-      		int firstPlace = s;
-      		s = 0;
-      		
-      		for (int top : Cookielevels){
-      			if (top > s){
-      				s = top;
-      			}
-      		}
-      		
-      		Cookielevels.remove(Integer.valueOf(s));
-      		
-      		int secondPlace = s;
-      		s = 0;
-      		
-      		for (int top : Cookielevels){
-      			if (top > s){
-      				s = top;
-      			}
-      		}
-      		
-      		Cookielevels.remove(Integer.valueOf(s));
-      		
-      		int thirdPlace = s;
-
-      		sender.sendMessage(new String[]{
-      			WC + "Cookie Leaderboards",
-      			AS("&f>>> >>> <<< <<<"),
-      			AS("&7&ofirst place @ " + firstPlace)});
-      		
-					for (String current : cookieUsers){
-						int paragonLevel = plugin.datacore.getInt("Users." + current + ".Cookies");
-							if (paragonLevel == firstPlace){
-								sender.sendMessage(AS("&b&o" + current));
-							}
-					}
-					
-					sender.sendMessage(AS("&7&osecond place @ " + secondPlace));
-      		  
-					for (String current : cookieUsers){
-						int paragonLevel = plugin.datacore.getInt("Users." + current + ".Cookies");
-							if (paragonLevel == secondPlace){
-								sender.sendMessage(AS("&b&o" + current));
-							}
-					}
-					
-					sender.sendMessage(AS("&7&othird place @ " + thirdPlace));
-	        		  
-					for (String current : cookieUsers){
-						int paragonLevel = plugin.datacore.getInt("Users." + current + ".Cookies");
-							if (paragonLevel == thirdPlace){
-								sender.sendMessage(AS("&b&o" + current));
-							}
-					}
-					
-					break;
 
       case "pmcolor":
     	  
@@ -630,65 +958,18 @@ public class WCCommands implements CommandExecutor {
        break;  
        
        case "paragons": case "paragon":
-    	   
-    	   if (args.length == 1){
-    	  
+
     	  sender.sendMessage(new String[]{
     		    AS("&5| &dParagon Information Complex"),
     			AS("&5| &f--- ___ --- ___ --- ___ ---"),
     			AS("&5| &bCommands&f:"),
-    			AS("&5| &a/wc rewards &f// &aShows your rewards!"),
     			AS("&5| &a/wc tp <player> &f// &aUse a TP token"),
-    			AS("&5| &a/wc sethome &f// &aSet a special home!"),
     			AS("&5| &a/wc home &f// &aTP to your special home!"),
     			AS("&5| &a/wc back &f// &aUse a Back token!"),
-    			AS("&5| &a/wc paragon self &f// &aSee your paragon stats!"),
     			AS("&5| &bSee&a ohsototes.com/?p=paragon &bfor full info on how to get and use them!")
     	  });
-    	  
-    	  break;
-    	  
-    	   } else {
-    		   
-    		   int mineral = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.mineral");
-    		   int dragon = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.dragon");
-    		   int nature = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.nature");
-    		   int crystal = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.crystal");
-    		   int sun = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.sun");
-    		   int hell = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.hell");
-    		   int earth = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.earth");
-    		   int industrial = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.industrial");
-    		   int life = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.life");
-    		   int inferno = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.inferno");
-    		   int death = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.death");
-    		   int aquatic = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.aquatic");
-    		   int refined = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.refined");
-    		   int frost = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.frost");
-    		   int total = plugin.datacore.getInt("Users." + sender.getName() + ".Paragons.Total");
-    		   
-    		   sender.sendMessage(new String[]{
-    				   
-    		   
-    				AS("&5| &dParagon Donation History"),
-    				AS("&1| &aTotal &f// &a" + total),
-    				AS("&1| &bMineral &f// &b" + mineral),
-    				AS("&1| &bDragon &f// &b" + dragon),
-    				AS("&1| &bNature &f// &b" + nature),
-    				AS("&1| &bCrystal &f// &b" + crystal),
-    				AS("&1| &bDeath &f// &b" + death),
-    				AS("&1| &bSun &f// &b" + sun),
-    				AS("&1| &bHell &f// &b" + hell),
-    				AS("&1| &bEarth &f// &b" + earth),
-    				AS("&1| &bIndustrial &f// &b" + industrial),
-    				AS( "&1| &bLife &f// &b" + life),
-    				AS("&1| &bInferno &f// &b" + inferno),
-    				AS("&1| &bAquatic &f// &b" + aquatic),
-    				AS("&1| &bRefined &f// &b" + refined),
-    				AS("&1| &bFrost &f// &b" + frost),
-    	   });
-    		   
-    		   break;
-    	   }
+
+       break;
     		   
        case "rewards": case "purchases":
     	   
@@ -707,202 +988,55 @@ public class WCCommands implements CommandExecutor {
     		   break;
     	   }
     	   
-    	   int teleports = plugin.datacore.getInt("Users." + sender.getName() + ".TPTokens");
+    	   int teleports = wcp.getParagonTps();
     	   
     	   if (teleports < 1){
     		   s(p, "You don't have enough TP tokens!");
     		   break;
     	   }
-    	   
-    	   
-			teleports = teleports - 1;
-			plugin.datacore.set("Users." + sender.getName() + ".TPTokens", teleports);
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + sender.getName() + " " + args[1]);
-			break;
+
+    	   wcp.setParagonTps(wcp.getParagonTps() - 1);
+    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + sender.getName() + " " + args[1]);
+      break;
 			
       case "market":
 
-    	    Boolean market = plugin.datacore.getBoolean("Users." + sender.getName() + ".Market");
+    	    Boolean market = wcp.getParagonMarket();
     	    
-    	    	if (market == false){
-    	    		s(p, "You don't have a market warp!");
-    	    		break;
-    	    	}
+    	    if (market == false){
+    	    	s(p, "You don't have a market warp!");
+    	    	break;
+    	    }
     	    	
 			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "warp markkit " + sender.getName());
 			break;
 			
        case "back":
     	   
-    	   int backs = plugin.datacore.getInt("Users." + sender.getName() + ".BackTokens");
+    	   int backs = wcp.getParagonBacks();
     	   
     	   if (backs < 1){
     		   s(p, "You don't have enough Back tokens!");
     		   break;
     	   }
-
-    	    backs = backs - 1;
-			plugin.datacore.set("Users." + sender.getName() + ".BackTokens", backs);
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + sender.getName() + " add essentials.back");
-			Bukkit.getServer().dispatchCommand(sender, "eback");
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + sender.getName() + " remove essentials.back");
-			break;
-			
-       case "sethome":
     	   
-    	   home = plugin.datacore.getBoolean("Users." + sender.getName() + ".SpecialHome");
-    	   homeSet = plugin.datacore.getBoolean("Users." + sender.getName() + ".SpecialHomeSet");
+    	   wcp.setParagonBacks(backs - 1);
+    	   updatePlayer(wcp, p.getName());
+    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + sender.getName() + " add wc.back");
+    	   Bukkit.getServer().dispatchCommand(sender, "back");
+    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + sender.getName() + " remove wc.back");
     	   
-    	   	if (home == false){
-    	   		s(p, "You don't have a special home to set!");
-    	   		break;
-    	   	}
-    	   	
-    	   	if (homeSet){
-    	   		s(p, "You have already set your special home!");
-    	   		break;
-    	   	}
-    	   	
-    	   	plugin.datacore.set("Users." + sender.getName() + ".SpecialHomeSet", true);
-    	   	
-    	   	double x = p.getLocation().getBlockX();
-    	   	double y = p.getLocation().getBlockY();
-    	   	double z = p.getLocation().getBlockZ();
-    	   	float yaw = p.getLocation().getYaw();
-    		float pitch = p.getLocation().getPitch();
-    	   	String w = p.getWorld().getName();
-    	   	
-    	   	plugin.datacore.set("Users." + p.getName() + ".SpecialHomeLocX", x);
-    	   	plugin.datacore.set("Users." + p.getName() + ".SpecialHomeLocY", y);
-    	   	plugin.datacore.set("Users." + p.getName() + ".SpecialHomeLocZ", z);
-    	   	plugin.datacore.set("Users." + p.getName() + ".SpecialHomeLocW", w);
-    	   	plugin.datacore.set("Users." + p.getName() + ".SpecialHomeLocYAW", yaw);
-    	   	plugin.datacore.set("Users." + p.getName() + ".SpecialHomeLocP", pitch);
-    	   	
-    	   	s(p, "HOME SET!");
-    	   	break;
-    	   	
+	   break;
+			    	   	
        case "home":
     	   
-    	   home = plugin.datacore.getBoolean("Users." + sender.getName() + ".SpecialHome");
-    	   homeSet = plugin.datacore.getBoolean("Users." + sender.getName() + ".SpecialHomeSet");
+    	   if (wcp.getParagonSpecialHomeSet()){
+    		   p.teleport(wcp.getParagonSpecialHome());
+    		   s(p, "Teleported to your special home!");
+    	   }
     	   
-    	   	if (home == false || homeSet == false){
-    	   		s(p, "You don't have a special home to go to!");
-    	   		break;
-    	   	}
-    	   	
-    	   	double X = plugin.datacore.getInt("Users." + sender.getName() + ".SpecialHomeLocX");
-    		double Y = plugin.datacore.getInt("Users." + sender.getName() + ".SpecialHomeLocY");
-    		double Z = plugin.datacore.getInt("Users." + sender.getName() + ".SpecialHomeLocZ");
-    		float YAW = plugin.datacore.getInt("Users." + sender.getName() + ".SpecialHomeLocYAW");
-    		float PITCH = plugin.datacore.getInt("Users." + sender.getName() + ".SpecialHomeLocP");
-    		World W = Bukkit.getWorld(plugin.datacore.getString("Users." + sender.getName() + ".SpecialHomeLocW"));
+    	break;
     		
-    		Location sS = new Location(W, X, Y, Z, YAW, PITCH);
-    		Player P = p;
-    		P.teleport(sS);
-    		s(p, "Teleported to your special home!");
-    		break;
-    		
-
-        case "bb":
-        	
-        	if (sender.hasPermission("wa.staff")){
-        		
-        		if (plugin.datacore.getBoolean("Users." + sender.getName() + ".ParagonPlaceMode")){
-        		plugin.datacore.set("Users." + sender.getName() + ".ParagonPlaceMode", false);
-        		sender.sendMessage(AS(WC + "BB OFF!"));
-        		return true;
-        		
-        		} else {
-        			
-        		plugin.datacore.set("Users." + sender.getName() + ".ParagonPlaceMode", true);
-            	sender.sendMessage(AS(WC + "BB ON!"));
-            	return true;
-        		}
-        	}
-      
-        break;
-        
-        case "top":
-        	
-        	List <String> playerList = plugin.datacore.getStringList("Users.Total");
-        	List <Integer> levels = new ArrayList<Integer>();
-        	s = 0;
-        		
-        		for (String current : playerList){
-        			int paragonLevel = plugin.datacore.getInt("Users." + current + ".ParagonLevel");
-        				if (levels.contains(Integer.valueOf(paragonLevel)) == false){
-        					levels.add(Integer.valueOf(paragonLevel));
-        				}
-        		}
-        		
-        		for (int top : levels){
-        			if (top > s){
-        				s = top;
-        			}
-        		}
-        		
-        	   levels.remove(Integer.valueOf(s));
-        		
-        		firstPlace = s;
-        		s = 0;
-        		
-        		for (int top : levels){
-        			if (top > s){
-        				s = top;
-        			}
-        		}
-        		
-        		levels.remove(Integer.valueOf(s));
-        		
-        		secondPlace = s;
-        		s = 0;
-        		
-        		for (int top : levels){
-        			if (top > s){
-        				s = top;
-        			}
-        		}
-        		
-        		levels.remove(Integer.valueOf(s));
-        		
-        		thirdPlace = s;
-
-        		sender.sendMessage(new String[]{
-        			WC + "Paragon Leaderboards",
-        			AS("&f>>> >>> <<< <<<"),
-        			AS("&7&ofirst place @ level " + firstPlace)});
-        		
-					for (String current : playerList){
-						int paragonLevel = plugin.datacore.getInt("Users." + current + ".ParagonLevel");
-							if (paragonLevel == firstPlace){
-								sender.sendMessage(AS("&b&o" + current));
-							}
-					}
-					
-					sender.sendMessage(AS("&7&osecond place @ level " + secondPlace));
-        		  
-					for (String current : playerList){
-						int paragonLevel = plugin.datacore.getInt("Users." + current + ".ParagonLevel");
-							if (paragonLevel == secondPlace){
-								sender.sendMessage(AS("&b&o" + current));
-							}
-					}
-					
-					sender.sendMessage(AS("&7&othird place @ level " + thirdPlace));
-	        		  
-					for (String current : playerList){
-						int paragonLevel = plugin.datacore.getInt("Users." + current + ".ParagonLevel");
-							if (paragonLevel == thirdPlace){
-								sender.sendMessage(AS("&b&o" + current));
-							}
-					}
-					
-					break;
-        		
-        		
         case "stafftp":
         	
         	if (sender.hasPermission("wa.staff") == false){
@@ -985,29 +1119,10 @@ public class WCCommands implements CommandExecutor {
       
         break;
         
-        case "bp":
-        	
-        	if (sender.hasPermission("wa.staff")){
-        		
-        		if (plugin.datacore.getBoolean("Users." + sender.getName() + ".ParagonBreakMode")){
-        		plugin.datacore.set("Users." + sender.getName() + ".ParagonBreakMode", false);
-        		sender.sendMessage(AS(WC + "BP OFF!"));
-        		return true;
-        		
-        		} else {
-        			
-        		plugin.datacore.set("Users." + sender.getName() + ".ParagonBreakMode", true);
-            	sender.sendMessage(AS(WC + "BP ON!"));
-            	return true;
-        		}
-        	}
-      
-        break;
-        
         case "placeholders":
         	
         	s(p, "%t = town, %c = coords, %p = paragons");
-        	break;
+        break;
         	
       	case "reload":
       		
@@ -1047,9 +1162,9 @@ public class WCCommands implements CommandExecutor {
 
 		case "rainoff":
 
-			if (!(sender.hasPermission("wa.emperor"))){
+			if (!(sender.hasPermission("wa.guardian"))){
 
-				s(p, "You are not the rank Emperor! Sorry, I tried my hardest.'");
+				s(p, "You are not the rank Guardian! Sorry, I tried my hardest.'");
 
 				return true;
 
@@ -1260,69 +1375,125 @@ public class WCCommands implements CommandExecutor {
 					
 			});
 
-			break;
+		break;
 			
-		case "groove":
+		case "superride":
 			
 			if (!(sender.hasPermission("wa.staff"))){			
 				sender.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
 				break;		
 			}
 			
-			final Random rand = new Random();
-			Bukkit.broadcastMessage(AS(WC + "Are you ready everyone? Here we go! (kill " + p.getDisplayName() + " &dplease)"));
+			if (plugin.datacore.getBoolean("Users." + p.getName() + ".ridePanel")){
+				s(p, "You already have a ride linked!");
+				break;
+			}
 			
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+			if (plugin.playerRide.get(p.getName()) == null){
+				plugin.playerRide.put(p.getName(), new ArrayList<Player>());
+			}
+			
+			if (args.length >= 2){
+				if (Bukkit.getPlayer(args[1]) != null){
+					plugin.playerRide.get(p.getName()).add(Bukkit.getPlayer(args[1]));
+					s(p, "Added " + Bukkit.getPlayer(args[1]).getName());
+				}
+			}
+			
+			if (args.length >= 3){
+				if (Bukkit.getPlayer(args[2]) != null){
+					plugin.playerRide.get(p.getName()).add(Bukkit.getPlayer(args[2]));
+					s(p, "Added " + Bukkit.getPlayer(args[2]).getName());
+				}
+			}
+			
+			if (args.length >= 4){
+				if (Bukkit.getPlayer(args[3]) != null){
+					plugin.playerRide.get(p.getName()).add(Bukkit.getPlayer(args[3]));
+					s(p, "Added " + Bukkit.getPlayer(args[3]).getName());
+				}
+			}
+			
+			if (args.length >= 5){
+				if (Bukkit.getPlayer(args[4]) != null){
+					plugin.playerRide.get(p.getName()).add(Bukkit.getPlayer(args[4]));
+					s(p, "Added " + Bukkit.getPlayer(args[4]).getName());
+				}
+			}
+			
+			if (args.length >= 6){
+				if (Bukkit.getPlayer(args[5]) != null){
+					plugin.playerRide.get(p.getName()).add(Bukkit.getPlayer(args[5]));
+					s(p, "Added " + Bukkit.getPlayer(args[5]).getName());
+				}
+			}
+			
+			plugin.datacore.set("Users." + p.getName() + ".ridePanel", true);
+			s(p, "Right click blocks to add a link, with the block you want to sit on FIRST. Then, type /wc superride2 to complete the link.");
+			
+		break;
+		
+		case "superride2":
+			
+			if (!(sender.hasPermission("wa.staff"))){			
+				sender.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
+				break;		
+			}
+			
+			if (!plugin.datacore.getBoolean("Users." + p.getName() + ".ridePanel")){
+				s(p, "You need to run /wc superride first!");
+				break;
+			}
+			
+			for (Location l : plugin.links.get(p.getName())){
+				Entity ee = l.getWorld().spawnFallingBlock(new Location(l.getWorld(), l.getX(), l.getY() + 10, l.getZ()), l.getBlock().getType(), (byte) 0);
+				ee.setVelocity(new Vector(0, 0, 0));
+				l.getBlock().setType(Material.AIR);
 				
-				public void run(){
-					
-					Bukkit.broadcastMessage(AS(WC + "&lWhat does the fox say?!"));
-					
-					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
-						
-						public void run(){
-							
-							if (sender.isOp()){
-								plugin.config.set("Users." + sender.getName() + ".op", true);
-							} else {
-								sender.setOp(true);			
-							}
-							
-							Bukkit.getServer().dispatchCommand(sender, "ds all -n 20 -t 10 -fw");
-							
-							if (!plugin.config.getBoolean("Users." + sender.getName() + ".op")){
-								sender.setOp(false);						
-							}
-							
-							final List<String> players = new ArrayList<String>();
-							
-							for (Player pl : Bukkit.getOnlinePlayers()){					
-								players.add(pl.getName());
-							}
-							
-							groove = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-								
-								public void run(){
-									
-									int size = players.size();
-									int rN = rand.nextInt(size);
-									String p = players.get(rN);
-									
-									Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p + " c:DING");
-									players.remove(p);	
-									size = players.size();					
-									plugin.config.set("groove", size);
-									if (size <= 0){							
-										cancelTask();
-									}							
-								}
-							}, 0L, 10L);				
-						}					
-					}, 40L);				
-				}			
-			}, 40L);
+				if (plugin.links2.get(p.getName()) == null){
+					plugin.links2.put(p.getName(), new ArrayList<Entity>());
+				}
+				
+				plugin.links2.get(p.getName()).add(ee);
+			}
 			
-			break;
+			plugin.links2.get(p.getName()).get(0).setPassenger(p);
+
+			int xXx = 0;
+			
+			if (plugin.playerRide.get(p.getName()) != null){
+				for (Player entt : plugin.playerRide.get(p.getName())){		
+						xXx++;
+						plugin.links2.get(p.getName()).get(xXx).setPassenger(entt);
+						s(p, "Added " + entt.getName());
+				}
+			}
+			
+			plugin.datacore.set("Users." + p.getName() + ".ridePanel", false);
+			plugin.datacore.set("Users." + p.getName() + ".ridePanel2", true);
+			s(p, "Done.");
+			
+		break;
+		
+		case "controlcarts":
+			
+			if (!(sender.hasPermission("wa.staff"))){
+				break;
+			}
+			
+			if (plugin.datacore.getBoolean("Users." + p.getName() + ".controlCarts")){
+				
+				plugin.datacore.set("Users." + p.getName() + ".controlCarts", false);
+				plugin.datacore.set("cartSpeed", false);
+				s(p, "Off!");
+			} else {
+				
+				plugin.datacore.set("Users." + p.getName() + ".controlCarts", true);
+				plugin.datacore.set("cartSpeed", true);
+				s(p, "On!");
+			}
+			
+		break;
 			
 		case "ride":
 			
@@ -1359,11 +1530,6 @@ public class WCCommands implements CommandExecutor {
     return true;
   }
   
-
-	private void cancelTask() {
-		Bukkit.getServer().getScheduler().cancelTask(groove);
-	}
-	
 	public long getCooldown(HashMap<String, Long> map, String player, int seconds){	
 		long timeLeft = ((map.get(player) / 1000) + seconds) - (System.currentTimeMillis() / 1000);
 		return timeLeft;	
@@ -1513,5 +1679,41 @@ public class WCCommands implements CommandExecutor {
 		wcp = plugin.wcm.getWCPlayer(player);
 		wca = plugin.wcm.getWCAlliance(alliance);
     }
+	 
+	 public Boolean checkInv(Player p, int cost){
+		 
+		 int amount = 0;
+		 int costPaid = 0;
+		 int amt = 0;
+		 
+		 for (ItemStack i : p.getInventory()){
+			 if (i != null && i.getType() != Material.AIR && i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().hasDisplayName() && i.getItemMeta().getDisplayName().contains("TOKEN")){
+				 amount = i.getAmount() + amount;
+			 }
+		 }
+		 
+		 if (amount >= cost){
+			 for (ItemStack i : p.getInventory()){
+				 if (i != null){
+					 amt = i.getAmount();
+				 }
+				 if (i != null && i.getType() != Material.AIR && i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().hasDisplayName() && i.getItemMeta().getDisplayName().contains("TOKEN")){
+					 for (int x = 0; x <= amt; x++){
+						 if (cost > costPaid){
+							 i.setAmount(i.getAmount() - 1);
+							 costPaid++;
+						 }
+					 }
+				 }
+			 }
+			 return true;
+		 }
+		 
+		 return false;
+	 }
+	 
+	 public void returnItem(Player p, int amount){
+		 p.getInventory().addItem(plugin.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, amount));
+	 }
 }
   

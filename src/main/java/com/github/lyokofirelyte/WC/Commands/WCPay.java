@@ -5,20 +5,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
-import com.github.lyokofirelyte.WCAPI.Events.PlayerMoneyTransferEvent;
 
-public class WCPay implements CommandExecutor, Listener {
+public class WCPay implements CommandExecutor {
 
-      WCMain plugin;
+      WCMain pl;
 	  public WCPay(WCMain instance){
-	  this.plugin = instance;
+	  this.pl = instance;
 	  }
 	  
 	  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
@@ -32,8 +30,8 @@ public class WCPay implements CommandExecutor, Listener {
 				return true;
 			}
 			
-			if (Bukkit.getPlayer(args[0]) == null){
-				s(p, "That player is not online!");
+			if (pl.wcm.getWCPlayer(args[0]) == null){
+				s(p, "That player does not exist! (Check spelling!)");
 				return true;
 			}
 			
@@ -42,15 +40,26 @@ public class WCPay implements CommandExecutor, Listener {
 				return true;
 			}
 			
-			PlayerMoneyTransferEvent e = new PlayerMoneyTransferEvent(p, Bukkit.getPlayer(args[0]), Integer.parseInt(args[1]));
-			plugin.getServer().getPluginManager().callEvent(e);
-		}
-		
-		if (cmd.getName().equalsIgnoreCase("balance") || cmd.getName().equalsIgnoreCase("money")){
-			WCPlayer wcp = plugin.wcm.getWCPlayer(((Player)sender).getName());
-			WCMain.s((Player)sender, "Shinies: " + wcp.getBalance());
+			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
+			WCPlayer wcpCurrent = pl.wcm.getWCPlayer(args[0]);
+			
+			if (wcp.getBalance() < Integer.parseInt(args[1])){
+				s(p, "You lack the funds to do that!");
+				return true;
+			}
+					
+			wcp.setBalance(wcp.getBalance() - Integer.parseInt(args[1]));
+			wcpCurrent.setBalance(wcpCurrent.getBalance() + Integer.parseInt(args[1]));
+			pl.wcm.updatePlayerMap(args[0], wcpCurrent);
+			pl.wcm.updatePlayerMap(p.getName(), wcp);
+			
+			s(p, "Sent!");
+			
+			if (Bukkit.getOfflinePlayer(args[0]).isOnline()){
+				s(Bukkit.getPlayer(args[0]), p.getDisplayName() + " &dhas given you &6" + args[1] + " &dshinies.");
+			}
 		}
 		  
-	  return true;
+		return true;
 	  }
 }

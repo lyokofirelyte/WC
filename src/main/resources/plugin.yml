@@ -1,9 +1,9 @@
 name: WaterCloset
 main: com.github.lyokofirelyte.WC.WCMain
 author: lyokofirelyte
-prefix: WCV4
+prefix: WCV5
 depend: [Vault, WCAPI]
-version: 4
+version: 5
 
 commands:
    watercloset:
@@ -12,6 +12,9 @@ commands:
    wc:
       description: WC Root Command
       usage: /wc
+   ping:
+      description: WC Ping Command
+      usage: /ping
    member:
       description: Member Command
       usage: /member <player>
@@ -20,9 +23,114 @@ commands:
       description: Staff Chat
       usage: /o <message>
       permission: wa.staff
+   wb:
+      description: WC WB Command
+      usage: /wb
+      permission: wa.statesman
+   workbench:
+      description: WC WB Command
+      usage: /workbench
+      permission: wa.statesman
+   near:
+      description: WC Near Command
+      usage: /near
+      permission: wa.divine
+   killall:
+      description: WC BLOODSHED command
+      usage: /killall
+      permission: wa.mod
+   radar:
+      description: WC Radar Command
+      usage: /radar
+      permission: wa.townsman
+   suicide:
+      description: WC Death Command
+      usage: /suicide
+      permission: wa.villager
+   feed:
+      description: WC Feed Command
+      usage: /feed
+      permission: wa.emperor
+   p:
+      description: WC Patrol Chat
+      usage: /p <message>
+   ptp:
+      description: WC Patrol TP Command
+      usage: /ptp <player>
+   seen:
+      description: WC Seen Command
+      usage: /ptp <player>
+      permission: wa.settler
+   hat:
+      description: WC Hawt Hat Command
+      usage: /hat
+      permission: wa.disctrictman
+   chestplate:
+      description: WC Hawt Chestplate Command
+      usage: /chestplate
+      permission: wa.disctrictman
+   leggings:
+      description: WC Hawt Leggings Command
+      usage: /leggings
+      permission: wa.disctrictman
+   boots:
+      description: WC Hawt Boots Command
+      usage: /boots
+      permission: wa.disctrictman
+   sudo:
+      description: WC Force Command
+      usage: /sudo <player> <command>
+      permission: wa.mod2
+   powertool:
+      description: WC PowerTool Command
+      usage: /powertool
+      permission: wa.regional
+   pt:
+      description: WC PowerTool Command
+      usage: /pt
+      permission: wa.regional
+   tppos:
+      description: WC TPPOS
+      usage: /tppos <x> <y> <z>
+      permission: wa.mod2
+   speed:
+      description: WC Speed Command
+      usage: /speed <#>
+      permission: wa.mod2
+   more:
+      description: WC More Command
+      usage: /more
+      permission: wa.mod2
+   back:
+      description: WC Back Command
+      usage: /back
+      permission: wa.mod2
+   gm:
+      description: WC GM Command
+      usage: /gm <s c a>
+      permission: wa.mod2
+   ci:
+      description: WC CI Command
+      usage: /ci or /ci u
+      permission: wa.staff
+   i:
+      description: WC i Command
+      usage: /i <item>
+      permission: wa.mod2
+   fly:
+      description: WC Flight Command
+      usage: /fly
+      permission: wa.mod2
+   soar:
+      description: WC Soar Command
+      usage: /soar
+      permission: wa.elysian
    l:
       description: Alliance Chat
       usage: /l <message>
+   afk:
+      description: WC AFK
+      usage: /afk
    spawn:
       description: WC Spawn
       usage: /spawn
@@ -35,6 +143,9 @@ commands:
    waa:
       description: WAA Help Menu
       usage: /waa help
+   qc:
+      description: WC Quick Command
+      usage: /qc
    root:
       description: WC Options
       usage: /options
@@ -112,6 +223,10 @@ commands:
       description: WC Warp Command
       usage: /warp <dest> or /warp <page>
       permission: wa.mod2
+   ds:
+      description: DISCO!
+      usage: /ds
+      permission: wa.mod2
    w:
       description: WC Warp Command
       usage: /w <dest> or /w <page>
@@ -142,6 +257,39 @@ commands:
       description: WC Reboot Command
       usage: /reboot
       permission: wa.admin
+   bal:
+      description: WC Bal Command
+      usage: /bal
+   balance:
+      description: WC Bal Command
+      usage: /bal
+   tp:
+      description: WC TP Command
+      usage: /tp <player>
+      permission: wa.mod2
+   tphere:
+      description: WC TP Command
+      usage: /tphere <player>
+      permission: wa.mod2
+   tpa:
+      description: WC TP Command
+      usage: /tpa <player>
+      permission: wa.continental
+   tpahere:
+      description: WC TP Command
+      usage: /tpahere <player>
+      permission: wa.immortal
+   tpall:
+      description: WC TP Command
+      usage: /tpall
+      permission: wa.admin
+   tpaall:
+      description: WC TP Command
+      usage: /tpaall
+      permission: wa.admin
+   pay:
+      description: WC Pay Command
+      usage: /pay
 permissions:
     spleef.admin:
         description: Use admin stuff.
@@ -170,12 +318,21 @@ permissions:
     wa.shirian:
         description: shirian.
         default: op
+    wa.regional:
+        description: PowerTool
+        default: op
     wa.serf:
         description: serf.
         default: op
     wa.national:
         description: national.
         default: op
+    wa.villager:
+        description: villager.
+        default: op
+    wa.townsman:
+        description: radar.
+        default: op  
     wa.admin:
         description: Admin.
         default: op
@@ -185,6 +342,24 @@ permissions:
     wa.immortal:
         description: tpahere.
         default: op
+    wa.divine:
+        description: near.
+        default: op
+    wa.eternal:
+        description: Multiple powertools.
+        default: op
+    wa.settler:
+        description: Seen.
+        default: op
     wa.enderpearl:
         description: Use ender pearls.
+        default: op
+    wa.disctrictman:
+        description: Hawt Hats
+        default: op
+    wa.metropolitan:  
+        description: sign color
+        default: op
+    wa.elysian:
+        description: soar
         default: op

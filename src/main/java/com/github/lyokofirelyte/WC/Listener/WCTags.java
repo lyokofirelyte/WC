@@ -26,12 +26,17 @@ public class WCTags implements Listener {
     	wcp = plugin.wcm.getWCPlayer(e.getNamedPlayer().getName());
     	wca = plugin.wcm.getWCAlliance(wcp.getAlliance());
     	
-    	if (wca.equals("ForeverAlone")){
-    		completed = "§7" + wcp.getNick();
-    	} else {
-    		completed = plugin.wcm.getCompleted2(e.getNamedPlayer().getName(), wca.getColor1(), wca.getColor2());
-    	}
+    	if (wcp.getNamePlate()){
     	
-    	e.setTag(completed);
+	    	if (wca.equals("ForeverAlone")){
+	    		completed = "§7" + wcp.getNick();
+	    	} else {
+	    		completed = plugin.wcm.getCompleted2(e.getNamedPlayer().getName(), wca.getColor1(), wca.getColor2());
+	    	}
+	    	
+	    	e.setTag(completed);
+    	} else {
+    		e.setTag(e.getNamedPlayer().getName());
+    	}
     }
 }

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,7 +27,7 @@ public class WCSigns implements Listener {
 
 	WCMain plugin;
 	public WCSigns(WCMain instance){
-		this.plugin = instance;
+	plugin = instance;
 	}
 	  
 	@EventHandler (priority = EventPriority.NORMAL)
@@ -157,20 +156,7 @@ public class WCSigns implements Listener {
 					float pitch = warpLoad.getInt("pitch");
 					Location warpTo = new Location(w, x, y+1, z, yaw, pitch);
 					p.teleport(warpTo);
-					List<Location> circleblocks = Utils.circle(p, p.getLocation(), 3, 1, true, false, 0);
-					List<Location> circleblocks2 = Utils.circle(p, p.getLocation(), 3, 1, true, false, 1);
-					
-					for (Location l : circleblocks){
-						p.getWorld().playEffect(l, Effect.SMOKE, 0);
-						p.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
-						p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
-					}
-					
-					for (Location l : circleblocks2){
-						p.getWorld().playEffect(l, Effect.SMOKE, 0);
-						p.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
-						p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
-					}
+					Utils.effects(p);
 				}
 				
 			} else {

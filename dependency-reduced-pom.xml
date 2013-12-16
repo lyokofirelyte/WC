@@ -4,7 +4,7 @@
   <groupId>WC</groupId>
   <artifactId>WC</artifactId>
   <name>WC</name>
-  <version>4</version>
+  <version>5</version>
   <url>com.github.lyokofirelyte.WaterCloset</url>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -71,14 +71,14 @@
     <dependency>
       <groupId>WCAPI</groupId>
       <artifactId>WCAPI</artifactId>
-      <version>4</version>
+      <version>5</version>
       <scope>system</scope>
       <systemPath>C:\Users\Lyoko Firelyte\workspace\WCCore\src\lib\WCAPI.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.6.4-R0.1-SNAPSHOT</version>
+      <version>1.7.2-R0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -91,7 +91,7 @@
   </dependencies>
   <properties>
     <mainClass>com.github.lyokofirelyte.WC.WCMain</mainClass>
-    <bukkitVersion>1.6.4-R0.1-SNAPSHOT</bukkitVersion>
+    <bukkitVersion>1.7.2-R0.1-SNAPSHOT</bukkitVersion>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

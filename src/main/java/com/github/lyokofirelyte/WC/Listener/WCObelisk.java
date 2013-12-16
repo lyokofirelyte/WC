@@ -55,7 +55,7 @@ public class WCObelisk implements Listener {
 					
 					for (String s2 : obelisks){
 						oblSplit = s2.split(" ");
-						inv.addItem(plugin.invManager.makeItem(oblSplit[0], "Click to fly...", false, Enchantment.DURABILITY, 1, Material.DIAMOND_BARDING, 1));
+						inv.addItem(plugin.invManager.makeItem(oblSplit[0], "Click to fly...", false, Enchantment.DURABILITY, 0, 1, Material.DIAMOND_BARDING, 1));
 					}
 					
 					e.getPlayer().openInventory(inv);
@@ -88,9 +88,6 @@ public class WCObelisk implements Listener {
 					final double xStart = p.getLocation().getX();
 					final double zStart = p.getLocation().getZ();
 
-					final double xCurrent = p.getLocation().getX();
-					final double zCurrent = p.getLocation().getZ();
-					
 					p.setAllowFlight(true);
 					p.setFlying(true);
 					coolDown.put(p.getName(), 0);
@@ -99,9 +96,12 @@ public class WCObelisk implements Listener {
 					
 				final int groove = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 				public void run(){
-					
-					while (p.getLocation().getY() < 200 && coolDown.get(p.getName()) <= 0){
-						p.setVelocity(new Vector(0, 1, 0));
+
+					double xCurrent = p.getLocation().getX();
+					double zCurrent = p.getLocation().getZ();
+
+					while (p.getLocation().getY() < 150 && coolDown.get(p.getName()) <= 0){
+						p.setVelocity(new Vector(0, 4, 0));
 						cool(p.getName());
 					}
 					
@@ -110,99 +110,122 @@ public class WCObelisk implements Listener {
 						
 						if (zTarget > zStart){ // Target is bigger, so we need to add velocity to the Z direction as well!
 							
-							while (xTarget > xCurrent && zTarget > zCurrent && coolDown.get(p.getName()) <= 0){
+							while (xTarget > xCurrent && coolDown.get(p.getName()) <= 0){
 								
-								double xCurrent = p.getLocation().getX();
-								double zCurrent = p.getLocation().getZ();
-								p.setVelocity(new Vector(3, 0, 3));
+								xCurrent = p.getLocation().getX();
+								p.setVelocity(new Vector(3, 0, 0));
 								altCheck(p);
-										
-								if (xTarget <= xCurrent && zTarget <= zCurrent){ // We're there! (RESULTS MAY VARY)
-									end(p);
-									return;
-								}
-								
 								cool(p.getName());
 							}
-							
-							return;
+								
+							while (zTarget > zCurrent && coolDown.get(p.getName()) <= 0){
+								
+								zCurrent = p.getLocation().getZ();
+								p.setVelocity(new Vector(0, 0, 3));
+								altCheck(p);
+								cool(p.getName());
+							}
+
+										
+							if (xTarget <= xCurrent && zTarget <= zCurrent){ // We're there! (RESULTS MAY VARY)
+								end(p);
+								return;
+							}
+								
+
 						}
 						
-						
+
 						if (zTarget < zStart){ // Target is smaller, so we need to subtract velocity to the Z direction as well!
 
-							while (xTarget > xCurrent && zTarget < zCurrent && coolDown.get(p.getName()) <= 0){
+							while (xTarget > xCurrent && coolDown.get(p.getName()) <= 0){
 								
-								double xCurrent = p.getLocation().getX();
-								double zCurrent = p.getLocation().getZ();
-								p.setVelocity(new Vector(3, 0, -3));
+								xCurrent = p.getLocation().getX();
+								p.setVelocity(new Vector(3, 0, 0));
 								altCheck(p);
-		
-								if (xTarget >= xCurrent && zTarget >= zCurrent){ // We're there! (RESULTS MAY VARY)
-									end(p);
-									return;
-								}
-								
-								cool(p.getName());
-
+								cool(p.getName());	
 							}
 							
-							return;
+							while (zTarget < zCurrent && coolDown.get(p.getName()) <= 0){
+								zCurrent = p.getLocation().getZ();
+								p.setVelocity(new Vector(0, 0, -3));
+								altCheck(p);
+								cool(p.getName());
+							}
+
+		
+							if (xTarget <= xCurrent && zTarget >= zCurrent){ // We're there! (RESULTS MAY VARY)
+								end(p);
+								return;
+							}
+
 						}
-						
-						
 					}
-					
-					
+						
+						
+						
+		
 					if (xTarget < xStart){ // target is smaller, rem vel 
 						
 						if (zTarget > zStart){ // Target is bigger, so we need to add velocity to the Z direction as well!
 							
-							while (xTarget < xCurrent && zTarget > zCurrent && coolDown.get(p.getName()) <= 0){
-								
-								double xCurrent = p.getLocation().getX();
-								double zCurrent = p.getLocation().getZ();
-								p.setVelocity(new Vector(-3, 0, 3));
+							while (xTarget < xCurrent && coolDown.get(p.getName()) <= 0){ 
+								xCurrent = p.getLocation().getX();
+								p.setVelocity(new Vector(-3, 0, 0));
 								altCheck(p);
-								
-								if (xTarget >= xCurrent && zTarget <= zCurrent){ // We're there! (RESULTS MAY VARY)
-									end(p);
-									return;
-								}
-								
 								cool(p.getName());
-								
 							}
+							
+							while (zTarget > zCurrent && coolDown.get(p.getName()) <= 0){
+								xCurrent = p.getLocation().getX();
+								p.setVelocity(new Vector(0, 0, 3));
+								altCheck(p);
+								cool(p.getName());
+							}
+
+								
+							if (xTarget >= xCurrent && zTarget <= zCurrent){ // We're there! (RESULTS MAY VARY)
+								end(p);
+								return;
+							}
+
 						}
+
 						
 						
 						if (zTarget < zStart){ // Target is smaller, so we need to subtract velocity to the Z direction as well!
 							
-							while (xTarget < xCurrent && zTarget < zCurrent && coolDown.get(p.getName()) <= 0){
-								
-								double xCurrent = p.getLocation().getX();
-								double zCurrent = p.getLocation().getZ();
-								p.setVelocity(new Vector(-3, 0, -3));
+							while (xTarget < xCurrent && coolDown.get(p.getName()) <= 0){
+								xCurrent = p.getLocation().getX();
+								p.setVelocity(new Vector(-3, 0, 0));
 								altCheck(p);
-								
-								if (xTarget >= xCurrent && zTarget >= zCurrent){ // We're there! (RESULTS MAY VARY)
-									end(p);
-									return;
-								}
-								
 								cool(p.getName());
-
 							}
+								
+							while (zTarget < zCurrent && coolDown.get(p.getName()) <= 0){
+								xCurrent = p.getLocation().getX();
+								p.setVelocity(new Vector(0, 0, -3));
+								altCheck(p);
+								cool(p.getName());
+							}
+
+							if (xTarget >= xCurrent && zTarget >= zCurrent){ // We're there! (RESULTS MAY VARY)
+								end(p);
+								return;
+							}
+							
 						}
+						
 					}
+
 				}}, 0L, 5L);	
 					
 				plugin.datacore.set("Users." + p.getName() + ".TAZK", groove);
 				return;
-				}
 			}
 		}
 	}
+}
 	
 	private void cool(final String name) {
 		coolDown.put(name, 5);
@@ -215,7 +238,7 @@ public class WCObelisk implements Listener {
 	public void end(Player p){
 		p.setAllowFlight(false);
 		p.setFlying(false);
-		p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10, 3)); // Ehh, this should absorb the fall.. right?
+		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 360, 10)); // Ehh, this should absorb the fall.. right?
 		p.setFoodLevel(0);
 		Bukkit.getScheduler().cancelTask(plugin.datacore.getInt("Users." + p.getName() + ".TAZK"));
 		WCMain.s(p, "Reached destination! (Or close to... :3)");
@@ -223,7 +246,7 @@ public class WCObelisk implements Listener {
 	
 	public void altCheck(Player p){
 		
-		if (p.getLocation().getY() < 100){
+		if (p.getLocation().getY() < 140){
 			p.setVelocity(new Vector(0, 2, 0));
 		}
 	}

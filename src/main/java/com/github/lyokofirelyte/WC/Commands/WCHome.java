@@ -23,6 +23,8 @@ public class WCHome implements CommandExecutor {
 	plugin = instance;
     }
 	
+	String bleh;
+	
 	String commands = "home sethome remhome delhome";
 	
 	  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
@@ -96,8 +98,8 @@ public class WCHome implements CommandExecutor {
 		World world = Bukkit.getWorld(locSplit[5]);
 		Location homeLanding = new Location(world, x, y+1.2, z, yaw, pitch);
 		p.teleport(homeLanding);
-		List<Location> circleblocks = Utils.circle(p, p.getLocation(), 3, 1, true, false, 0);
-		List<Location> circleblocks2 = Utils.circle(p, p.getLocation(), 3, 1, true, false, 1);
+		List<Location> circleblocks = Utils.circle(p.getLocation(), 3, 1, true, false, 0);
+		List<Location> circleblocks2 = Utils.circle(p.getLocation(), 3, 1, true, false, 1);
 		
 		if (wcp.homeSounds){
 			p.getWorld().playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 3.0F, 0.5F);
@@ -135,13 +137,13 @@ public class WCHome implements CommandExecutor {
 
 	private int limitCheck(Player p) {
 		
-		String permissions = "wa.admin wa.staff wa.national wa.shirian wa.serf";
+		String permissions = "wa.admin wa.staff wa.elysian wa.national wa.shirian wa.serf";
 		String[] perms = permissions.split(" ");
-		int x = 6;
+		int x = 7;
 			for (String a : perms){
 				x--;
 				if (p.hasPermission(a)){
-					if (x == 5){
+					if (x == 6){
 						return 1337;
 					} else {
 						return x;
@@ -160,18 +162,28 @@ public class WCHome implements CommandExecutor {
 			viewHomes(pName, homes, homeLimit, p);
 			return;
 		}
-
-		if (homes.size() >= homeLimit){
-			viewHomes(pName, homes, homeLimit, p);
-			return;
-		}
+		
+		int xX = 0;
 		
 		for (String a : homes){
 			if (a.startsWith(args[0])){
-				homes.remove(a);
-				wcp.remHome(args[0]);
-				updatePlayer(wcp, p.getName());
+				xX++;
+				bleh = a;
 			}
+		}
+		
+		if (xX == 0){
+			
+			if (homes.size() >= homeLimit){
+				viewHomes(pName, homes, homeLimit, p);
+				return;
+			} 
+			
+		} else {
+			
+			homes.remove(bleh);
+			wcp.remHome(args[0]);
+			updatePlayer(wcp, p.getName());
 		}
 		
 		double x = p.getLocation().getX();

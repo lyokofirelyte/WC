@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -17,9 +18,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import static com.github.lyokofirelyte.WC.WCMain.s;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 public class WCMail implements CommandExecutor, Listener {
 public static String WC = "§dWC §5// §d";
@@ -48,14 +51,13 @@ String message;
 		}
 		
 		Player p = (Player) sender;
-		
-		
+
 		switch(args.length){
 		
 		case 0:
 			
 			for (String help : WCHelpMail){
-	    		sender.sendMessage(Utils.AS(help));
+	    		s(p, help);
 	    	}
 	    	
 			break;
@@ -67,23 +69,23 @@ String message;
 			
 			case "send":
 				
-				sender.sendMessage(Utils.AS(WC + "Try /mail send <player> <message>."));
+				s(p, "Try /mail send <player> <message>.");
 				break;
 	
 		    case "read":
 
-		    	mailCheck(p);
+		    	mailCheck(p, plugin.wcm.getWCPlayer(p.getName()));
 		    	break;
 		    	
 		    case "clear":
 		    	
-		        clearCheck(p);
+		    	clearCheck(p, plugin.wcm.getWCPlayer(p.getName()));
 		        break;
 		        
 		    case "quick":
 		    	
-		    	mailCheck(p);
-		    	clearCheck(p);
+		    	mailCheck(p, plugin.wcm.getWCPlayer(p.getName()));
+		    	clearCheck(p, plugin.wcm.getWCPlayer(p.getName()));
 		    	break;
 		        
 		    default:
@@ -109,7 +111,7 @@ String message;
 			  List <String> WCHelpMail = plugin.help.getStringList("WC.Mail");
 		    	
 		    	for (String help : WCHelpMail){
-		    		sender.sendMessage(Utils.AS(help));
+		    		s(p, help);
 		    	}
 		    	
 		    break;
@@ -119,38 +121,39 @@ String message;
 			  switch (args[1]){
 		    	
 		      case "staff":
-		    	mailStaff(p, Utils.createString(args, 2));
-		    	break;
-		      
+		    	  mailStaff(p, Utils.createString(args, 2));
+		    	  break;
+		    	  
+		      case "alliance":
+		    	  mailAlliance(p, Utils.createString(args, 2));
+		    	  break;
 			  
 			  case "website":		  
 				  message = Utils.createString(args, 2);
 				  mailSite(sender.getName(), message);
-				  sender.sendMessage(Utils.AS(WC + "Your message has been sent to http://www.ohsototes.com/?p=mail"));
+				  s(p, "Your message has been sent to http://www.ohsototes.com/?p=mail");
 				  break;
 				  
 			  case "all":
 				  
 				  if (p.hasPermission("wa.staff") == false){
-					  p.sendMessage(Utils.AS(WC + "You don't have permission to send global mails."));
+					  s(p, "You don't have permission to send global mails.");
 					  break;
 				  }
 				  
-				  List <String> userList = plugin.mail.getStringList("Users.Total");
-				  sender.sendMessage(Utils.AS(WC + "Message sent!"));
+				  List <String> userList = plugin.systemYaml.getStringList("Users.Total");
+				  
+				  s(p, "Message sent to everyone!");
 				  
 				  for (String current : userList){
-					  
+
 					  OfflinePlayer sendTo = Bukkit.getOfflinePlayer(current);
 				  	
-					  message = Utils.createString(args, 2);
-					  mail = plugin.mail.getStringList("Users." + current + ".Mail");
-					  mail.add(p.getDisplayName() + " &f-> &2Global &9// &3" + message);
-					  plugin.mail.set("Users." + current + ".Mail", mail);
-					  	if (sendTo.isOnline()){
-					  		Bukkit.getPlayer(current).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
-					  	}
+					  sendMail(p, current, "&2Global", message);
 					  
+					  if (sendTo.isOnline()){
+					  	Bukkit.getPlayer(current).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
+					  }
 				  }
 				  
 			  break;
@@ -165,59 +168,68 @@ String message;
 				  OfflinePlayer sendTo = Bukkit.getOfflinePlayer(args[1]);
 				  
 				  if (sendTo.hasPlayedBefore() == false){
-					  sender.sendMessage(Utils.AS(WC + "That player has never logged in before!"));
+					  s(p, "That player has never logged in before!");
 					  break;
 				  }
 				  	
-
-				  message = Utils.createString(args, 2);
-				  	
-				  mail = plugin.mail.getStringList("Users." + sendTo.getName() + ".Mail");
-				  mail.add(p.getDisplayName() + " &9// &3" + message);
-				  plugin.mail.set("Users." + sendTo.getName() + ".Mail", mail);
-				  sender.sendMessage(Utils.AS(WC + "Message sent!"));
+				  message = Utils.createString(args, 2);  	
+				  sendMail(p, args[1], "&2Global", message);
+				  s(p, "Message sent!");
 				  
 				  if (sendTo.isOnline()){
-					  Bukkit.getPlayer(args[1]).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
+					 s(Bukkit.getPlayer(args[1]), "You've recieved a new mail! Check it with /mail read.");
 				  }
 				  
 			   break;
 			   
 			  }
 		  }
-
-	}
+		}
 	
-	}
+		}
 	return true;
 	}
-		
 	
+	private void mailAlliance(Player p, String message){
+		
+		WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
+		
+		if (!wcp.getInAlliance()){
+			s(p, "You're not in an alliance.");
+		} else {
+			for (String s : plugin.wcm.getWCSystem("system").getUsers()){
+				WCPlayer wcpCurrent = plugin.wcm.getWCPlayer(s);
+				if (wcpCurrent != null && wcpCurrent.getInAlliance() && wcpCurrent.getAlliance().equals(wcp.getAlliance())){
+					sendMail(p, s, "&bAlliance", message);
+				}
+			}
+			s(p, "Sent!");
+		}
+	}
+		
 	private void mailStaff(Player p, String message) {
 		
-		if (p.hasPermission("wa.staff") == false){
-			p.sendMessage(WCMail.WC + "You don't have permission to send mail to staff.");
+		if (!p.hasPermission("wa.staff")){
+			s(p, "You don't have permission to send mail to staff.");
 			return;
 		}
 		
-		List<String> players = plugin.mail.getStringList("Users.Total");
+		List<String> players = plugin.systemYaml.getStringList("Users.Total");
 		
-			for (String bleh : players){
+		for (String bleh : players){
 				
-				if (WCVault.perms.has("world", bleh, "wa.staff")){
-					
-					  mail = plugin.mail.getStringList("Users." + bleh + ".Mail");
-					  mail.add(p.getDisplayName() + " &f-> &aStaff &9// &3" + message);
-					  plugin.mail.set("Users." + bleh + ".Mail", mail);
-					  OfflinePlayer sendTo = Bukkit.getOfflinePlayer(bleh);
+			if (WCVault.perms.has("world", bleh, "wa.staff")){
+
+				sendMail(p, bleh, "&aStaff", message);
+				
+				OfflinePlayer sendTo = Bukkit.getOfflinePlayer(bleh);
 					  
-					  	if (sendTo.isOnline()){
-					  		Bukkit.getPlayer(bleh).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
-					  	}
+			    if (sendTo.isOnline()){
+			    	s(Bukkit.getPlayer(bleh), "You've recieved a new mail! Check it with /mail read.");
 				}
 			}
+		}
 	}
-
 
 	public void mailSite(String name, String message){
 		
@@ -245,58 +257,68 @@ String message;
 	      {
 	        e.printStackTrace();
 	      }
-	    }
-	
-	public void clearCheck(Player p){
-		
-		mail = plugin.mail.getStringList("Users." + p.getName() + ".Mail");
-		
-		if (mail.size() == 0){
-			p.sendMessage(Utils.AS(WC + "You have no mail!"));
-			return;
-		}
-		
-		plugin.mail.set("Users." + p.getName() + ".Mail", null);
-		p.sendMessage(Utils.AS(WC + "Mail cleared!"));
 	}
 	
-	public void mailCheck(Player p){
+	public void clearCheck(Player p, WCPlayer mailReceiver){
+		
+		if (mailReceiver.getMail().size() <= 0){
+			s(p, "You have no mail!");
+			return;
+		}
+		
+		mailReceiver.setMail(new ArrayList<String>());
+		plugin.wcm.updatePlayerMap(p.getName(), mailReceiver);
+		s(p, "Mail cleared!");
+	}
+	
+	public void mailCheck(Player p, WCPlayer mailReceiver){
     	
-    	mail = plugin.mail.getStringList("Users." + p.getName() + ".Mail");
+    	mail = mailReceiver.getMail();
 		
 		if (mail.size() == 0){
 			p.sendMessage(Utils.AS(WC + "You have no mail!"));
 			return;
 		}
 		
-    	p.sendMessage(Utils.AS(WC + "Viewing Mail &6(" + mail.size() + "&6)"));
-    		for (String singleMail : mail){
-    			p.sendMessage(Utils.AS("&5| " + singleMail));
-    		}
+    	s(p, "Viewing Mail &6(" + mail.size() + "&6)");
+    	
+    	for (String singleMail : mail){
+    		p.sendMessage(Utils.AS("&5| " + singleMail));
+    	}
 	}
 	
 	public void mailLogin(Player p){
 		
-		mail = plugin.mail.getStringList("Users." + p.getName() + ".Mail");
-		List <String> userList = plugin.mail.getStringList("Users.Total");
-		
-		if (mail.size() > 0){
-			p.sendMessage(Utils.AS(WC + "You have " + mail.size() + " &dnew messages. Read them with /mail read."));
-		}
-		
-		if (userList.contains(p.getName())){
-			return;
+		WCPlayer mailReceiver = plugin.wcm.getWCPlayer(p.getName());
+	
+		if (mailReceiver.getMail().size() > 0){
+			p.sendMessage(Utils.AS(WC + "You have " + mail.size() + " &dnew messages. Type /mail read or /mail quick."));
+			mailCheck(p, mailReceiver);
 		} else {
-			userList.add(p.getName());
-			plugin.mail.set("Users.Total", userList);
+			p.sendMessage(Utils.AS(WC + "You have no new messages."));
 		}
 		
-
 	}
 	
-	@EventHandler(priority=EventPriority.LOW)
-	  public boolean onPlayerJoin(final PlayerJoinEvent event){
-		mailLogin(event.getPlayer());
-		return true;
+	public void sendMail(Player p, String player, String type, String message){
+		  
+		s(p, "Message sent to everyone!");
+		    
+		WCPlayer mailReceiver = plugin.wcm.getWCPlayer(player);
+		OfflinePlayer sendTo = Bukkit.getOfflinePlayer(player);
+		  	
+		mail = mailReceiver.getMail();
+		mail.add(p.getDisplayName() + " &f-> " + type + " &9// &3" + message);
+		mailReceiver.setMail(mail);
+		plugin.wcm.updatePlayerMap(player, mailReceiver);
+			  
+		if (sendTo.isOnline()){
+			Bukkit.getPlayer(player).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
+		}
+	}
+	
+	@EventHandler(priority=EventPriority.HIGHEST) 
+	public void onPlayerJoin(PlayerJoinEvent e){
+		mailLogin(e.getPlayer());
 	}
 }

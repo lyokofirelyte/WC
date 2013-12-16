@@ -1,5 +1,6 @@
 package com.github.lyokofirelyte.WC.Listener;
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,7 @@ import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 public class WCScoreboard implements Listener {
@@ -23,93 +25,142 @@ public class WCScoreboard implements Listener {
 	WCMain pl;
 	WCPlayer wcp;
 	WCAlliance wca;
+	WCSystem wcs;
+	Boolean rebooted = false;
+	int timeLeft = 300;
 	
 	public WCScoreboard(WCMain instance){
 	   pl = instance;
     } 
+	
+	private void warning(){
+		for (Player p : Bukkit.getOnlinePlayers()){
+			p.getScoreboard().getObjective(DisplaySlot.SIDEBAR).setDisplayName("§4REBOOT: §c" + timeLeft);
+		}
+		timeLeft--;
+	}
 
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onScoreBoard(ScoreboardUpdateEvent e){
 		
-	     Player p = e.getPlayer();
+	     final Player p = e.getPlayer();
 		 wcp = pl.wcm.getWCPlayer(p.getName());
 		 wca = pl.wcm.getWCAlliance(wcp.getAlliance());
+		 wcs = pl.wcm.getWCSystem("system");
 		 Objective o1 = p.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
 		 
-		 if (o1 != null && wcp.getScoreboard()){	
+		 if (wcp == null){
+			 pl.wcm.setupPlayer(e.getPlayer().getName());
+			 wcp = pl.wcm.getWCPlayer(p.getName());
+		 }
+		 
+		 if (wcs.isRebooting()){
+			 if (o1 == null){
+				 ScoreboardManager manager = Bukkit.getScoreboardManager();
+				 Scoreboard board = manager.getNewScoreboard();	
+				 Objective o2 = board.registerNewObjective("wa", "dummy");
+				 o2.setDisplaySlot(DisplaySlot.SIDEBAR);
+				 o2.setDisplayName("§4REBOOT INITIATED");
+				 p.setScoreboard(board);
+			 }
 			 
-			if (p.getDisplayName().length() > 16){
-				o1.setDisplayName(p.getDisplayName().substring(0, 16));
-			} else {
-				o1.setDisplayName(p.getDisplayName());
+			 if (!rebooted){
+				 Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
+				 public void run() { warning();} }, 0L, 20L);
+				 rebooted = true;
+			 }
+			 
+			 return;
+		 }
+		 
+		 if (o1 != null && wcs.getPatrolCrystal() != null && !wcs.getPatrolCrystal().isDead() && wcs.getPatrolHotSpotParticipants().contains(e.getPlayer().getName())){
+			 return;
+		 }
+		 
+		 if (o1 != null && wcp.getScoreboard()){
+			 
+			if (pl.afkers.contains(p)){
+				o1.setDisplayName(Utils.AS("&7[afk]"));
 			}
-						
-			Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
-			Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
+			 
+			if (!wcp.getScoreboardCoords() && !pl.afkers.contains(p)){
+			 
+				if (p.getDisplayName().length() > 16){
+					o1.setDisplayName(Utils.AS(p.getDisplayName().substring(0, 16)));
+				} else {
+					o1.setDisplayName(Utils.AS(p.getDisplayName()));
+				}
+			}
+							
+			Score balance = o1.getScore(Bukkit.getOfflinePlayer("§3Shinies:"));
+			Score paragons = o1.getScore(Bukkit.getOfflinePlayer("§3Patrol Lvl:"));
 			Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
 			Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
 			Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
-			Score alliance2;
-						
-			if (!wcp.getInAlliance()){		
-				Score alliance = o1.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
-				alliance.setScore(1);
-			} else {
+
+			if (wcp.getInAlliance()){
 				
-			String completed = (pl.wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
+				Score alliance;
+				String completed = (pl.wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
 						
-			if (completed.length() >= 16){
-					alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
+				if (completed.length() >= 16){
+					alliance = o1.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
 				} else {
-					alliance2 = o1.getScore(Bukkit.getOfflinePlayer(completed));
+					alliance = o1.getScore(Bukkit.getOfflinePlayer(completed));
 				}
 						
-				alliance2.setScore(wca.getMemberCount());
+				alliance.setScore(wca.getMemberCount());
 			}
 						
-			paragons.setScore(wcp.getParagonLevel());
-			balance.setScore((int) WCVault.econ.getBalance(p.getName()));
+			paragons.setScore(wcp.getPatrolLevel());
+			balance.setScore((int) wcp.getBalance());
 			rank.setScore(1);
 			online.setScore(Bukkit.getOnlinePlayers().length);
 			options.setScore(0);
 				
 		 } else if (wcp.getScoreboard()){
 			 
-			   ScoreboardManager manager = Bukkit.getScoreboardManager();
+			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			Scoreboard board = manager.getNewScoreboard();	
 			Objective o2 = board.registerNewObjective("wa", "dummy");
 			o2.setDisplaySlot(DisplaySlot.SIDEBAR);
 			
-			if (p.getDisplayName().length() > 16){
-				o2.setDisplayName(p.getDisplayName().substring(0, 16));
-			} else {
-				o2.setDisplayName(p.getDisplayName());
+			if (pl.afkers.contains(p)){
+				o2.setDisplayName(Utils.AS("&7[afk]"));
+			}
+			
+			if (!wcp.getScoreboardCoords() && !pl.afkers.contains(p)){
+			
+				if (p.getDisplayName().length() > 16){
+					o2.setDisplayName(Utils.AS(p.getDisplayName().substring(0, 16)));
+				} else {
+					o2.setDisplayName(Utils.AS(p.getDisplayName()));
+				}
+			
 			}
 						
-			Score balance = o2.getScore(Bukkit.getOfflinePlayer("§3Balance:"));
-			Score paragons = o2.getScore(Bukkit.getOfflinePlayer("§3Paragon Lvl:"));
+			Score balance = o2.getScore(Bukkit.getOfflinePlayer("§3Shinies:"));
+			Score paragons = o2.getScore(Bukkit.getOfflinePlayer("§3Patrol Lvl:"));
 			Score online = o2.getScore(Bukkit.getOfflinePlayer("§9Online:"));
 			Score rank = o2.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
 			Score options = o2.getScore(Bukkit.getOfflinePlayer("§5/root"));
-			Score alliance2;
 						
-			if (!wcp.getInAlliance()){
-				Score alliance = o2.getScore(Bukkit.getOfflinePlayer("§7Forever§8Alone"));
-				alliance.setScore(1);
-			} else {
+			if (wcp.getInAlliance()){
+				
+				Score alliance;
 				String completed = (pl.wcm.getCompleted2(wcp.getAlliance(), wca.getColor1(), wca.getColor2()));
 						
 				if (completed.length() >= 16){
-					alliance2 = o2.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
+					alliance = o2.getScore(Bukkit.getOfflinePlayer(completed.substring(0, 16)));
 				} else {
-					alliance2 = o2.getScore(Bukkit.getOfflinePlayer(completed));
+					alliance = o2.getScore(Bukkit.getOfflinePlayer(completed));
 				}
 						
-				alliance2.setScore(wca.getMemberCount());
+				alliance.setScore(wca.getMemberCount());
 			}
 						
-			paragons.setScore(wcp.getParagonLevel());
-			balance.setScore((int) WCVault.econ.getBalance(p.getName()));
+			paragons.setScore(wcp.getPatrolLevel());
+			balance.setScore((int) wcp.getBalance());
 			rank.setScore(1);
 			online.setScore(Bukkit.getOnlinePlayers().length);
 			options.setScore(0);

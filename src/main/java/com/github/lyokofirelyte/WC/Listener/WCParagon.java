@@ -1,6 +1,5 @@
 package com.github.lyokofirelyte.WC.Listener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -14,9 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import static com.github.lyokofirelyte.WC.WCMain.s2;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
@@ -25,65 +24,55 @@ import com.github.lyokofirelyte.WCAPI.Events.ParagonFindEvent;
 
 public class WCParagon implements Listener {
 	
-	WCMain plugin;
+	WCMain pl;
 	public WCParagon(WCMain instance){
-	plugin = instance;
+	pl = instance;
 	}
 	
 	WCPlayer wcp;
-	List<String> lore;
-	ItemStack paragon;
 	Location loc;
-	ItemMeta paragonMeta;
 	Player p;
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onParagon(final ParagonFindEvent e){
 		
-		wcp = plugin.wcm.getWCPlayer(e.getPlayer().getName());
+		wcp = pl.wcm.getWCPlayer(e.getPlayer().getName());
 		p = e.getPlayer();
 		
 		if (!e.getPlayer().getWorld().getName().equals("world")){
 			e.setCancelled(true);
 			return;
 		}
+		
+		if (e.getParagon().toLowerCase().contains("death")){
+	        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from killing mobs."));
+		} else {
+	        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from harvesting " + e.getMat().toString().toLowerCase() + " &6" + e.getBlocksMined() + " &dtimes."));
+		}
 
-        paragon = new ItemStack(Material.STAINED_CLAY, 1, (short) e.getItemColor());
-        paragonMeta = paragon.getItemMeta();
+		ItemStack token = pl.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, 1);
         
-        lore = new ArrayList<String>();
-        
-        lore.add("§7§oI should return this");
-        lore.add("§7§oto the shrine near spawn.");
-        paragonMeta.setLore(lore);
-        
-        paragonMeta.setDisplayName(Utils.AS(e.getParagon().toUpperCase() + " PARAGON"));
-        paragonMeta.addEnchant(Enchantment.DURABILITY, 10, true);
-        paragon.setItemMeta(paragonMeta);
-        
-        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from harvesting " + e.getMat().toString().toLowerCase() + " &6" + e.getBlocksMined() + " &dtimes."));
+
         
         wcp.setBlocksMined(0);
         
         if (p.getInventory().firstEmpty() == -1){
-        	
-        	loc = p.getLocation();
-        	loc.getWorld().dropItemNaturally(loc, paragon);
-        	
-        	} else {
-        		
-        	p.getInventory().addItem(paragon);
-        	p.updateInventory();
+        	p.getWorld().dropItemNaturally(p.getLocation(), token);
+            s2(p, "&6&oYour tokens were dropped due to full inventory.");
+        } else {		
+        	p.getInventory().addItem(token);
+            s2(p, "&6&oYour tokens were added to your inventory.");
         }
-        	
+
+        pl.wcm.updatePlayerMap(p.getName(), wcp);
+
         if (wcp.getFireworks()){ 
         	
-        	List<Location> circleblocks = Utils.circle(e.getPlayer(), e.getPlayer().getLocation(), 5, 1, true, false, 1);
+        	List<Location> circleblocks = Utils.circle(e.getPlayer().getLocation(), 5, 1, true, false, 1);
 	        long delay =  0L;
 	        	for (final Location l : circleblocks){
 	        		delay = delay + 2L;
-	        		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
+	        		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.pl, new Runnable() {
 	        	      public void run() {
 	        	        	FireworkShenans fplayer = new FireworkShenans();
 	        	        	try {

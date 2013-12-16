@@ -20,6 +20,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCWarps implements CommandExecutor {
@@ -180,6 +181,9 @@ public class WCWarps implements CommandExecutor {
 					double zP = other.getLocation().getZ();
 
 					String warpSimple = Math.round(xP) + "&f, &6" + Math.round(yP) + "&f, &6" + Math.round(zP); 
+				    WCPlayer wcp = plugin.wcm.getWCPlayer(other.getName());
+				    wcp.setLastLocation(other.getLocation());
+				    plugin.wcm.updatePlayerMap(other.getName(), wcp);
 					other.teleport(warpTo);
 				    WCMain.s(other, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple + " &dby " + p.getDisplayName() + "&d.");
 				    return true;
@@ -190,9 +194,12 @@ public class WCWarps implements CommandExecutor {
 			    double zP = p.getLocation().getZ();
 
 			    String warpSimple = Math.round(xP) + "&f, &6" + Math.round(yP) + "&f, &6" + Math.round(zP) + "&d."; 
+			    WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
+			    wcp.setLastLocation(p.getLocation());
+			    plugin.wcm.updatePlayerMap(p.getName(), wcp);
 			    p.teleport(warpTo);
-				List<Location> circleblocks = Utils.circle(p, p.getLocation(), 3, 1, true, false, 0);
-				List<Location> circleblocks2 = Utils.circle(p, p.getLocation(), 3, 1, true, false, 1);
+				List<Location> circleblocks = Utils.circle(p.getLocation(), 3, 1, true, false, 0);
+				List<Location> circleblocks2 = Utils.circle(p.getLocation(), 3, 1, true, false, 1);
 				
 					for (Location l : circleblocks){
 						p.getWorld().playEffect(l, Effect.SMOKE, 0);
