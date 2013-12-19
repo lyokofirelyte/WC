@@ -814,7 +814,7 @@ public class WCMenus implements Listener, CommandExecutor {
 			
 			if (d.equals("CREATIVE SERVER")){
 				p.closeInventory();
-				Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/server IC");
+				p.performCommand("server IC");
 				return;
 			}
 			

@@ -36,12 +36,19 @@
       <artifactId>tagapi</artifactId>
       <version>2.6</version>
     </dependency>
-      <dependency>
+    <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <systemPath>${project.basedir}\src\lib\VaultCompile.jar</systemPath>
       <artifactId>Vault</artifactId>
       <scope>system</scope>
       <version>1.2.27</version>
+    </dependency>
+    <dependency>
+      <groupId>com.confuserr.BarAPI</groupId>
+      <systemPath>${project.basedir}\src\lib\BarAPI.jar</systemPath>
+      <artifactId>BarAPI</artifactId>
+      <scope>system</scope>
+      <version>2.0</version>
     </dependency>
   </dependencies>
   <repositories>

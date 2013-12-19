@@ -260,42 +260,58 @@ public class WCCommands implements CommandExecutor {
     	  List<String> list8 = plugin.datacore.getStringList("orange.Team");
     	  
     	  if (list1.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn1");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn1");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list2.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn2");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn2");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list3.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn3");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn3");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list4.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn4");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn4");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list5.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn5");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn5");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list6.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn6");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn6");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list7.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn7");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn7");
+    		  p.setOp(false);
     		  break;
     	  }
     	  
     	  if (list8.contains(p.getName())){
-    		  Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "sudo " + p.getName() + " c:/rawrdasshie7 spawn8");
+    		  p.setOp(true);
+    		  p.performCommand("warp spawn8");
+    		  p.setOp(false);
     		  break;
     	  }
     	  

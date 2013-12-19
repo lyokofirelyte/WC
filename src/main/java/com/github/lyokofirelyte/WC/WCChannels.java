@@ -143,10 +143,9 @@ public class WCChannels implements CommandExecutor, Listener {
 	  
 	  for (String s : emotes){
 		  
-		  if (e.getMessage().contains(s) && (e.getMessage().startsWith("@") || wcp.getEmotes())){
+		  if (e.getMessage().contains(s) && e.getMessage().startsWith("@")){
 			  PlayerEmoteEvent emote = new PlayerEmoteEvent(s, e.getPlayer(), e.getMessage());
 	  		  pl.getServer().getPluginManager().callEvent(emote);
-	  		  return;
 	  	  }
 	  }
 	  
@@ -192,7 +191,7 @@ public class WCChannels implements CommandExecutor, Listener {
 			
 			if (lastChat != null && lastChat.equals(p)){
 				rawr = true;
-				bleh.sendMessage(AS("&8>> " + p.getDisplayName() + "&f: " + message));
+				bleh.sendMessage(AS("&8>> " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message));
 			} else {
 				
 				String prefix = WCVault.chat.getPlayerPrefix(p);
@@ -425,7 +424,7 @@ public class WCChannels implements CommandExecutor, Listener {
 			  WCPatrol wcpp = pl.wcm.getWCPatrol(wcp.getPatrol());
 			  for (String s : wcpp.getMembers()){
 				  if (Bukkit.getPlayer(s) != null){
-					  Bukkit.getPlayer(s).sendMessage(AS("&8>> &3" + wcpp.getName() + " &8>> " + p.getDisplayName() + ": " + Utils.createString(args, 0)));
+					  Bukkit.getPlayer(s).sendMessage(AS("&8>> &3" + wcpp.getName() + " &8>> " + p.getDisplayName() + "&f: " + Utils.createString(args, 0)));
 				  }
 			  }
 		  }

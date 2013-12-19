@@ -141,19 +141,12 @@ String message;
 					  break;
 				  }
 				  
-				  List <String> userList = plugin.systemYaml.getStringList("Users.Total");
-				  
+				  List <String> userList = plugin.wcm.getWCSystem("system").getUsers();
+				  message = Utils.createString(args, 2);
 				  s(p, "Message sent to everyone!");
 				  
 				  for (String current : userList){
-
-					  OfflinePlayer sendTo = Bukkit.getOfflinePlayer(current);
-				  	
 					  sendMail(p, current, "&2Global", message);
-					  
-					  if (sendTo.isOnline()){
-					  	Bukkit.getPlayer(current).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
-					  }
 				  }
 				  
 			  break;
@@ -173,12 +166,8 @@ String message;
 				  }
 				  	
 				  message = Utils.createString(args, 2);  	
-				  sendMail(p, args[1], "&2Global", message);
+				  sendMail(p, args[1], "&6you", message);
 				  s(p, "Message sent!");
-				  
-				  if (sendTo.isOnline()){
-					 s(Bukkit.getPlayer(args[1]), "You've recieved a new mail! Check it with /mail read.");
-				  }
 				  
 			   break;
 			   
@@ -292,7 +281,7 @@ String message;
 		WCPlayer mailReceiver = plugin.wcm.getWCPlayer(p.getName());
 	
 		if (mailReceiver.getMail().size() > 0){
-			p.sendMessage(Utils.AS(WC + "You have " + mail.size() + " &dnew messages. Type /mail read or /mail quick."));
+			p.sendMessage(Utils.AS(WC + "You have " + mailReceiver.getMail().size() + " &dnew messages. Type /mail read or /mail quick."));
 			mailCheck(p, mailReceiver);
 		} else {
 			p.sendMessage(Utils.AS(WC + "You have no new messages."));
@@ -301,18 +290,15 @@ String message;
 	}
 	
 	public void sendMail(Player p, String player, String type, String message){
-		  
-		s(p, "Message sent to everyone!");
-		    
+
 		WCPlayer mailReceiver = plugin.wcm.getWCPlayer(player);
-		OfflinePlayer sendTo = Bukkit.getOfflinePlayer(player);
 		  	
 		mail = mailReceiver.getMail();
 		mail.add(p.getDisplayName() + " &f-> " + type + " &9// &3" + message);
 		mailReceiver.setMail(mail);
 		plugin.wcm.updatePlayerMap(player, mailReceiver);
 			  
-		if (sendTo.isOnline()){
+		if (Bukkit.getPlayer(player) != null){
 			Bukkit.getPlayer(player).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
 		}
 	}

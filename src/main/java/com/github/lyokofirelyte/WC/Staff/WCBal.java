@@ -126,7 +126,9 @@ public class WCBal implements CommandExecutor {
 		 List<String> players = new ArrayList<>();
 		 
 		 for (String p : pl.wcm.getWCSystem("system").getUsers()){
-			 balances.add(pl.wcm.getWCPlayer(p).getBalance());
+			 if (pl.wcm.getWCPlayer(p).getBalance() > 0){
+				 balances.add(pl.wcm.getWCPlayer(p).getBalance());
+			 }
 		 }
 
 		 Collections.sort(balances);

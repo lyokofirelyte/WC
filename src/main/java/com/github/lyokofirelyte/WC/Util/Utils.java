@@ -200,18 +200,14 @@ public class Utils {
 	public static EntityType getRandomEntity(){
 		List<EntityType> entities = new ArrayList<EntityType>();
 		entities.add(EntityType.CREEPER);
-		entities.add(EntityType.CAVE_SPIDER);
 		entities.add(EntityType.SPIDER);
-		entities.add(EntityType.MAGMA_CUBE);
-		entities.add(EntityType.SLIME);
 		entities.add(EntityType.PIG_ZOMBIE);
 		entities.add(EntityType.SKELETON);
-		entities.add(EntityType.CAVE_SPIDER);
 		entities.add(EntityType.SILVERFISH);
-		entities.add(EntityType.BLAZE);
+		entities.add(EntityType.SPIDER);
 		entities.add(EntityType.ZOMBIE);
-		entities.add(EntityType.GHAST);
-		entities.add(EntityType.WITCH);
+		entities.add(EntityType.ZOMBIE);
+		entities.add(EntityType.SKELETON);
 		Random rand = new Random();
 		int sel = rand.nextInt(entities.size());
 		return entities.get(sel);

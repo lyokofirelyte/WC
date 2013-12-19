@@ -40,7 +40,7 @@ public class WCTele implements CommandExecutor {
 						WCPlayer wcpCurrent = pl.wcm.getWCPlayer(Bukkit.getPlayer(wcp.getTpaRequest()).getName());
 						wcpCurrent.setLastLocation(Bukkit.getPlayer(wcp.getTpaRequest()).getLocation());
 						Bukkit.getPlayer(wcp.getTpaRequest()).teleport(p.getLocation());
-						q = p; Utils.effects(q);; s(q, "Teleporting!"); s(p, "Accepted.");
+						q = p; Utils.effects(q); s(q, "Teleporting!"); s(p, "Accepted.");
 						pl.wcm.updatePlayerMap(wcp.getTpaRequest(), wcpCurrent);
 						wcp.setTpaRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
@@ -55,12 +55,18 @@ public class WCTele implements CommandExecutor {
 					} else {
 					    wcp.setLastLocation(p.getLocation());
 						p.teleport(Bukkit.getPlayer(wcp.getTpahereRequest()));
-						q = p; Utils.effects(q);; s(p, "Teleporting!"); s(q, "Accepted.");
+						q = p; Utils.effects(q); s(p, "Teleporting!"); s(q, "Accepted.");
 						wcp.setTpahereRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
 					}
 					return true;
 				}
+			}
+			if (que.equals("tpa") && !p.hasPermission("wa.continental")){
+				return true;
+			}
+			if (que.equals("tpahere") && !p.hasPermission("wa.immortal")){
+				return true;
 			}
 			if (!argsCheck(1, "/" + cmd.getName().toLowerCase() + " &d<player>", p, args) || !playerCheck(args[0])){
 				return true;

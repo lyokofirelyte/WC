@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import me.confuser.barapi.BarAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -257,6 +259,7 @@ public class WCPatrols implements Listener {
 						wcs.setPatrolHotSpotAreas(new ArrayList<Location>());
 						Bukkit.broadcastMessage(AS(Utils.WC + "The active hotspot has been deactivated! Only the boss remains!"));
 						bossTime();
+						Bukkit.getServer().getScheduler().cancelTask(wcs.getNameTask());
 					}
 					return;
 				}
@@ -395,12 +398,13 @@ public class WCPatrols implements Listener {
 		}
 		
 		Random rand = new Random();
-		int xDir = rand.nextInt(1);
-		int zDir = rand.nextInt(1);
+		int xDir = rand.nextInt(2);
+		int zDir = rand.nextInt(2);
 		double xR = rand.nextInt(2500);
 		double zR = rand.nextInt(2500);
 		Boolean rawr = false;
-		wcs.setPatrolDiff(rand.nextInt(2)+1);
+		wcs.setPatrolKills(0);
+		wcs.setPatrolDiff((rand.nextInt(3)+1));
 		wcs.setPatrolEnts(new ArrayList<LivingEntity>());
 		wcs.setPatrolParticipants(new ArrayList<String>());
 		List<ItemStack> items = new ArrayList<ItemStack>();
@@ -444,7 +448,7 @@ public class WCPatrols implements Listener {
 		wcs.setPatrolCheckTask(checkTask);
 		pl.wcm.updateSystem("system", wcs);
 		
-		WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§3ACTIVE!", "§6" + xR + "§6, " + wcs.getPatrolHotSpot().getY() + "§6, " + zR, true, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
+		WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§3ACTIVE! LVL " + wcs.getPatrolDiff(), "§6" + xR + "§6, " + wcs.getPatrolHotSpot().getY() + "§6, " + zR, true, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
 
 	}
 	
@@ -453,6 +457,9 @@ public class WCPatrols implements Listener {
 		WCSystem wcs = pl.wcm.getWCSystem("system");
 		
 		if (le.isDead()){
+			for (Player p : Bukkit.getOnlinePlayers()){
+				BarAPI.setMessage(p, "DEFEATED!", 3);
+			}
 			for (LivingEntity ee : wcs.getPatrolEnts()){
 				if (!ee.isDead()){
 					ee.remove();
@@ -468,7 +475,6 @@ public class WCPatrols implements Listener {
 			rewardPlayers();
         	List<Location> circleblocks = Utils.circle(wcs.getPatrolHotSpot(), 20, 1, true, false, 1);
 	        long delay =  0L;
-	        for (int x = 0; x < 2; x++){
 		        for (final Location l : circleblocks){
 		        	delay = delay + 2L;
 		        	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.pl, new Runnable() {
@@ -484,21 +490,17 @@ public class WCPatrols implements Listener {
 							}}
 		        	}, delay);
 		        }
-	        }
+			if (!wcs.getPatrolCrystal().isDead()){
+				wcs.getPatrolCrystal().remove();
+			}
+		} else {
+			for (Player p : Bukkit.getOnlinePlayers()){
+				BarAPI.setMessage(p, "§cHOTSPOT BOSS", (float)(le.getHealth()/le.getMaxHealth())*100);
+			}
 		}
 		
 		if (wcs.getPatrolDiff() == 3){
 			lightningStorm();
-		}
-		
-		for (Player p : Bukkit.getOnlinePlayers()){
-			for (Location l : wcs.getPatrolHotSpotAreas()){
-				if (l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
-					if (p.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null){
-						p.getScoreboard().getObjective(DisplaySlot.SIDEBAR).setDisplayName("§3BOSS LIFE: " + le.getMaxHealth());
-					}
-				}
-			}
 		}
 	}
 	
@@ -522,7 +524,7 @@ public class WCPatrols implements Listener {
 		int teleportCube = rand.nextInt(20) + 1;
 		int buildCharm = rand.nextInt(10) + 1;
 		
-		if (soulSplitChance == 10){
+		if (soulSplitChance == 5){
 			ItemStack i = pl.invManager.makeItem("§3Soul Split", "", true, Enchantment.DURABILITY, 10, 0, Material.ARROW, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -535,7 +537,7 @@ public class WCPatrols implements Listener {
 			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
-		if (defenderShield == 10){
+		if (defenderShield == 5){
 			ItemStack i = pl.invManager.makeItem("§3Defender Shield", "", true, Enchantment.DURABILITY, 10, 0, Material.BOWL, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -549,7 +551,7 @@ public class WCPatrols implements Listener {
 			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
-		if (teleportCube == 10){
+		if (teleportCube == 5){
 			ItemStack i = pl.invManager.makeItem("§3Teleport Cube", "", true, Enchantment.DURABILITY, 10, 0, Material.GLASS, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -563,7 +565,7 @@ public class WCPatrols implements Listener {
 			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
-		if (buildCharm == 10){
+		if (buildCharm == 5){
 			ItemStack i = pl.invManager.makeItem("§3Build Charm", "", true, Enchantment.DURABILITY, 10, 0, Material.APPLE, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -633,7 +635,7 @@ public class WCPatrols implements Listener {
 			break;
 			
 			case 3:
-				le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.SPIDER);
+				le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.CAVE_SPIDER);
 				le.setMaxHealth(350); le.setHealth(350);
 				le.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999, 1));
 				le.setCustomName("§aCharlotte"); le.setCustomNameVisible(true);		
@@ -688,17 +690,16 @@ public class WCPatrols implements Listener {
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 			for (Location l : wcs.getPatrolHotSpotAreas()){
 				if (wcp.getPatrol() != null && !used.contains(p) && l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
-					if (p.getNearbyEntities(30D, 30D, 30D).size() <= 60){
-						for (int x = 0; x <= wcs.getPatrolDiff(); x++){
+					if (p.getNearbyEntities(30D, 30D, 30D).size() <= 70){
+						for (int x = 0; x < wcs.getPatrolDiff(); x++){
 							LivingEntity le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.ZOMBIE);
 							le.setMaxHealth(30); le.setHealth(30);
 							ents.add(le);
-							le.setCustomName("§3Hotspot Guardian"); le.setCustomNameVisible(true);
-							Utils.effects(wcs.getPatrolHotSpot());
+							le.setCustomName(AS(Utils.getRandomChatColor() + "Hotspot Guardian")); le.setCustomNameVisible(true);
 							le = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), Utils.getRandomEntity());
-							le.getEquipment().setItemInHand(wcs.getPatrolItems().get(wcs.getPatrolDiff()));
+							le.getEquipment().setItemInHand(wcs.getPatrolItems().get(wcs.getPatrolDiff()-1));
 							if (wcs.getPatrolDiff() == 3){
-								ItemStack i = wcs.getPatrolItems().get(wcs.getPatrolDiff());
+								ItemStack i = wcs.getPatrolItems().get(wcs.getPatrolDiff()-1);
 								ItemMeta im = i.getItemMeta();
 								im.addEnchant(Enchantment.DAMAGE_ALL, 1, true);
 								i.setItemMeta(im);
@@ -708,18 +709,20 @@ public class WCPatrols implements Listener {
 							le.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 							le.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
 							ents.add(le);
-							le.setCustomName("§3Hotspot Minion"); le.setCustomNameVisible(true);
+							le.setCustomName(AS(Utils.getRandomChatColor() + "Hotspot Minion")); le.setCustomNameVisible(true);
 						}
 						used.add(p);
 						if (!wcs.getPatrolHotSpotParticipants().contains(p.getName())){
 							List<String> pr = wcs.getPatrolHotSpotParticipants();
 							pr.add(p.getName());
 							wcs.setPatrolParticipants(pr);
-						}
-						if (p.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null){
-							p.getScoreboard().getObjective(DisplaySlot.SIDEBAR).setDisplayName("§3HOTSPOT LIFE: " + ((wcs.getPatrolDiff() * 100) - wcs.getPatrolKills()));
+							pl.wcm.updateSystem("system", wcs);
 						}
 					}
+					if (p.getScoreboard().getObjective(DisplaySlot.SIDEBAR) != null){
+						p.getScoreboard().getObjective(DisplaySlot.SIDEBAR).setDisplayName("§3HOTSPOT LIFE: " + ((wcs.getPatrolDiff() * 100) - wcs.getPatrolKills()));
+					}
+					BarAPI.setMessage(p, "§3HOTSPOT LIFE", ((float)((wcs.getPatrolDiff() * 100) - wcs.getPatrolKills())/wcs.getPatrolDiff()));
 				}
 			}
 		}

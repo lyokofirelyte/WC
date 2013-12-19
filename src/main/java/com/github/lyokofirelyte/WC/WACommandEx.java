@@ -1011,7 +1011,34 @@ public class WACommandEx implements CommandExecutor {
     		s(p, "Try /waa help!");
     	}
   	}
-  
+
+    
+    if (cmd.getName().equalsIgnoreCase("rn")){
+    	
+    	Player p = ((Player)sender);
+    	
+    	if (args.length != 1){
+    		s(p, "/rn <name>");
+    	} else {
+    		for (Player pp : Bukkit.getOnlinePlayers()){
+    			if (pp.getDisplayName().replaceAll("&", "").toLowerCase().contains(args[0].toLowerCase())){
+    				WCMain.s2(p, pp.getDisplayName() + " &f>> &7" + pp.getName());
+    			}
+    		}
+    	}
+    }
+    
+    if (cmd.getName().equalsIgnoreCase("list")){
+    	
+    	Player p = ((Player)sender);
+    	StringBuilder sb = new StringBuilder();
+    	
+    	for (Player pp : Bukkit.getOnlinePlayers()){
+    		sb.append("&7" + pp.getName() + " ");
+    	}
+    	String s = sb.toString().trim();
+    	s(p, s.replace(" ", "&8, "));
+    }
   
     if (cmd.getName().equalsIgnoreCase("nick")){
     	
@@ -1036,8 +1063,8 @@ public class WACommandEx implements CommandExecutor {
     	}
     	
     	if (args[0].contains("&") || args[0].contains("§")){
-    		s(p, "Your color will be updated automatically based on which alliance you are in.");
-    		args[0].replaceAll("&", ""); args[0].replaceAll("§", "");
+    		s(p, "Your color will be updated automatically based on which alliance you are in. Don't use &.");
+    		return true;
     	}
     	
     	wcp.setNick(args[0]);

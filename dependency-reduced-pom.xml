@@ -88,6 +88,13 @@
       <scope>system</scope>
       <systemPath>C:\Users\Lyoko Firelyte\workspace\WCCore\src\lib\VaultCompile.jar</systemPath>
     </dependency>
+    <dependency>
+      <groupId>com.confuserr.BarAPI</groupId>
+      <artifactId>BarAPI</artifactId>
+      <version>2.0</version>
+      <scope>system</scope>
+      <systemPath>C:\Users\Lyoko Firelyte\workspace\WCCore\src\lib\BarAPI.jar</systemPath>
+    </dependency>
   </dependencies>
   <properties>
     <mainClass>com.github.lyokofirelyte.WC.WCMain</mainClass>

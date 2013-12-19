@@ -12,6 +12,12 @@ commands:
    wc:
       description: WC Root Command
       usage: /wc
+   rn:
+      description: WC RealName Command
+      usage: /rn <player>
+   list:
+      description: WC List Command
+      usage: /list
    ping:
       description: WC Ping Command
       usage: /ping
@@ -274,11 +280,9 @@ commands:
    tpa:
       description: WC TP Command
       usage: /tpa <player>
-      permission: wa.continental
    tpahere:
       description: WC TP Command
       usage: /tpahere <player>
-      permission: wa.immortal
    tpall:
       description: WC TP Command
       usage: /tpall

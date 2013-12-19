@@ -283,6 +283,8 @@ public class WCMain extends JavaPlugin {
     
     getCommand("waa").setExecutor(new WACommandEx(this));
     getCommand("nick").setExecutor(new WACommandEx(this));
+    getCommand("rn").setExecutor(new WACommandEx(this));
+    getCommand("list").setExecutor(new WACommandEx(this));
     
     getCommand("sudo").setExecutor(new WCSudo(this));
 
