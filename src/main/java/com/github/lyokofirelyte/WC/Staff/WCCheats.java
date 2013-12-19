@@ -1,22 +1,34 @@
 package com.github.lyokofirelyte.WC.Staff;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCSystem;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
+import static com.github.lyokofirelyte.WC.WCMain.s2;
 
 public class WCCheats implements CommandExecutor {
 
@@ -32,10 +44,208 @@ public class WCCheats implements CommandExecutor {
 		
 		switch (cmd.getName().toLowerCase()){
 		
+			case "sm":
+				
+				String armors = "diamond iron chain gold leather";
+				int x = 0;
+				
+				if (args.length < 9 && args.length != 2){
+					s(p, "/sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>");
+					s2(p, "&6Example: &7/sm zombie 20 Grumpy_Guy diamond diamond_sword damage Hugh_Jasses skeleton,zombie 1");
+					s2(p, "&dUse a '_' for spaces. Location can be 'aim' or a player.");
+					s2(p, "&dFor more passengers, seperate different mobs with a ','. Use # if you don't want a passenger.");
+					s2(p, "&dYou can use /sm <type> ## to indicate no extra features. Example: /sm zombie ##");
+					break;
+				}
+			
+				for (EntityType e : EntityType.values()){
+					if (e.toString().toLowerCase().equals(args[0].toLowerCase())){
+						if (Utils.isInteger(args[1])){
+							if (armors.contains(args[3].toLowerCase())){
+								int y = 0;
+								for (Material m : Material.values()){
+									if (m.toString().toLowerCase().equals(args[4].toLowerCase())){
+										int z = 0;
+										for (PotionEffectType pe : PotionEffectType.values()){
+											if (String.valueOf(pe).toString().toLowerCase().contains(args[5].toLowerCase())){
+												if (Bukkit.getPlayer(args[6]) != null || args[6].equals("aim")){
+													if (Utils.isInteger(args[8])){
+														if (args[7].contains(",") || args[7].equals("#")){
+															List<String> passengers = new ArrayList<String>();
+															if (args[7].contains(",")){
+																passengers = Arrays.asList(args[7].split(","));
+															}
+															List<EntityType> goodPassengers = new ArrayList<EntityType>();
+															for (String passenger : passengers){
+																int a = 0;
+																for (EntityType ee : EntityType.values()){
+																	if (passenger.toLowerCase().equals(ee.toString().toLowerCase())){
+																		goodPassengers.add(ee);
+																	} else {
+																		a++;
+																		if (a >= EntityType.values().length){
+																			s(p, "The passenger " + passenger + " is not a valid entity.");
+																			break;
+																		}
+																	}
+																}
+															}
+															formMob(p, e, Integer.parseInt(args[1]), args[2], args[3], m, pe, args[6], goodPassengers, Integer.parseInt(args[8]));
+															break;
+														} else {
+															int b = 0;
+															for (EntityType ee : EntityType.values()){
+																if (args[7].toLowerCase().equals(ee.toString().toLowerCase())){
+																	List<EntityType> gp = Arrays.asList(ee);
+																	formMob(p, e, Integer.parseInt(args[1]), args[2], args[3], m, pe, args[6], gp, Integer.parseInt(args[8]));
+																	break;
+																} else {
+																	b++;
+																	if (b >= EntityType.values().length){
+																		s(p, "The passenger " + args[7] + " is not a valid entity.");
+																		break;
+																	}
+																}
+															}
+														}
+													} else {
+														s(p, "You must use a number for the amount!");
+														break;
+													}
+												} else {
+													s(p, "You've entered an invalid player since and you didn't say 'aim'.");
+													break;
+												}
+											} else {
+												z++;
+												if (z >= PotionEffectType.values().length){
+													s(p, "The potion effect " + args[5] + " was not found.");
+													break;
+												}
+											}
+										}
+									} else {
+										y++;
+										if (y >= Material.values().length){
+											s(p, "The material " + args[4] + " was not found.");
+											break;
+										}
+									}
+								}
+							} else {
+								s(p, "Choose from " + armors.replace(" ", ", "));
+								break;
+							}
+						} else if (args[1].equals("##")){
+							p.getWorld().spawnEntity(p.getTargetBlock(null, 20).getLocation(), e);
+							break;
+						} else {
+							s(p, "Health must be a number!");
+							break;
+						}
+					} else if (args[0].equals("#")){
+						s(p, "Why the hell did you use this command then? GAH");
+					} else {
+						x++;
+						if (x >= EntityType.values().length){
+							s(p, "The entity " + args[0] + " was not found.");
+							break;
+						}
+					}
+				}
+				
+			break;
+		
+			case "sit": // Yeah, this is pretty ghetto.
+				
+				if (p.isInsideVehicle()){
+					p.eject();
+				} else {
+					LivingEntity e = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), EntityType.SQUID);
+					e.setMaxHealth(9999999);
+					e.setHealth(9999999);
+					e.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
+					e.setPassenger(p);	
+				}
+				
+			break;
+		
+			case "dis":
+				
+				if (args.length == 0){
+					p.setCustomName(p.getName());
+					s(p, "Disguised as yourself! Wait a minute...");
+				} else {
+					p.setCustomName(args[0]);
+					s(p, "Disguised as " + args[0] + "!");
+				}
+				
+			break;
+		
+			case "wlist":
+				
+				for (World w : Bukkit.getWorlds()){
+					StringBuilder sb = new StringBuilder();
+					sb.append("&6" + w.getName() + " ");
+					for (Player current : Bukkit.getOnlinePlayers()){
+						if (current.getWorld() == w){
+							sb.append(current.getDisplayName() + " ");
+						}
+					}
+					String sb2 = sb.toString().trim();
+					s2(p, sb2.replaceAll(" ", "&8, "));
+				}
+				
+			break;
+			
+			case "vanish": case "v":
+				
+				WCSystem wcs = pl.wcm.getWCSystem("system");
+				List<String> vanished = wcs.getVanishedPlayers();
+				
+				if (vanished.contains(p.getName())){
+					vanished.remove(p.getName());
+					s(p, "ELABORATE UNVANISH HOAX!");
+					p.getWorld().playEffect(p.getLocation(), Effect.MOBSPAWNER_FLAMES, 2);
+					p.getWorld().playEffect(p.getLocation(), Effect.MOBSPAWNER_FLAMES, 2);
+					for (Player player : Bukkit.getOnlinePlayers()){
+						player.showPlayer(p);
+					}
+				} else {	
+					vanished.add(p.getName());
+					s(p, "ELABORATE VANISH HOAX!");
+					p.getWorld().playEffect(p.getLocation(), Effect.SMOKE, 2);
+					p.getWorld().playEffect(p.getLocation(), Effect.SMOKE, 2);
+					for (Player player : Bukkit.getOnlinePlayers()){
+						player.hidePlayer(p);
+					}
+				}
+				
+				wcs.setVanishedPlayers(vanished);
+				pl.wcm.updateSystem("system", wcs);
+	
+			break;
+			
+			case "world":
+			
+				if (args.length != 1){
+					s(p, "/world <world>");
+				} else if (Bukkit.getWorld(args[0]) == null){
+					s(p, "That world does not exist. See /wlist for all of them.");
+				} else {
+					Location l = p.getLocation();
+					p.teleport(new Location(Bukkit.getWorld(args[0]), l.getX(), l.getY(), l.getZ(), l.getPitch(), l.getYaw()));
+					Utils.effects(p);
+					s(p, "Inter-dimensional temporal shift completed.");
+				}
+				
+			break;
+		
 			case "feed":
 				
 				if (args.length == 0){
 					p.setFoodLevel(20);
+					p.setSaturation(3);
 				} else if (Bukkit.getPlayer(args[0]) != null){
 					Bukkit.getPlayer(args[0]).setFoodLevel(20);
 				} else {
@@ -222,5 +432,85 @@ public class WCCheats implements CommandExecutor {
 		}
 		
 		return true;
+	}
+
+	@SuppressWarnings("deprecation")
+	private void formMob(Player p, EntityType e, int health, String nameTag, String armorType, Material m, PotionEffectType pe, String location, List<EntityType> goodPassengers, int amount) {
+		
+		List<LivingEntity> les = new ArrayList<LivingEntity>();
+		List<LivingEntity> passengers = new ArrayList<LivingEntity>();
+		int z = 1;
+		
+		if (location.equals("aim")){
+			for (int x = 0; x < amount; x++){
+				LivingEntity le = (LivingEntity) p.getWorld().spawnEntity(p.getTargetBlock(null, 20).getLocation(), e);
+				les.add(le);
+			}
+		} else {
+			for (int x = 0; x < amount; x++){
+				LivingEntity le = (LivingEntity) p.getWorld().spawnEntity(Bukkit.getPlayer(location).getLocation(), e);
+				les.add(le);
+			}
+		}
+
+		for (LivingEntity le : les){
+			
+			for (EntityType et : goodPassengers){
+				LivingEntity la = (LivingEntity) p.getWorld().spawnEntity(p.getTargetBlock(null, 20).getLocation(), et);
+				passengers.add(la);
+			}
+
+			for (LivingEntity la : passengers){
+				if (z < passengers.size()){
+					la.setPassenger(passengers.get(z));
+				}
+				z++;
+			}		
+			
+			if (passengers.size() > 0){
+				le.setPassenger(passengers.get(0));
+			}
+			
+			le.addPotionEffect(new PotionEffect(pe, 99999, 1));
+			le.setCustomName(Utils.AS(nameTag.replaceAll("_", " ")));
+			le.setCustomNameVisible(true);
+			le.getEquipment().setItemInHand(new ItemStack(m, 1));
+			le.setMaxHealth(health);
+			le.setHealth(health);
+			passengers = new ArrayList<LivingEntity>();
+			
+			switch(armorType){
+				case "diamond":
+					le.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+					le.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+					le.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+					le.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+				break;
+				case "iron":
+					le.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+					le.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
+					le.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+					le.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+				break;
+				case "leather":
+					le.getEquipment().setBoots(new ItemStack(Material.LEATHER_BOOTS));
+					le.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+					le.getEquipment().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+					le.getEquipment().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+				break;
+				case "chain":
+					le.getEquipment().setBoots(new ItemStack(Material.CHAINMAIL_BOOTS));
+					le.getEquipment().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+					le.getEquipment().setLeggings(new ItemStack(Material.CHAINMAIL_LEGGINGS));
+					le.getEquipment().setChestplate(new ItemStack(Material.CHAINMAIL_CHESTPLATE));
+				break;
+				case "gold":
+					le.getEquipment().setBoots(new ItemStack(Material.GOLD_BOOTS));
+					le.getEquipment().setHelmet(new ItemStack(Material.GOLD_HELMET));
+					le.getEquipment().setLeggings(new ItemStack(Material.GOLD_LEGGINGS));
+					le.getEquipment().setChestplate(new ItemStack(Material.GOLD_CHESTPLATE));
+				break;		
+			}
+		}	
 	}
 }

@@ -259,7 +259,6 @@ public class WCPatrols implements Listener {
 						wcs.setPatrolHotSpotAreas(new ArrayList<Location>());
 						Bukkit.broadcastMessage(AS(Utils.WC + "The active hotspot has been deactivated! Only the boss remains!"));
 						bossTime();
-						Bukkit.getServer().getScheduler().cancelTask(wcs.getNameTask());
 					}
 					return;
 				}

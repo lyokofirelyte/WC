@@ -146,6 +146,7 @@ public class WCChannels implements CommandExecutor, Listener {
 		  if (e.getMessage().contains(s) && e.getMessage().startsWith("@")){
 			  PlayerEmoteEvent emote = new PlayerEmoteEvent(s, e.getPlayer(), e.getMessage());
 	  		  pl.getServer().getPluginManager().callEvent(emote);
+	  		  return;
 	  	  }
 	  }
 	  

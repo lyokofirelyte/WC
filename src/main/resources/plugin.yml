@@ -15,15 +15,41 @@ commands:
    rn:
       description: WC RealName Command
       usage: /rn <player>
+   sit:
+      description: WC SIDDOWN Command
+      usage: /sit
+   sm:
+      description: WC SUPERMOB Command
+      usage: /sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>
+      permission: wa.mod2
+   dis:
+      description: WC HIDEMYASS Command
+      usage: /dis
+      permission: wa.staff
    list:
       description: WC List Command
       usage: /list
+   wlist:
+      description: WC World List Command
+      usage: /wlist
+   world:
+      description: WC World List Command
+      usage: /world <world>
+      permission: wa.mod2
    ping:
       description: WC Ping Command
       usage: /ping
    member:
       description: Member Command
       usage: /member <player>
+      permission: wa.staff
+   v:
+      description: WC Vanish Command
+      usage: /vanish
+      permission: wa.staff
+   vanish:
+      description: WC Vanish Command
+      usage: /v
       permission: wa.staff
    o:
       description: Staff Chat
