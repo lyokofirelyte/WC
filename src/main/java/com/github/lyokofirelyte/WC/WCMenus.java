@@ -39,6 +39,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.github.lyokofirelyte.WC.Gui.GuiRoot;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
@@ -138,7 +139,10 @@ public class WCMenus implements Listener, CommandExecutor {
 				setUp();
 			}
 			
-			((Player)sender).openInventory(invs.get("mainMenu"));		
+			//((Player)sender).openInventory(invs.get("mainMenu"));	
+			
+			this.pl.wcm.displayGui((Player) sender, new GuiRoot(this.pl));
+			
 		}
 		
 		if (cmd.getName().equalsIgnoreCase("qc")){
