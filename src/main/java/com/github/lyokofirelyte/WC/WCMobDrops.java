@@ -26,7 +26,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.Commands.WCMail;
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ParagonFindEvent;
@@ -110,10 +109,8 @@ public class WCMobDrops implements Listener {
 					Random rand = new Random();
 					int nextInt = rand.nextInt(10);
 				
-					
-					FireworkShenans fplayer = new FireworkShenans();
 					try {
-						   fplayer.playFirework(proj1.getWorld(), proj1.getLocation(),
+						   pl.fw.playFirework(proj1.getWorld(), proj1.getLocation(),
 								   FireworkEffect.builder().with(Type.BURST).withColor(colors.get(nextInt)).build());
 					   } catch (IllegalArgumentException e2) {
 					   } catch (Exception e2) {

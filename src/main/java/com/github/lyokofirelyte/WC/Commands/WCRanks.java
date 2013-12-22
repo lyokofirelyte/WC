@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
@@ -150,9 +149,8 @@ public class WCRanks implements CommandExecutor {
         		delay = delay + 2L;
         		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.pl, new Runnable() {
         	      public void run() {
-        	        	FireworkShenans fplayer = new FireworkShenans();
         	        	try {
-							fplayer.playFirework(p.getWorld(), l,
+							pl.fw.playFirework(p.getWorld(), l,
 							FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
 						} catch (IllegalArgumentException e) {
 							e.printStackTrace();

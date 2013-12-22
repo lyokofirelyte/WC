@@ -346,6 +346,7 @@ public class WCMenus implements Listener, CommandExecutor {
 		actions.put("ROOT SHORTCUT", "wc rootshortcut");
 		actions.put("NAME PLATE", "wc nameplate");
 		actions.put("SIDEBOARD COORDS", "wc sideboardcoords");
+		actions.put("CREATIVE WORLD", "wc creative");
 		
 		actions.put("WC Teleport Pad", "wc paragonTeleportPad");
 		actions.put("/wc back (1)", "wc paragonBack");
@@ -659,7 +660,7 @@ public class WCMenus implements Listener, CommandExecutor {
 		inv = addToInv(Material.INK_SACK, "§dPARAGON SHOPPE", 47, "§5Paragon Rewards", 6, inv);
 		inv = addToInv(Material.INK_SACK, "§bPATROLS", 48, "§dPatrol Menu", 11, inv);
 		inv = addToInv(Material.INK_SACK, "§1QUICK COMMANDS", 50, "§5Command Menu", 14, inv);
-		inv = addToInv(Material.INK_SACK, "§2CREATIVE SERVER", 51, "§aTransfer to Imagicraft", 13, inv);
+		inv = addToInv(Material.INK_SACK, "§2CREATIVE WORLD", 51, "§aWarp to creative", 13, inv);
 		inv = addToInv(Material.INK_SACK, "§eLOGOFF", 52, "§6Leave the game", 0, inv);
 		inv = addToInv(Material.FLINT, "§bCLOSE", 31, "§b< < <", 1, inv);
 		invs.put("mainMenu", inv);
@@ -811,13 +812,7 @@ public class WCMenus implements Listener, CommandExecutor {
 					return;
 				}			
 			}
-			
-			if (d.equals("CREATIVE SERVER")){
-				p.closeInventory();
-				p.performCommand("server IC");
-				return;
-			}
-			
+
 			if (d.equals("INCINERATOR")){
 				inv = Bukkit.createInventory(null, 54, "§4INCINERATORIUM");
 				invs.put("incinerator", inv);

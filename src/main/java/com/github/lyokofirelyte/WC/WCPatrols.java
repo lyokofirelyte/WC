@@ -36,7 +36,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
@@ -478,9 +477,8 @@ public class WCPatrols implements Listener {
 		        	delay = delay + 2L;
 		        	Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.pl, new Runnable() {
 		        	public void run() {
-		        		FireworkShenans fplayer = new FireworkShenans();
 		        	    try {
-		        	    	fplayer.playFirework(l.getWorld(), l,
+		        	    	pl.fw.playFirework(l.getWorld(), l,
 							FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
 							} catch (IllegalArgumentException e) {
 								e.printStackTrace();

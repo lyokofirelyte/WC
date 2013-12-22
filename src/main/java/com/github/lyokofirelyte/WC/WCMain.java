@@ -49,6 +49,7 @@ import com.github.lyokofirelyte.WC.Commands.WCWarps;
 import com.github.lyokofirelyte.WC.Extras.StaticField;
 import com.github.lyokofirelyte.WC.Extras.TimeStampEX;
 import com.github.lyokofirelyte.WC.Extras.TraceFW;
+import com.github.lyokofirelyte.WC.Extras.WCSEEKRITPARTAY;
 import com.github.lyokofirelyte.WC.Listener.WCBlockBreak;
 import com.github.lyokofirelyte.WC.Listener.WCBlockPlace;
 import com.github.lyokofirelyte.WC.Listener.WCDeath;
@@ -63,9 +64,11 @@ import com.github.lyokofirelyte.WC.Listener.WCSignColor;
 import com.github.lyokofirelyte.WC.Listener.WCTags;
 import com.github.lyokofirelyte.WC.Staff.WCBal;
 import com.github.lyokofirelyte.WC.Staff.WCCheats;
+import com.github.lyokofirelyte.WC.Staff.WCMember;
 import com.github.lyokofirelyte.WC.Staff.WCSeen;
 import com.github.lyokofirelyte.WC.Staff.WCSudo;
 import com.github.lyokofirelyte.WC.Staff.WCTele;
+import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
@@ -104,6 +107,7 @@ public class WCMain extends JavaPlugin {
   public RebootManager rm;
   public InventoryManager invManager;
   public WCPatrols wcpp;
+  public FireworkShenans fw;
   public Map <String, List<Location>> links = new HashMap<>();
   public Map <String, List<Entity>> links2 = new HashMap<>();
   public Map <String, List<Player>> playerRide = new HashMap<>();
@@ -143,6 +147,8 @@ public class WCMain extends JavaPlugin {
 	  pm.registerEvents(new WCSeen(this),this);
 	  pm.registerEvents(new WCSignColor(this),this);
 	  pm.registerEvents(new WCMarkkit(this),this);
+	  pm.registerEvents(new WCMember(this),this);
+	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
 	
 	  vaultMgr.hookSetup();
 	    
@@ -164,6 +170,7 @@ public class WCMain extends JavaPlugin {
 	  rm = new RebootManager(api);
 	  invManager = new InventoryManager(api);
 	  wcpp = new WCPatrols(this);
+	  fw = new FireworkShenans(this);
 	    
 	  if ((url == null) || (username == null) || (password == null) || WCAPI == null) {
 	     Bukkit.getServer().getLogger().info("You must provide a url, username, and password in the config.yml. That or the API is missing.");
@@ -264,6 +271,9 @@ public class WCMain extends JavaPlugin {
     
     getCommand("wb").setExecutor(new WCWB(this));
     getCommand("workbench").setExecutor(new WCWB(this));
+    
+    getCommand("partyfw").setExecutor(new WCSEEKRITPARTAY(this));
+    getCommand("jesse").setExecutor(new WCSEEKRITPARTAY(this));
     
     getCommand("soar").setExecutor(new WCSoar(this));
     

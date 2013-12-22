@@ -45,7 +45,6 @@ public class WCTele implements CommandExecutor {
 						wcp.setTpaRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
 					}
-					return true;
 				}
 			}
 			if (que.equals("tpahere")){
@@ -59,7 +58,6 @@ public class WCTele implements CommandExecutor {
 						wcp.setTpahereRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
 					}
-					return true;
 				}
 			}
 			if (que.equals("tpa") && !p.hasPermission("wa.continental")){
@@ -77,11 +75,18 @@ public class WCTele implements CommandExecutor {
 		
 			case "tp":
 				
-				wcp.setLastLocation(p.getLocation());
-				pl.wcm.updatePlayerMap(p.getName(), wcp);
-				p.teleport(q.getLocation());
-				s(p, "Teleporting!");
-				Utils.effects(q);
+				String tpWorlds = "WACP Keopi Tripolis Syracuse Alliance";
+				
+				if (p.hasPermission("wa.mod2") || (tpWorlds.contains(q.getWorld().getName()) && tpWorlds.contains(q.getWorld().getName()))){
+				
+					wcp.setLastLocation(p.getLocation());
+					pl.wcm.updatePlayerMap(p.getName(), wcp);
+					p.teleport(q.getLocation());
+					s(p, "Teleporting!");
+					if (!pl.wcm.getWCSystem("system").getVanishedPlayers().contains(p.getName())){
+						Utils.effects(q);
+					}
+				}
 				
 			break;
 			
@@ -131,13 +136,13 @@ public class WCTele implements CommandExecutor {
 				for (Player r : Bukkit.getOnlinePlayers()){
 					wcpCurrent = pl.wcm.getWCPlayer(r.getName());
 					wcpCurrent.setLastLocation(r.getLocation());
-					pl.wcm.updatePlayerMap(r.getName(), wcp);
+					pl.wcm.updatePlayerMap(r.getName(), wcpCurrent);
 					r.teleport(p.getLocation());
 					s(r, "Teleporting!");
 				}
 				
 				q = p;
-				Utils.effects(q);;
+				Utils.effects(q);
 				
 			break;
 		

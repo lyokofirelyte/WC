@@ -26,7 +26,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class StaticField extends JavaPlugin
@@ -148,10 +147,9 @@ public class StaticField extends JavaPlugin
 					Player e2 = (Player) e1;
 					if (e2.hasPermission("wa.staff")){
 						e.getEntity().setVelocity(new Vector(0, 3, 0));
-						FireworkShenans fplayer = new FireworkShenans();
 		            	try {
 		        			
-							fplayer.playFirework(e2.getWorld(), e.getEntity().getLocation(),
+							plugin.fw.playFirework(e2.getWorld(), e.getEntity().getLocation(),
 							FireworkEffect.builder().with(Type.BALL_LARGE).withColor(Color.FUCHSIA).build());
 							for (int x = 0; x < 30; x++){
 								e2.getWorld().playEffect(e.getEntity().getLocation(), Effect.MOBSPAWNER_FLAMES, 0);

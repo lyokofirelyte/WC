@@ -19,15 +19,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class TraceFW implements CommandExecutor{
 	
-	WCMain plugin;
+	WCMain pl;
 	public TraceFW(WCMain instance){
-	plugin = instance;
+	pl = instance;
     }
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -49,14 +47,14 @@ public class TraceFW implements CommandExecutor{
 	
 	public void bday(final World w, Boolean clr) {
 		
-		List<String> happy = plugin.datacore.getStringList("TraceHAPPY");
-		List<String> birthday = plugin.datacore.getStringList("TraceBDAY");
-		List<String> outline = plugin.datacore.getStringList("TraceOUTLINE");
-		List<String> TT = plugin.datacore.getStringList("TraceT");
-		List<String> RR = plugin.datacore.getStringList("TraceR");
-		List<String> AA = plugin.datacore.getStringList("TraceA");
-		List<String> CC = plugin.datacore.getStringList("TraceC");
-		List<String> EE = plugin.datacore.getStringList("TraceE");
+		List<String> happy = pl.datacore.getStringList("TraceHAPPY");
+		List<String> birthday = pl.datacore.getStringList("TraceBDAY");
+		List<String> outline = pl.datacore.getStringList("TraceOUTLINE");
+		List<String> TT = pl.datacore.getStringList("TraceT");
+		List<String> RR = pl.datacore.getStringList("TraceR");
+		List<String> AA = pl.datacore.getStringList("TraceA");
+		List<String> CC = pl.datacore.getStringList("TraceC");
+		List<String> EE = pl.datacore.getStringList("TraceE");
 		
 		List<Location> happyLIST = new ArrayList<Location>();
 		List<Location> birthdayLIST = new ArrayList<Location>();
@@ -165,16 +163,16 @@ public class TraceFW implements CommandExecutor{
 			for (Location l : EELIST){
 				l.getBlock().setType(Material.AIR);
 			}
-			    List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+			    List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 			 	for (String taskC : tasks){
 			 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 			 	}
-	  			plugin.datacore.set("PARTYTASKSLIST", null);
-	  			plugin.datacore.set("PartyDelayTwo", 0);
-	  			plugin.datacore.set("PartyX", 0);
-	  			plugin.datacore.set("PartyY", 0);
-	  			plugin.datacore.set("Overwatch", null);
-	  			plugin.saveYamls();
+	  			pl.datacore.set("PARTYTASKSLIST", null);
+	  			pl.datacore.set("PartyDelayTwo", 0);
+	  			pl.datacore.set("PartyX", 0);
+	  			pl.datacore.set("PartyY", 0);
+	  			pl.datacore.set("Overwatch", null);
+	  			pl.saveYamls();
 	  			return;
 		}
 		
@@ -199,16 +197,16 @@ public class TraceFW implements CommandExecutor{
 		
 		 DELAY = DELAY + 2L;	 
 		 y++;
-		 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
+		 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.pl, new Runnable() {
 			 
   		   public void run() {
   			   
-	  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+	  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 						
 						public void run(){
-				  			   FireworkShenans fplayer = new FireworkShenans();
+
 				  			   try {
-				  				   fplayer.playFirework(w, l,
+				  				   pl.fw.playFirework(w, l,
 				  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.RED).build());
 				  			   } catch (IllegalArgumentException e) {
 				  				   e.printStackTrace();
@@ -218,13 +216,12 @@ public class TraceFW implements CommandExecutor{
 						}
 					}, 5, 20L);
 	  			
-	  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+	  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 	  			tasks.add(happyTask + "");
-	  			plugin.datacore.set("PARTYTASKSLIST", tasks);
+	  			pl.datacore.set("PARTYTASKSLIST", tasks);
   			 
-  			   FireworkShenans fplayer = new FireworkShenans();
   			   try {
-  				   fplayer.playFirework(w, l,
+  				   pl.fw.playFirework(w, l,
   						   FireworkEffect.builder().with(Type.BURST).withColor(Color.WHITE).build());
   			   } catch (IllegalArgumentException e) {
   				   e.printStackTrace();
@@ -240,16 +237,16 @@ public class TraceFW implements CommandExecutor{
 
 			DELAY = DELAY + 2L;
 
-				 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					 
 			  		   public void run() {
 			  			   
-			  			 List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+			  			 List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 			  			 	for (String taskC : tasks){
 			  			 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 			  			 	}
-				  			plugin.datacore.set("PARTYTASKSLIST", null);
-				  			plugin.saveYamls();
+				  			pl.datacore.set("PARTYTASKSLIST", null);
+				  			pl.saveYamls();
 			  		   	}
 				 }
 			     , DELAY);
@@ -265,16 +262,16 @@ public class TraceFW implements CommandExecutor{
 				
 			     z++;
 				 DELAY = DELAY + 2L;
-				 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 					 
 		  		   public void run() {
 		  			   
-			  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+			  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 								
 								public void run(){
-						  			   FireworkShenans fplayer = new FireworkShenans();
+		
 						  			   try {
-						  				   fplayer.playFirework(w, l,
+						  				   pl.fw.playFirework(w, l,
 						  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.RED).build());
 						  			   } catch (IllegalArgumentException e) {
 						  				   e.printStackTrace();
@@ -284,13 +281,12 @@ public class TraceFW implements CommandExecutor{
 								}
 							}, 5L, 20L);
 			  			
-			  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+			  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 			  			tasks.add(happyTask + "");
-			  			plugin.datacore.set("PARTYTASKSLIST", tasks);
-		  			 
-		  			   FireworkShenans fplayer = new FireworkShenans();
+			  			pl.datacore.set("PARTYTASKSLIST", tasks);
+
 		  			   try {
-		  				   fplayer.playFirework(w, l,
+		  				   pl.fw.playFirework(w, l,
 		  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.WHITE).build());
 		  			   } catch (IllegalArgumentException e) {
 		  				   e.printStackTrace();
@@ -306,16 +302,16 @@ public class TraceFW implements CommandExecutor{
 
 					DELAY = DELAY + 5L;
 
-						 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 							 
 					  		   public void run() {
 					  			   
-					  			 List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+					  			 List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 					  			 	for (String taskC : tasks){
 					  			 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 					  			 	}
-						  			plugin.datacore.set("PARTYTASKSLIST", null);
-						  			plugin.saveYamls();
+						  			pl.datacore.set("PARTYTASKSLIST", null);
+						  			pl.saveYamls();
 					  		   	}
 						 }
 					     , DELAY);
@@ -332,16 +328,16 @@ public class TraceFW implements CommandExecutor{
 			
 			 DELAY = DELAY + 2L;
 			 a++;
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				 
 	  		   public void run() {
 	  			   
-		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 							
 							public void run(){
-					  			   FireworkShenans fplayer = new FireworkShenans();
+	
 					  			   try {
-					  				   fplayer.playFirework(w, l,
+					  				   pl.fw.playFirework(w, l,
 					  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.ORANGE).build());
 					  			   } catch (IllegalArgumentException e) {
 					  				   e.printStackTrace();
@@ -351,13 +347,12 @@ public class TraceFW implements CommandExecutor{
 							}
 						}, 5L, 20L);
 		  			
-		  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		  			tasks.add(happyTask + "");
-		  			plugin.datacore.set("PARTYTASKSLIST", tasks);
-	  			 
-	  			   FireworkShenans fplayer = new FireworkShenans();
+		  			pl.datacore.set("PARTYTASKSLIST", tasks);
+		  			
 	  			   try {
-	  				   fplayer.playFirework(w, l,
+	  				   pl.fw.playFirework(w, l,
 	  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.WHITE).build());
 	  			   } catch (IllegalArgumentException e) {
 	  				   e.printStackTrace();
@@ -373,16 +368,16 @@ public class TraceFW implements CommandExecutor{
 
 				DELAY = DELAY + 5L;
 
-					 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 						 
 				  		   public void run() {
 				  			   
-				  			 List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+				  			 List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 				  			 	for (String taskC : tasks){
 				  			 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 				  			 	}
-					  			plugin.datacore.set("PARTYTASKSLIST", null);
-					  			plugin.saveYamls();
+					  			pl.datacore.set("PARTYTASKSLIST", null);
+					  			pl.saveYamls();
 				  		   	}
 					 }
 				     , DELAY);
@@ -398,17 +393,17 @@ public class TraceFW implements CommandExecutor{
 			
 			 DELAY = DELAY + 2L;
 			 b++;
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				 
 	  		   @SuppressWarnings("deprecation")
 			public void run() {
 	  			   
-		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 							
 							public void run(){
-					  			   FireworkShenans fplayer = new FireworkShenans();
+	
 					  			   try {
-					  				   fplayer.playFirework(w, l,
+					  				   pl.fw.playFirework(w, l,
 					  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.RED).build());
 					  			   } catch (IllegalArgumentException e) {
 					  				   e.printStackTrace();
@@ -418,13 +413,12 @@ public class TraceFW implements CommandExecutor{
 							}
 						}, 5L, 20L);
 		  			
-		  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		  			tasks.add(happyTask + "");
-		  			plugin.datacore.set("PARTYTASKSLIST", tasks);
-	  			 
-	  			   FireworkShenans fplayer = new FireworkShenans();
+		  			pl.datacore.set("PARTYTASKSLIST", tasks);
+
 	  			   try {
-	  				   fplayer.playFirework(w, l,
+	  				   pl.fw.playFirework(w, l,
 	  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.WHITE).build());
 	  			   } catch (IllegalArgumentException e) {
 	  				   e.printStackTrace();
@@ -449,17 +443,17 @@ public class TraceFW implements CommandExecutor{
 			
 			 DELAY = DELAY + 2L;
 			 c++;
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				 
 	  		   @SuppressWarnings("deprecation")
 			public void run() {
 	  			   
-		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 							
 							public void run(){
-					  			   FireworkShenans fplayer = new FireworkShenans();
+	
 					  			   try {
-					  				   fplayer.playFirework(w, l,
+					  				   pl.fw.playFirework(w, l,
 					  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.FUCHSIA).build());
 					  			   } catch (IllegalArgumentException e) {
 					  				   e.printStackTrace();
@@ -469,13 +463,13 @@ public class TraceFW implements CommandExecutor{
 							}
 						}, 5L, 20L);
 		  			
-		  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		  			tasks.add(happyTask + "");
-		  			plugin.datacore.set("PARTYTASKSLIST", tasks);
+		  			pl.datacore.set("PARTYTASKSLIST", tasks);
 	  			 
-	  			   FireworkShenans fplayer = new FireworkShenans();
+
 	  			   try {
-	  				   fplayer.playFirework(w, l,
+	  				   pl.fw.playFirework(w, l,
 	  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.PURPLE).build());
 	  			   } catch (IllegalArgumentException e) {
 	  				   e.printStackTrace();
@@ -500,17 +494,17 @@ public class TraceFW implements CommandExecutor{
 			
 			 DELAY = DELAY + 2L;
 			 d++;
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				 
 	  		   @SuppressWarnings("deprecation")
 			public void run() {
 	  			   
-		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 							
 							public void run(){
-					  			   FireworkShenans fplayer = new FireworkShenans();
+	
 					  			   try {
-					  				   fplayer.playFirework(w, l,
+					  				   pl.fw.playFirework(w, l,
 					  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.TEAL).build());
 					  			   } catch (IllegalArgumentException e) {
 					  				   e.printStackTrace();
@@ -520,13 +514,12 @@ public class TraceFW implements CommandExecutor{
 							}
 						}, 5L, 20L);
 		  			
-		  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		  			tasks.add(happyTask + "");
-		  			plugin.datacore.set("PARTYTASKSLIST", tasks);
+		  			pl.datacore.set("PARTYTASKSLIST", tasks);
 	  			 
-	  			   FireworkShenans fplayer = new FireworkShenans();
 	  			   try {
-	  				   fplayer.playFirework(w, l,
+	  				   pl.fw.playFirework(w, l,
 	  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.AQUA).build());
 	  			   } catch (IllegalArgumentException e) {
 	  				   e.printStackTrace();
@@ -550,17 +543,17 @@ public class TraceFW implements CommandExecutor{
 			
 			 DELAY = DELAY + 2L;
 			 e++;
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				 
 	  		   @SuppressWarnings("deprecation")
 			public void run() {
 	  			   
-		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 							
 							public void run(){
-					  			   FireworkShenans fplayer = new FireworkShenans();
+	
 					  			   try {
-					  				   fplayer.playFirework(w, l,
+					  				   pl.fw.playFirework(w, l,
 					  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.LIME).build());
 					  			   } catch (IllegalArgumentException e) {
 					  				   e.printStackTrace();
@@ -570,13 +563,12 @@ public class TraceFW implements CommandExecutor{
 							}
 						}, 5L, 20L);
 		  			
-		  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		  			tasks.add(happyTask + "");
-		  			plugin.datacore.set("PARTYTASKSLIST", tasks);
-	  			 
-	  			   FireworkShenans fplayer = new FireworkShenans();
+		  			pl.datacore.set("PARTYTASKSLIST", tasks);
+
 	  			   try {
-	  				   fplayer.playFirework(w, l,
+	  				   pl.fw.playFirework(w, l,
 	  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.GREEN).build());
 	  			   } catch (IllegalArgumentException e) {
 	  				   e.printStackTrace();
@@ -600,17 +592,17 @@ public class TraceFW implements CommandExecutor{
 			
 			 f++;
 			 DELAY = DELAY + 2L;
-			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 				 
 	  		   @SuppressWarnings("deprecation")
 			public void run() {
 	  			   
-		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		  			int happyTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 							
 							public void run(){
-					  			   FireworkShenans fplayer = new FireworkShenans();
+	
 					  			   try {
-					  				   fplayer.playFirework(w, l,
+					  				   pl.fw.playFirework(w, l,
 					  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.PURPLE).build());
 					  			   } catch (IllegalArgumentException e) {
 					  				   e.printStackTrace();
@@ -620,13 +612,12 @@ public class TraceFW implements CommandExecutor{
 							}
 						}, 5L, 20L);
 		  			
-		  			List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		  			List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		  			tasks.add(happyTask + "");
-		  			plugin.datacore.set("PARTYTASKSLIST", tasks);
-	  			 
-	  			   FireworkShenans fplayer = new FireworkShenans();
+		  			pl.datacore.set("PARTYTASKSLIST", tasks);
+
 	  			   try {
-	  				   fplayer.playFirework(w, l,
+	  				   pl.fw.playFirework(w, l,
 	  						   FireworkEffect.builder().with(Type.BURST).withColor(Color.BLUE).build());
 	  			   } catch (IllegalArgumentException e) {
 	  				   e.printStackTrace();
@@ -641,16 +632,16 @@ public class TraceFW implements CommandExecutor{
 	  		   , DELAY);
 			   }
 		
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 			 
 	  		   public void run() {
 	  			   
-	  			 List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+	  			 List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 	  			 	for (String taskC : tasks){
 	  			 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 	  			 	}
-		  			plugin.datacore.set("PARTYTASKSLIST", null);
-		  			plugin.saveYamls();
+		  			pl.datacore.set("PARTYTASKSLIST", null);
+		  			pl.saveYamls();
 	  		   	}
 		 }
 	     , DELAY);
@@ -660,15 +651,15 @@ public class TraceFW implements CommandExecutor{
 		
 		f = 0;
 		
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 			 public void run() {
 		
-		 List<String> tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		 List<String> tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		 	for (String taskC : tasks){
 		 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 		 	}
-			plugin.datacore.set("PARTYTASKSLIST", null);
-			plugin.saveYamls();
+			pl.datacore.set("PARTYTASKSLIST", null);
+			pl.saveYamls();
 			
 		for (Location l : happyLIST){
 			
@@ -685,10 +676,9 @@ public class TraceFW implements CommandExecutor{
 			colors.add(Color.PURPLE);
 			colors.add(Color.GREEN);
 			colors.add(Color.TEAL);
-			
-			FireworkShenans fplayer = new FireworkShenans();
+
 			try {
-				   fplayer.playFirework(w, l,
+				   pl.fw.playFirework(w, l,
 						   FireworkEffect.builder().with(Type.STAR).withColor(colors.get(nextInt)).build());
 			   } catch (IllegalArgumentException e2) {
 			   } catch (Exception e2) {
@@ -731,10 +721,9 @@ public class TraceFW implements CommandExecutor{
 			colors.add(Color.PURPLE);
 			colors.add(Color.GREEN);
 			colors.add(Color.TEAL);
-			
-			FireworkShenans fplayer = new FireworkShenans();
+
 			try {
-				   fplayer.playFirework(w, l,
+				   pl.fw.playFirework(w, l,
 						   FireworkEffect.builder().with(Type.STAR).withColor(colors.get(nextInt)).build());
 			   } catch (IllegalArgumentException e2) {
 			   } catch (Exception e2) {
@@ -742,12 +731,12 @@ public class TraceFW implements CommandExecutor{
 			
 		}
 		
-		tasks = plugin.datacore.getStringList("PARTYTASKSLIST");
+		tasks = pl.datacore.getStringList("PARTYTASKSLIST");
 		 	for (String taskC : tasks){
 		 		Bukkit.getServer().getScheduler().cancelTask(Integer.parseInt(taskC));
 		 	}
-			plugin.datacore.set("PARTYTASKSLIST", null);
-			plugin.saveYamls();
+			pl.datacore.set("PARTYTASKSLIST", null);
+			pl.saveYamls();
 	}
 		}, DELAY);
 	}

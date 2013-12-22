@@ -1,5 +1,6 @@
 package com.github.lyokofirelyte.WC;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -29,7 +31,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 
@@ -111,6 +112,57 @@ public class WCCommands implements CommandExecutor {
       }
       
       switch (args[0].toLowerCase()){
+      
+      case "latest":
+    	  
+    	  List<String> goodUsers = new ArrayList<String>();
+    	  
+    	  for (String s : plugin.wcm.getWCSystem("system").getUsers()){
+  				File essFile = new File("./plugins/Essentials/userdata/" + s + ".yml");
+  				if (essFile.exists()){
+	  				YamlConfiguration essYaml = YamlConfiguration.loadConfiguration(essFile);
+	  				long lastLogout = essYaml.getLong("timestamps.logout");
+	  				if (lastLogout >= (System.currentTimeMillis() - 2592000000L)){
+	  					goodUsers.add(s);
+	  				}
+  				}
+    	  }
+    	  
+    	  StringBuilder sb2 = new StringBuilder();
+    	  
+    	  for (String s : goodUsers){
+    		  sb2.append("&7" + s + " ");
+    	  }
+    	  
+    	  String finalString = sb2.toString().trim();
+    	  s(p, finalString.replaceAll(" ", "&8, "));
+    	  
+      break;
+      
+      case "creative":
+    	  
+    	  if (!p.isOp()){
+    		  p.setOp(true);
+    		  p.performCommand("warp wacp");
+    		  p.setOp(false);
+    	  } else {
+    		  p.performCommand("warp wacp");
+    	  }
+    	  
+      break;
+      
+      case "revokemails":
+    	  
+    	  if (p.getName().equals("Hugh_Jasses")){
+    		  for (String s : plugin.wcm.getWCSystem("system").getUsers()){
+    			  WCPlayer wcpCurrent = plugin.wcm.getWCPlayer(s);
+    			  wcpCurrent.setMail(new ArrayList<String>());
+    			  plugin.wcm.updatePlayerMap(s, wcpCurrent);
+    		  }
+    		  s(p, "Wiped all mails.");
+    	  }
+    	  
+      break;
       
       case "hugdebug":
     	  
@@ -863,10 +915,9 @@ public class WCCommands implements CommandExecutor {
   	  			  		}
     	  			
     	  			if (randomNumber2 == 5){
-    	  				FireworkShenans fplayer = new FireworkShenans();
           	        	try {
         			
-    							fplayer.playFirework(p.getWorld(), self,
+    							plugin.fw.playFirework(p.getWorld(), self,
     							FireworkEffect.builder().with(Type.BURST).withColor(Color.FUCHSIA).build());
     						} catch (IllegalArgumentException e) {
     							e.printStackTrace();
@@ -1664,10 +1715,9 @@ public class WCCommands implements CommandExecutor {
   	      public void run()
   	      {
   	    	  	
-  	        	FireworkShenans fplayer = new FireworkShenans();
   	        	try {
 			
-						fplayer.playFirework(p.getWorld(), l,
+						plugin.fw.playFirework(p.getWorld(), l,
 						FireworkEffect.builder().with(Type.BURST).withColor(Color.WHITE).build());
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();

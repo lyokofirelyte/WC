@@ -6,6 +6,14 @@ depend: [Vault, WCAPI]
 version: 5
 
 commands:
+   partyfw:
+      description: NO
+      usage: /nope
+      permission: wa.admin
+   jesse:
+      description: NO
+      usage: /nope
+      permission: wa.admin
    watercloset:
       description: WC Root Command
       usage: /watercloset
@@ -96,19 +104,19 @@ commands:
    hat:
       description: WC Hawt Hat Command
       usage: /hat
-      permission: wa.disctrictman
+      permission: wa.districtman
    chestplate:
       description: WC Hawt Chestplate Command
       usage: /chestplate
-      permission: wa.disctrictman
+      permission: wa.districtman
    leggings:
       description: WC Hawt Leggings Command
       usage: /leggings
-      permission: wa.disctrictman
+      permission: wa.districtman
    boots:
       description: WC Hawt Boots Command
       usage: /boots
-      permission: wa.disctrictman
+      permission: wa.districtman
    sudo:
       description: WC Force Command
       usage: /sudo <player> <command>
@@ -298,7 +306,6 @@ commands:
    tp:
       description: WC TP Command
       usage: /tp <player>
-      permission: wa.mod2
    tphere:
       description: WC TP Command
       usage: /tphere <player>
@@ -384,7 +391,7 @@ permissions:
     wa.enderpearl:
         description: Use ender pearls.
         default: op
-    wa.disctrictman:
+    wa.districtman:
         description: Hawt Hats
         default: op
     wa.metropolitan:  

@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import com.github.lyokofirelyte.WC.WCMain;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ParagonFindEvent;
@@ -74,9 +73,8 @@ public class WCParagon implements Listener {
 	        		delay = delay + 2L;
 	        		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.pl, new Runnable() {
 	        	      public void run() {
-	        	        	FireworkShenans fplayer = new FireworkShenans();
 	        	        	try {
-								fplayer.playFirework(e.getPlayer().getWorld(), l,
+								pl.fw.playFirework(e.getPlayer().getWorld(), l,
 								FireworkEffect.builder().with(Type.BURST).withColor(e.getfwColor()).build());
 							} catch (IllegalArgumentException e) {
 								e.printStackTrace();

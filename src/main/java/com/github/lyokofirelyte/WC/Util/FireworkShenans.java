@@ -8,6 +8,8 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.Location;
 import org.bukkit.World;
+
+import com.github.lyokofirelyte.WC.WCMain;
  
 /**
  * FireworkEffectPlayer v1.0
@@ -22,6 +24,11 @@ import org.bukkit.World;
  * @author codename_B
  */
 public class FireworkShenans {
+	
+	WCMain pl;
+	public FireworkShenans(WCMain instance){
+		pl = instance;
+	}
        
         /*
          * Example use:

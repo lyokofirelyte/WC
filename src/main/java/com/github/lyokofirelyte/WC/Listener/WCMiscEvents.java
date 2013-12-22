@@ -40,7 +40,6 @@ import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCCommands;
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
@@ -257,9 +256,8 @@ public class WCMiscEvents implements Listener {
 		        	    {
 		        	      public void run()
 		        	      {
-		        	        	FireworkShenans fplayer = new FireworkShenans();
 		        	        	try {
-									fplayer.playFirework(p.getWorld(), l,
+									plugin.fw.playFirework(p.getWorld(), l,
 									FireworkEffect.builder().with(Type.BALL_LARGE).withColor(Color.WHITE).build());
 								} catch (IllegalArgumentException e) {
 									e.printStackTrace();
@@ -350,7 +348,7 @@ public class WCMiscEvents implements Listener {
     				  found = true;
     			  }
     		  }
-    		  if (!found && p.getWalkSpeed() != 0.2){
+    		  if (!found && p.getWalkSpeed() != 0.2 && p.getWalkSpeed() != 0){
     			  p.setWalkSpeed((float)0.2);
     		  }
     	  }

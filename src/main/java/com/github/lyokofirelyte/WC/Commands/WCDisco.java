@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
@@ -64,9 +63,8 @@ public class WCDisco implements CommandExecutor {
 		        		delay = delay + 2L;
 		        		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
 		        	      public void run() {
-		        	        	FireworkShenans fplayer = new FireworkShenans();
 		        	        	try {
-									fplayer.playFirework(p.getWorld(), l,
+									pl.fw.playFirework(p.getWorld(), l,
 									FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
 								} catch (IllegalArgumentException e) {
 									e.printStackTrace();

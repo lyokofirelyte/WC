@@ -59,7 +59,7 @@ public class WCPowerTool implements CommandExecutor, Listener {
 						}
 					}
 				}			
-				pts.add(name + " " + Utils.createString(args, 0));
+				pts.add(name + "%%%%%%" + Utils.createString(args, 0));
 				s(p, "Powertool added. Type &6/pt &dto remove it, or &6/pt :a &dto remove all of your powertools.");
 				pl.wcm.updatePlayerMap(p.getName(), wcp);
 			}
@@ -80,7 +80,7 @@ public class WCPowerTool implements CommandExecutor, Listener {
 			
 			for (String s : pts){
 				if (s.startsWith(name)){
-					String[] ss = s.split(" ");
+					String[] ss = s.split("%%%%%%");
 					p.performCommand(ss[1]);
 				}
 			}
