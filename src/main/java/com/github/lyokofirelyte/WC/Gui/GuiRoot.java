@@ -62,10 +62,7 @@ public class GuiRoot extends WCGui {
 	
 	@Override
 	public void actionPerformed(Player p){
-		
-<<<<<<< HEAD:src/main/java/com/github/lyokofirelyte/WC/Gui/GuiRoot.java
-		switch (slot){
-=======
+	
 		switch (this.slot){
 		
 		case 31:
@@ -74,7 +71,6 @@ public class GuiRoot extends WCGui {
 			break;
 			
 		case 37:
->>>>>>> FETCH_HEAD:src/main/java/com/github/lyokofirelyte/WC/Gui/GuiRoot.java
 			
 			this.main.wcm.displayGui(p, new GuiChat(this.main));
 			break;
