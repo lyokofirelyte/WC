@@ -72,7 +72,7 @@ public class GuiRoot extends WCGui {
 			
 		case 37:
 			
-			this.main.wcm.displayGui(p, new GuiChat(this.main));
+			main.wcm.displayGui(p, new GuiChat(this.main));
 			break;
 			
 		}
