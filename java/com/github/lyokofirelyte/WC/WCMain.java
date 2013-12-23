@@ -50,7 +50,6 @@ import com.github.lyokofirelyte.WC.Extras.StaticField;
 import com.github.lyokofirelyte.WC.Extras.TimeStampEX;
 import com.github.lyokofirelyte.WC.Extras.TraceFW;
 import com.github.lyokofirelyte.WC.Extras.WCSEEKRITPARTAY;
-import com.github.lyokofirelyte.WC.Gui.GuiRoot;
 import com.github.lyokofirelyte.WC.Listener.WCBlockBreak;
 import com.github.lyokofirelyte.WC.Listener.WCBlockPlace;
 import com.github.lyokofirelyte.WC.Listener.WCDeath;
@@ -167,7 +166,7 @@ public class WCMain extends JavaPlugin {
 	  
 	  api = (WCAPI) WCAPI;
 	    
-	  wcm = api.wcm;
+	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
 	  invManager = new InventoryManager(api);
 	  wcpp = new WCPatrols(this);
@@ -179,8 +178,6 @@ public class WCMain extends JavaPlugin {
 	  }
 	
 	  registerCommands();
-	  
-	  wcm.setupGui(new GuiRoot(this));
 	    
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { updateBoard();} }, 2L, 160L);
