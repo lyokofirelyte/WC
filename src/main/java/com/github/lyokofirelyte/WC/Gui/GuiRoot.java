@@ -4,23 +4,30 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCGui;
+
 import static com.github.lyokofirelyte.WCAPI.Manager.InventoryManager.createItem;
 
 public class GuiRoot extends WCGui {
 	
 	public WCMain main;
+	
+	private List<Integer> rootW;
+	private List<Integer> rootC;
 
 	public GuiRoot(WCMain main){
+		
 		super(54, "&dWATERCLOSET CORE v5");
-		this.main = main;	
+		this.main = main;
+		
+		this.rootW = Arrays.asList(1, 3, 10, 11, 12, 19, 20, 21);
+		this.rootC = Arrays.asList(5, 6, 7, 14, 23, 24, 25);
+		
 	}
-	
-	List<Integer> rootW = Arrays.asList(1, 3, 10, 11, 12, 19, 20, 21);
-	List<Integer> rootC = Arrays.asList(5, 6, 7, 14, 23, 24, 25);
 	
 	@Override
 	public void create(){
@@ -49,14 +56,26 @@ public class GuiRoot extends WCGui {
 		addButton(50, createItem("&1QUICK COMMANDS", new String[] { "&5Command Menu" }, Material.INK_SACK, 1, 14));
 		addButton(51, createItem("&2CREATIVE WORLD", new String[] { "&aWarp to creative" }, Material.INK_SACK, 1, 13));
 		addButton(52, createItem("&eLOGOFF", new String[] { "&6Leave the game" }, Material.INK_SACK));
-		addButton(31, createItem("&bCLOSE", new String[] { "&b< < <" }, Material.FLINT));
+		addButton(31, createItem("&bCLOSE", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
+		
 	}
 	
 	@Override
 	public void actionPerformed(Player p){
 		
 		switch (this.slot){
+		
+		case 31:
 			
-		}	
+			p.closeInventory();
+			break;
+			
+		case 37:
+			
+			this.main.wcm.displayGui(p, new GuiChat(this.main));
+			break;
+			
+		}
+		
 	}
 }

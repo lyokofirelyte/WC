@@ -1,4 +1,4 @@
- package com.github.lyokofirelyte.WC;
+package com.github.lyokofirelyte.WC;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
