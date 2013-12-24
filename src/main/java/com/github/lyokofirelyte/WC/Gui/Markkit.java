@@ -28,7 +28,7 @@ public class Markkit extends WCGui {
 			if (rootW.contains(x)){
 				addButton(x, createItem("", new String[] { "" }, Material.STAINED_GLASS_PANE, 1, 0));
 			}
-		}
+		}  
 
 		addButton(62, createItem("&cCANCEL", new String[] { "&4Clear cart" }, Material.INK_SACK, 1, 9));
 		addButton(61, createItem("&aCONFIRM", new String[] { "&2Accept purchase" }, Material.INK_SACK, 1, 1));

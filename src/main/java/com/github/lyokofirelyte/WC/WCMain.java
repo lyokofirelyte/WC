@@ -166,7 +166,7 @@ public class WCMain extends JavaPlugin {
 	  
 	  api = (WCAPI) WCAPI;
 	    
-	  wcm = api.wcm;
+	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
 	  invManager = new InventoryManager(api);
 	  wcpp = new WCPatrols(this);
