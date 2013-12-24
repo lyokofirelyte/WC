@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCGui;
-import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
+import static com.github.lyokofirelyte.WCAPI.Manager.InventoryManager.createItem;
 
 public class GuiToggles extends WCGui {
 	
@@ -24,16 +24,16 @@ public class GuiToggles extends WCGui {
 	@Override
 	public void create(){
 		
-		this.addButton(0, InventoryManager.createItem("&aHOME SOUNDS", new String[] { "&2/home sounds" }, Material.WORKBENCH));
-		this.addButton(1, InventoryManager.createItem("&eSIDEBOARD COORDS", new String[] { "&9Toggle name / coords", "&9on sideboard" }, Material.REDSTONE));
-		this.addButton(2, InventoryManager.createItem("&eSIDEBOARD", new String[] { "&6The scoreboard" }, Material.GLOWSTONE));
-		this.addButton(3, InventoryManager.createItem("&bPOKES", new String[] { "&9Toggle pokes" }, Material.STICK));
-		this.addButton(4, InventoryManager.createItem("&4PVP", new String[] { "&cToggle PVP Mode" }, Material.DIAMOND_SWORD));
-		this.addButton(5, InventoryManager.createItem("&dFIREWORKS", new String[] { "&8Toggle paragon fireworks" }, Material.FIREWORK));
-		this.addButton(6, InventoryManager.createItem("&3EMOTES", new String[] { "&aToggle auto-emotes", "on chat" }, Material.CAKE));
-		this.addButton(7, InventoryManager.createItem("&2ROOT SHORTCUT", new String[] { "&3Shift + left click", "&3for root menu" }, Material.ANVIL));
-		this.addButton(8, InventoryManager.createItem("&cNAME PLATE", new String[] { "&bToggle alliance nameplate" }, Material.NAME_TAG));
-		this.addButton(13, InventoryManager.createItem("&bWATERCLOSET CORE v5", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
+		this.addButton(0, createItem("&aHOME SOUNDS", new String[] { "&2/home sounds" }, Material.WORKBENCH));
+		this.addButton(1, createItem("&eSIDEBOARD COORDS", new String[] { "&9Toggle name / coords", "&9on sideboard" }, Material.REDSTONE));
+		this.addButton(2, createItem("&eSIDEBOARD", new String[] { "&6The scoreboard" }, Material.GLOWSTONE));
+		this.addButton(3, createItem("&bPOKES", new String[] { "&9Toggle pokes" }, Material.STICK));
+		this.addButton(4, createItem("&4PVP", new String[] { "&cToggle PVP Mode" }, Material.DIAMOND_SWORD));
+		this.addButton(5, createItem("&dFIREWORKS", new String[] { "&8Toggle paragon fireworks" }, Material.FIREWORK));
+		this.addButton(6, createItem("&3EMOTES", new String[] { "&aToggle auto-emotes", "on chat" }, Material.CAKE));
+		this.addButton(7, createItem("&2ROOT SHORTCUT", new String[] { "&3Shift + left click", "&3for root menu" }, Material.ANVIL));
+		this.addButton(8, createItem("&cNAME PLATE", new String[] { "&bToggle alliance nameplate" }, Material.NAME_TAG));
+		this.addButton(13, createItem("&bWATERCLOSET CORE v5", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
 		
 	}
 	
