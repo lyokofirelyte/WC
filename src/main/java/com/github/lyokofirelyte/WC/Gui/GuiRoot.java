@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCGui;
@@ -62,7 +61,7 @@ public class GuiRoot extends WCGui {
 	}
 	
 	@Override
-	public void actionPerformed(Player p, InventoryClickEvent e){
+	public void actionPerformed(Player p){
 	
 		switch (this.slot){
 		
