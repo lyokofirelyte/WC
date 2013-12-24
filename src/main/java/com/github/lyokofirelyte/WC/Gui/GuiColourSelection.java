@@ -51,11 +51,11 @@ public class GuiColourSelection extends WCGui {
 	@Override
 	public void actionPerformed(Player p, InventoryClickEvent e){
 		
-		switch (slot){
+		switch (this.slot){
 		
 		default:
 			
-			p.performCommand(command + " " + item.getItemMeta().getLore().get(0).charAt(1));
+			p.performCommand(this.command + " " + item.getItemMeta().getLore().get(0).charAt(1));
 			this.main.wcm.displayGui(p, this.parent);
 			break;
 		
@@ -70,5 +70,7 @@ public class GuiColourSelection extends WCGui {
 			break;
 			
 		}
+		
 	}
+	
 }
