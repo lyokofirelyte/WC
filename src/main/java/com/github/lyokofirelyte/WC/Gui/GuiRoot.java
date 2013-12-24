@@ -14,7 +14,7 @@ import static com.github.lyokofirelyte.WCAPI.Manager.InventoryManager.createItem
 
 public class GuiRoot extends WCGui {
 	
-	public WCMain main;
+	private WCMain main;
 	
 	private List<Integer> rootW;
 	private List<Integer> rootC;
@@ -72,7 +72,7 @@ public class GuiRoot extends WCGui {
 			
 		case 37:
 			
-			main.wcm.displayGui(p, new GuiChat(this.main));
+			main.wcm.displayGui(p, new GuiChat(this.main, this));
 			break;
 			
 		}

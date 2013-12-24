@@ -744,7 +744,7 @@ public class WCMenus implements Listener, CommandExecutor {
 		staffTools.put("GLASS", "a sel " + playerSelection.get(p.getName()));
 	}
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	@EventHandler (priority = EventPriority.LOW)
 	public void onClick(InventoryClickEvent e){
 		
@@ -941,7 +941,7 @@ public class WCMenus implements Listener, CommandExecutor {
 				p.performCommand(staffTools.get(e.getCurrentItem().getType().toString()));
 			}
 		}	
-	}
+	}*/
 	
 	private void allianceReq(Player p, String n) {
 		
