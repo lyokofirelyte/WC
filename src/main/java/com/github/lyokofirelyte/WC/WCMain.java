@@ -324,6 +324,7 @@ public class WCMain extends JavaPlugin {
     getCommand("dis").setExecutor(new WCCheats(this));
     getCommand("sm").setExecutor(new WCCheats(this));
     getCommand("sit").setExecutor(new WCCheats(this));
+    getCommand("top").setExecutor(new WCCheats(this));
 
     getCommand("near").setExecutor(new WCNear(this));
     getCommand("radar").setExecutor(new WCNear(this));

@@ -153,6 +153,10 @@ commands:
       description: WC CI Command
       usage: /ci or /ci u
       permission: wa.staff
+   top:
+      description: WC Top Command
+      usage: /top
+      permission: wa.mod2
    i:
       description: WC i Command
       usage: /i <item>

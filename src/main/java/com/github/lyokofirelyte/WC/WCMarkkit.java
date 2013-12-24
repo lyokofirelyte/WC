@@ -13,7 +13,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.github.lyokofirelyte.WC.Gui.Markkit;
+import com.github.lyokofirelyte.WC.Gui.GuiMarkkit;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
@@ -72,16 +72,11 @@ public class WCMarkkit implements Listener {
 					String[] ss = s.split(" ");
 					if (ss[0].equals(loc.getWorld().getName()) && Double.parseDouble(ss[1]) == loc.getX() && Double.parseDouble(ss[2]) == loc.getY() && Double.parseDouble(ss[3]) == loc.getZ()){
 						if (e.getClickedBlock().getState() instanceof Sign){
-						//	Sign sign = (Sign) e.getClickedBlock().getState();
-								sellInv(e.getPlayer());
+							pl.wcm.displayGui(e.getPlayer(), new GuiMarkkit(pl));
+							return;
 						}
 					}
 				}
 			}
-		}
-		
-		public void sellInv(Player p){
-			
-			pl.wcm.displayGui(p, new Markkit(pl));
 		}
 }

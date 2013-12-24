@@ -24,11 +24,11 @@ public class GuiChat extends WCGui {
 	@Override
 	public void create(){
 		
-		this.addButton(0, InventoryManager.createItem("&bGLOBAL COLOUR", new String[] { "&9Change global colour" }, Material.INK_SACK, 1, 14));
-		this.addButton(1, InventoryManager.createItem("&bPM COLOUR", new String[] { "&9Change pm colour" }, Material.INK_SACK, 1, 10));
-		this.addButton(2, InventoryManager.createItem("&bALLIANCE COLOUR", new String[] { "&9Change alliance colour" }, Material.INK_SACK, 1, 11));
-		this.addButton(3, InventoryManager.createItem("&bTIME CODES", new String[] { "&9Toggle chat timecodes" }, Material.INK_SACK, 1, 12));
-		this.addButton(8, InventoryManager.createItem("&bWATERCLOSET CORE v5", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
+		addButton(0, InventoryManager.createItem("&bGLOBAL COLOUR", new String[] { "&9Change global colour" }, Material.INK_SACK, 1, 14));
+		addButton(1, InventoryManager.createItem("&bPM COLOUR", new String[] { "&9Change pm colour" }, Material.INK_SACK, 1, 10));
+		addButton(2, InventoryManager.createItem("&bALLIANCE COLOUR", new String[] { "&9Change alliance colour" }, Material.INK_SACK, 1, 11));
+		addButton(3, InventoryManager.createItem("&bTIME CODES", new String[] { "&9Toggle chat timecodes" }, Material.INK_SACK, 1, 12));
+		addButton(8, InventoryManager.createItem("&bWATERCLOSET CORE v5", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
 		
 	}
 	
@@ -39,17 +39,17 @@ public class GuiChat extends WCGui {
 		
 		case 0:
 			
-			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, "wc globalcolor", this));
+			main.wcm.displayGui(p, new GuiColourSelection(main, "wc globalcolor", this));
 			break;
 			
 		case 1:
 			
-			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, "wc pmcolor", this));
+			main.wcm.displayGui(p, new GuiColourSelection(main, "wc pmcolor", this));
 			break;
 			
 		case 2:
 			
-			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, "waa chat color", this));
+			main.wcm.displayGui(p, new GuiColourSelection(main, "waa chat color", this));
 			break;
 			
 		case 3:
@@ -59,7 +59,7 @@ public class GuiChat extends WCGui {
 			
 		case 8:
 			
-			this.main.wcm.displayGui(p, this.parent);
+			main.wcm.displayGui(p, parent);
 			break;
 			
 		}

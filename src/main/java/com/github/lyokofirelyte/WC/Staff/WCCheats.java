@@ -44,6 +44,18 @@ public class WCCheats implements CommandExecutor {
 		
 		switch (cmd.getName().toLowerCase()){
 		
+			case "top":
+				
+				for (int x = 256; x > 0; x--){
+					Location l = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY()+x, p.getLocation().getZ(), p.getLocation().getPitch(), p.getLocation().getYaw());
+					if (l.getBlock() != null && l.getBlock().getType() != Material.AIR){
+						p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY()+x+2, p.getLocation().getZ(), p.getLocation().getPitch(), p.getLocation().getYaw()));
+						break;
+					}
+				}
+				
+			break;
+		
 			case "sm":
 				
 				String armors = "diamond iron chain gold leather";

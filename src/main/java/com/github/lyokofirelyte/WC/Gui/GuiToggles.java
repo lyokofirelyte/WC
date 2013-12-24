@@ -91,9 +91,6 @@ public class GuiToggles extends WCGui {
 			
 			this.main.wcm.displayGui(p, this.parent);
 			break;
-			
 		}
-		
 	}
-	
 }
