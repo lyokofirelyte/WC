@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCGui;
+import com.github.lyokofirelyte.WCAPI.WCManager;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 
 public class GuiStats extends WCGui {
@@ -31,14 +32,28 @@ public class GuiStats extends WCGui {
 	}
 	
 	@Override
-	public void actionPerformed(Player p){
+	public void actionPerformed(final Player p){
 		
 		switch (this.slot){
 		
 		case 0:
 			
-			p.performCommand("wcstats");
+			WCManager.callChat(p, "!stats " + p.getName());
 			p.closeInventory();
+			break;
+			
+		case 1:
+			
+			this.main.wcm.displayGui(p, new GuiPlayerSelection(this.main, new Runnable(){
+				
+				public void run(){
+					
+					WCManager.callChat(p, "!stats " + GuiPlayerSelection.player.getName());
+					
+				}
+				
+			}, true, this));
+			
 			break;
 			
 		case 8:
