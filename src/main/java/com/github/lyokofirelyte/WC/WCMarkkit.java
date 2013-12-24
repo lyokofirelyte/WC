@@ -12,6 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import com.github.lyokofirelyte.WC.Gui.Markkit;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
@@ -46,24 +48,15 @@ public class WCMarkkit implements Listener {
 			
 			Player p = e.getPlayer();
 			
-			if (p.hasPermission("wa.staff") && (e.getLine(0).equals("sell") || e.getLine(0).equals("buy")) && e.getLine(1) != null){
-				if (Utils.isInteger(e.getLine(1)) && e.getLine(3).startsWith("*")){
-					if (e.getLine(0).equals("sell")){
-						e.setLine(1, Utils.AS("&3>> " + e.getLine(0) + " <<"));
-					} else {
-						e.setLine(1, Utils.AS("&2>> " + e.getLine(0) + " <<"));
-					}
-					e.setLine(2, Utils.AS("&dWC &5Markkit"));
-					e.setLine(3, Utils.AS("&f" + e.getLine(1)));
+			if (p.hasPermission("wa.staff") && (e.getLine(0).equals("markkit")) && e.getLine(1) != null){
+					e.setLine(0, Utils.AS("&dWC &5Markkit"));
+					e.setLine(1, Utils.AS("&f" + e.getLine(1)));
 					WCSystem wcs = pl.wcm.getWCSystem("system");
 					List<String> validLocs = wcs.getMarketSigns();
 					Location l = e.getBlock().getLocation();
 					validLocs.add(l.getWorld().getName() + " " + l.getX() + " " + l.getY() + " " + l.getZ());
 					wcs.setMarketSigns(validLocs);
 					pl.wcm.updateSystem("system", wcs);
-				} else {
-					e.setLine(0, Utils.AS("&4invalid sign"));
-				}
 			}
 		}
 		
@@ -79,26 +72,16 @@ public class WCMarkkit implements Listener {
 					String[] ss = s.split(" ");
 					if (ss[0].equals(loc.getWorld().getName()) && Double.parseDouble(ss[1]) == loc.getX() && Double.parseDouble(ss[2]) == loc.getY() && Double.parseDouble(ss[3]) == loc.getZ()){
 						if (e.getClickedBlock().getState() instanceof Sign){
-							Sign sign = (Sign) e.getClickedBlock().getState();
-							if (sign.getLine(0).contains("sell")){
-								sellInv(sign);
-							} else {
-								buyInv(sign);
-							}
+						//	Sign sign = (Sign) e.getClickedBlock().getState();
+								sellInv(e.getPlayer());
 						}
 					}
 				}
 			}
 		}
 		
-		public void sellInv(Sign sign){
+		public void sellInv(Player p){
 			
-			
-		}
-		
-		public void buyInv(Sign sign){
-			
-			
-			
+			pl.wcm.displayGui(p, new Markkit(pl));
 		}
 }

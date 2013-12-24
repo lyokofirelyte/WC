@@ -3,6 +3,7 @@ package com.github.lyokofirelyte.WC.Gui;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCGui;
@@ -48,13 +49,13 @@ public class GuiColourSelection extends WCGui {
 	}
 	
 	@Override
-	public void actionPerformed(Player p){
+	public void actionPerformed(Player p, InventoryClickEvent e){
 		
-		switch (this.slot){
+		switch (slot){
 		
 		default:
 			
-			p.performCommand(this.command + " " + this.item.getItemMeta().getLore().get(0).charAt(1));
+			p.performCommand(command + " " + item.getItemMeta().getLore().get(0).charAt(1));
 			this.main.wcm.displayGui(p, this.parent);
 			break;
 		
@@ -69,7 +70,5 @@ public class GuiColourSelection extends WCGui {
 			break;
 			
 		}
-		
 	}
-	
 }

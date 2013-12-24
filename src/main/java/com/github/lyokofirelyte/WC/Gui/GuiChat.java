@@ -3,6 +3,7 @@ package com.github.lyokofirelyte.WC.Gui;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCGui;
@@ -33,7 +34,7 @@ public class GuiChat extends WCGui {
 	}
 	
 	@Override
-	public void actionPerformed(Player p){
+	public void actionPerformed(Player p, InventoryClickEvent e){
 		
 		switch (this.slot){
 		
