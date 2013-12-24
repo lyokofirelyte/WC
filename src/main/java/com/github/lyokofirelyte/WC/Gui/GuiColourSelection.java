@@ -50,27 +50,23 @@ public class GuiColourSelection extends WCGui {
 	@Override
 	public void actionPerformed(Player p){
 		
-		if (this.current.equals("click")){
-
-			switch (this.slot){
+		switch (this.slot){
+		
+		default:
 			
-			default:
-				
-				p.performCommand(this.command + " " + this.item.getItemMeta().getLore().get(0).charAt(1));
-				this.main.wcm.displayGui(p, this.parent);
-				break;
+			p.performCommand(this.command + " " + this.item.getItemMeta().getLore().get(0).charAt(1));
+			this.main.wcm.displayGui(p, this.parent);
+			break;
+		
+		case 8:
 			
-			case 8:
-				
-				// Nothing.
-				break;
+			// Nothing.
+			break;
+		
+		case 17:
 			
-			case 17:
-				
-				this.main.wcm.displayGui(p, this.parent);
-				break;
-				
-			}
+			this.main.wcm.displayGui(p, this.parent);
+			break;
 			
 		}
 		
