@@ -166,11 +166,13 @@ public class WCMain extends JavaPlugin {
 	  
 	  api = (WCAPI) WCAPI;
 	    
-	  wcm = api.wcm;
+	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
 	  invManager = new InventoryManager(api);
 	  wcpp = new WCPatrols(this);
 	  fw = new FireworkShenans(this);
+	  
+	  pm.registerEvents(wcm, this);
 	    
 	  if ((url == null) || (username == null) || (password == null) || WCAPI == null) {
 	     Bukkit.getServer().getLogger().info("You must provide a url, username, and password in the config.yml. That or the API is missing.");

@@ -11,13 +11,16 @@ import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 public class GuiColourSelection extends WCGui {
 	
 	private WCMain main;
-	private WCGui parent;
 	
-	public GuiColourSelection(WCMain main, WCGui parent){
+	private WCGui parent;
+	private String command;
+	
+	public GuiColourSelection(WCMain main, String command, WCGui parent){
 		
 		super(18, "&3COLOUR SELECTION");
 		this.main = main;
 		this.parent = parent;
+		this.command = command;
 		
 	}
 	
@@ -48,6 +51,17 @@ public class GuiColourSelection extends WCGui {
 	public void actionPerformed(Player p){
 		
 		switch (this.slot){
+		
+		default:
+			
+			p.performCommand(this.command + " " + this.item.getItemMeta().getLore().get(0).charAt(1));
+			this.main.wcm.displayGui(p, this.parent);
+			break;
+		
+		case 8:
+			
+			// Nothing.
+			break;
 		
 		case 17:
 			

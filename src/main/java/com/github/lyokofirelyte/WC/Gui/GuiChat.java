@@ -10,12 +10,14 @@ import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 
 public class GuiChat extends WCGui {
 	
-	public WCMain main;
+	private WCMain main;
+	private WCGui parent;
 	
-	public GuiChat(WCMain main){
+	public GuiChat(WCMain main, WCGui parent){
 		
 		super(9, "&4CHAT");
 		this.main = main;
+		this.parent = parent;
 		
 	}
 	
@@ -37,7 +39,27 @@ public class GuiChat extends WCGui {
 		
 		case 0:
 			
-			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, this));
+			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, "wc globalcolor", this));
+			break;
+			
+		case 1:
+			
+			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, "wc pmcolor", this));
+			break;
+			
+		case 2:
+			
+			this.main.wcm.displayGui(p, new GuiColourSelection(this.main, "waa chat color", this));
+			break;
+			
+		case 3:
+			
+			p.performCommand("wc timecode");
+			break;
+			
+		case 8:
+			
+			this.main.wcm.displayGui(p, this.parent);
 			break;
 			
 		}
