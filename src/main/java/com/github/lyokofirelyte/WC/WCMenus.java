@@ -138,11 +138,11 @@ public class WCMenus implements Listener, CommandExecutor {
 				setup = true;
 				setUp();
 			}
+
+			p.openInventory(invs.get("rootIntroMenu"));
 			
-			//((Player)sender).openInventory(invs.get("mainMenu"));	
-			
-			pl.wcm.displayGui((Player) sender, new GuiRoot(pl));
-			
+			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
+			public void run() {	pl.wcm.displayGui((Player) sender, new GuiRoot(pl)); } }, 20L);
 		}
 		
 		if (cmd.getName().equalsIgnoreCase("qc")){
@@ -546,6 +546,9 @@ public class WCMenus implements Listener, CommandExecutor {
 		inv = Bukkit.createInventory(null, 54, "§3ADD ADMIN");
 		inv = addToInv(Material.FLINT, "§bALLIANCE FRONT DESK", 53, "§b< < <", 1, inv);
 		invs.put("allianceAdminMenu", inv);
+		
+		inv = Bukkit.createInventory(null, 0, "§d§lWCV5 §3§l§o>> core >>");
+		invs.put("rootIntroMenu", inv);
 		
 		inv = Bukkit.createInventory(null, 27, "§3ALLIANCE FRONT DESK");
 		inv = addToInv(Material.GLOWSTONE_DUST, "§bLEADER", 0, "§9Change leaders", 1, inv);

@@ -31,7 +31,7 @@ public class WCDisco implements CommandExecutor {
 		
 		if (cmd.getName().toLowerCase().equals("ds")){
 			
-			Bukkit.broadcastMessage(Utils.AS("&4>> &aIt's DISCO TIME! &4<<"));
+			Bukkit.broadcastMessage(Utils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));
 			
 			for (final Player p : Bukkit.getOnlinePlayers()){
 				
@@ -97,7 +97,7 @@ public class WCDisco implements CommandExecutor {
 			for (LivingEntity e : ents){
 				Sheep sheep = (Sheep)e;
 				sheep.setColor(Utils.getRandomDyeColor());
-				e.setCustomName(Utils.AS(Utils.getRandomChatColor() + "DISCO!")); e.setCustomNameVisible(true);
+				e.setCustomName(Utils.AS(Utils.getRandomChatColor() + "FESTIVE DISCO!")); e.setCustomNameVisible(true);
 				e.getWorld().playSound(e.getLocation(), Utils.getRandomNote(), 0.5F, 3F);
 				e.setNoDamageTicks(3000);
 			}
