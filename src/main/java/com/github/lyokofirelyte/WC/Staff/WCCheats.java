@@ -46,12 +46,10 @@ public class WCCheats implements CommandExecutor {
 		
 			case "top":
 				
-				for (int x = 256; x > 0; x--){
-					Location l = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY()+x, p.getLocation().getZ(), p.getLocation().getPitch(), p.getLocation().getYaw());
-					if (l.getBlock() != null && l.getBlock().getType() != Material.AIR){
-						p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY()+x+2, p.getLocation().getZ(), p.getLocation().getPitch(), p.getLocation().getYaw()));
-						break;
-					}
+				if (p.getWorld().getHighestBlockYAt(p.getLocation()) != -1){
+					p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getWorld().getHighestBlockYAt(p.getLocation())+1, p.getLocation().getZ(), p.getLocation().getYaw(), p.getLocation().getPitch()));	
+				} else {
+					s(p, "No location found!");
 				}
 				
 			break;

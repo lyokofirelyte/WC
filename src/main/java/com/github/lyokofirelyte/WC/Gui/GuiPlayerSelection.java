@@ -37,27 +37,27 @@ public class GuiPlayerSelection extends WCGui {
 	@Override
 	public void create(){
 		
-		this.players = Bukkit.getOnlinePlayers();
-		this.total = this.players.length;
+		players = Bukkit.getOnlinePlayers();
+		total = this.players.length;
 		
 		for (int i = 0; i < this.total; i++){
 			
 			Player p = this.players[i];
-			this.addButton(i, InventoryManager.createItem(p.getDisplayName(), new String[] { "&f" + p.getName() }, Material.SKULL_ITEM, 1, 3));
+			addButton(i, InventoryManager.createItem(p.getDisplayName(), new String[] { "&f" + p.getName() }, Material.SKULL_ITEM, 1, 3));
 			
 		}
 		
-		this.addButton(53, createItem("&bRETURN", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
+		addButton(53, createItem("&bRETURN", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
 		
 	}
 	
 	@Override
 	public void actionPerformed(Player p){
 		
-		System.out.println(this.slot);
-		System.out.println(this.total);
+		System.out.println(slot);
+		System.out.println(total);
 		
-		if (this.current.equals("click")){
+		if (current.equals("click")){
 			
 			if (this.slot == 53){
 				
@@ -67,19 +67,13 @@ public class GuiPlayerSelection extends WCGui {
 				
 				System.out.println(this.slot);
 				
-				this.player = this.players[this.slot];
-				this.run.run();
+				player = players[slot];
+				run.run();
 				
-				if (this.close){
-					
-					p.closeInventory();
-					
+				if (close){		
+					p.closeInventory();		
 				}
-				
 			}
-			
 		}
-		
 	}
-	
 }

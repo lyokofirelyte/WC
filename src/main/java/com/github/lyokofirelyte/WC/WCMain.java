@@ -113,6 +113,7 @@ public class WCMain extends JavaPlugin {
   public Map <String, List<Player>> playerRide = new HashMap<>();
   public Map <String, List<String>> patrols = new HashMap<>();
   public Map <String, ItemStack[]> backupInvs = new HashMap<>();
+  public Map <String, Inventory> markkitInvs = new HashMap<>();
   public Map <String, Integer> afkTimer = new HashMap<>();
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
@@ -206,10 +207,40 @@ public class WCMain extends JavaPlugin {
 	  Inventory inv = Bukkit.createInventory(null, 9, "§cLOCATIONS");
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
+	  loadMarkkitInvs();
+  }
+  
+  public void saveMarkkitInvs(){
+	  
+	  Inventory inven = Bukkit.createInventory(null, 54, AS("&dMarkkit"));
+	  List<String> invs = new ArrayList<String>();
+	  
+	  for (String s : markkitInvs.keySet()){ 
+		  for (int i = 0; i < inven.getSize(); i++){
+			  datacore.set("Markkit." + s + ".item." + i, markkitInvs.get(s).getContents()[i]);
+		  }
+		  invs.add(s);
+	  }
+	  
+	  datacore.set("Markkit.LIST", invs);
+  }
+  
+  public void loadMarkkitInvs(){
+	  
+	  for (String s : datacore.getStringList("Markkit.LIST")){ 
+		  Inventory inv = Bukkit.createInventory(null, 54, AS("&dMarkkit"));
+		  ItemStack[] contents = new ItemStack[inv.getSize()];
+		  for (int i = 0; i < inv.getSize(); i++){
+			  contents[i] = datacore.getItemStack("Markkit." + s + ".item." + i); 
+		  }
+		  inv.setContents(contents);
+		  markkitInvs.put(s, inv);
+	  }
   }
   
   public void autoSave(){
-	  
+	 
+		saveMarkkitInvs();
 		saveYamls();
 		
 		List<String> users = systemYaml.getStringList("TotalUsers");
@@ -242,13 +273,14 @@ public class WCMain extends JavaPlugin {
 		  wcs.getPatrolCrystal().remove();
 	  }
 	  
+	  saveMarkkitInvs();
 	  saveYamls();
-
+	  
 	  getServer().getScheduler().cancelTasks(this);
-	    
+
 	    try{
-	      if (this.conn != null){
-	        this.conn.close();
+	      if (conn != null){
+	        conn.close();
 	      }
 	    }
 	    catch (SQLException e) {
@@ -501,7 +533,7 @@ public class WCMain extends JavaPlugin {
 		  int lvl = wcp.getPatrolLevel();
 		  int neededXP = (int) (100 + (Math.pow(wcp.getPatrolLevel(), 2) + wcp.getPatrolLevel()));  
 		  
-		  player.setDisplayName(AS(wcm.getFullNick(player.getName())));
+		  player.setDisplayName(AS(wcm.getFullNick(player.getName()))); 
 		  
 		  if (xp >= neededXP){
 			  Bukkit.broadcastMessage(AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));

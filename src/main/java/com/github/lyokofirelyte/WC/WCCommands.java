@@ -151,6 +151,39 @@ public class WCCommands implements CommandExecutor {
     	  
       break;
       
+      case "price":
+    	  
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
+    			  ItemMeta im = p.getItemInHand().getItemMeta();
+    			  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), args[1], AS("&aSell"), args[2])));
+    			  im.setDisplayName(AS("&a" + p.getItemInHand().getType().name().toString()));
+    			  p.getItemInHand().setItemMeta(im);
+    			  s(p, "Updated price!");
+    		  }
+    	  } else {
+    		  s(p, "/wc price <buyPrice> <sellPrice>");
+    	  }
+    	  
+      break;
+      
+      case "edit":
+    	  
+    	  if (p.hasPermission("wa.staff")){
+    		  if (wcp.getMarkkitEditMode()){
+    			  wcp.setMarkkitEditMode(false);
+    			  wcp.setCurrentMarkkitEdit("none");
+        		  s(p, "Edit mode OFF!");
+    		  } else {
+    			  wcp.setMarkkitEditMode(true);
+    			  wcp.setCurrentMarkkitEdit("none");
+        		  s(p, "Edit mode ON.");
+    		  }
+    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+    	  }
+    	  
+      break;
+      
       case "revokemails":
     	  
     	  if (p.getName().equals("Hugh_Jasses")){
