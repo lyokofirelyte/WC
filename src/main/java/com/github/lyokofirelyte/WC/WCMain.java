@@ -119,6 +119,8 @@ public class WCMain extends JavaPlugin {
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
   
+  public Location spawnLoc;
+  
   private int msg = 0;
 
   public void onEnable() {
@@ -209,6 +211,17 @@ public class WCMain extends JavaPlugin {
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
 	  loadMarkkitInvs();
+	  
+	  try {
+		  
+		  spawnLoc = new Location(Bukkit.getWorld(datacore.getString("spawnLoc.world")), datacore.getInt("spawnLoc.x"), datacore.getInt("spawnLoc.y"), datacore.getInt("spawnLoc.z"));
+		  
+	  } catch (Exception e){
+		  
+		  getLogger().severe("Failed to set the spawnLoc! Set this by /wc setspawnloc!");
+		  
+	  }
+	  
   }
   
   public void saveMarkkitInvs(){
@@ -273,6 +286,11 @@ public class WCMain extends JavaPlugin {
 		  }
 		  wcs.getPatrolCrystal().remove();
 	  }
+	  
+	  datacore.set("spawnLoc.world", spawnLoc.getWorld().getName());
+	  datacore.set("spawnLoc.x", spawnLoc.getX());
+	  datacore.set("spawnLoc.y", spawnLoc.getY());
+	  datacore.set("spawnLoc.z", spawnLoc.getZ());
 	  
 	  saveMarkkitInvs();
 	  saveYamls();

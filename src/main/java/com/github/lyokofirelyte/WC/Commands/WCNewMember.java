@@ -26,7 +26,7 @@ public class WCNewMember implements CommandExecutor {
 			
 			if (args.length != 1){
 				
-				WCMain.s(p, "Correct usage: /newmember <playername>");
+				WCMain.s(p, "/newmember <player>");
 				
 			} else {
 				

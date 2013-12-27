@@ -85,6 +85,28 @@ public class GuiRoot extends WCGui {
 			this.main.wcm.displayGui(p, new GuiStats(this.main, this));
 			break;
 			
+		case 46:
+			
+			if (!(p.hasPermission("wa.staff"))){
+				
+				this.main.wcm.displayGui(p, new GuiMessage(this.main, "&c&lYou don't have permission!", 3, p, this));
+				
+			} else {
+				
+				this.main.wcm.displayGui(p, new GuiPlayerSelection(this.main, new Runnable(){
+					
+					public void run(){
+						
+						
+						
+					}
+					
+				}, false, this));
+				
+			}
+			
+			break;
+			
 		}
 		
 	}
