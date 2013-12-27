@@ -2,12 +2,17 @@ package com.github.lyokofirelyte.WC.Gui;
 
 import static com.github.lyokofirelyte.WCAPI.Manager.InventoryManager.createItem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCGui;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 
@@ -23,6 +28,21 @@ public class GuiPlayerSelection extends WCGui {
 	private Runnable run;
 	private int total;
 	
+	private String group;
+	
+	public GuiPlayerSelection(WCMain main, Runnable run, boolean close){
+		
+		super(54, "&4PLAYER SELECTION");
+		this.main = main;
+		
+		this.run = run;
+		this.close = close;
+		this.parent = null;
+		
+		this.group = null;
+		
+	}
+	
 	public GuiPlayerSelection(WCMain main, Runnable run, boolean close, WCGui parent){
 		
 		super(54, "&4PLAYER SELECTION");
@@ -32,22 +52,85 @@ public class GuiPlayerSelection extends WCGui {
 		this.close = close;
 		this.parent = parent;
 		
+		this.group = null;
+		
+	}
+	
+	public GuiPlayerSelection(WCMain main, Runnable run, boolean close, String group){
+		
+		super(54, "&4PLAYER SELECTION");
+		this.main = main;
+		
+		this.run = run;
+		this.close = close;
+		this.parent = null;
+		
+		this.group = group;
+		
+	}
+	
+	public GuiPlayerSelection(WCMain main, Runnable run, boolean close, WCGui parent, String group){
+		
+		super(54, "&4PLAYER SELECTION");
+		this.main = main;
+		
+		this.run = run;
+		this.close = close;
+		this.parent = parent;
+		
+		this.group = group;
+		
 	}
 	
 	@Override
 	public void create(){
 		
-		players = Bukkit.getOnlinePlayers();
-		total = this.players.length;
+		this.players = Bukkit.getOnlinePlayers();
+		this.total = this.players.length;
+		
+		int a = 0;
+		List<Player> playersL = new ArrayList<Player>();
 		
 		for (int i = 0; i < this.total; i++){
 			
 			Player p = this.players[i];
-			addButton(i, InventoryManager.createItem(p.getDisplayName(), new String[] { "&f" + p.getName() }, Material.SKULL_ITEM, 1, 3));
+			
+			if (!(this.group == null)){
+				
+				List<String> groups = Arrays.asList(WCVault.perms.getPlayerGroups(p));
+				
+				if (groups.contains(this.group)){
+					
+					addButton(i, InventoryManager.createItem(p.getDisplayName(), new String[] { "&f" + p.getName() }, Material.SKULL_ITEM, 1, 3));
+					playersL.add(p);
+					a++;
+					
+				}
+				
+			} else {
+				
+				addButton(i, InventoryManager.createItem(p.getDisplayName(), new String[] { "&f" + p.getName() }, Material.SKULL_ITEM, 1, 3));
+				
+			}
 			
 		}
 		
-		addButton(53, createItem("&bRETURN", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
+		String close = "&bRETURN";
+		
+		if (this.parent == null){
+			
+			close = "&bCLOSE";
+			
+		}
+		
+		addButton(53, createItem(close, new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
+		
+		if (!(this.group == null)){
+			
+			this.players = playersL.toArray(this.players);
+			this.total = a;
+			
+		}
 		
 	}
 	
@@ -61,7 +144,15 @@ public class GuiPlayerSelection extends WCGui {
 			
 			if (this.slot == 53){
 				
-				this.main.wcm.displayGui(p, this.parent);
+				if (this.parent == null){
+					
+					p.closeInventory();
+					
+				} else {
+					
+					this.main.wcm.displayGui(p, this.parent);
+					
+				}
 				
 			} else if (this.slot < this.total){
 				
