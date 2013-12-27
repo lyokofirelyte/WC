@@ -34,6 +34,7 @@ import com.github.lyokofirelyte.WC.Commands.WCHome;
 import com.github.lyokofirelyte.WC.Commands.WCInvSee;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WC.Commands.WCNear;
+import com.github.lyokofirelyte.WC.Commands.WCNewMember;
 import com.github.lyokofirelyte.WC.Commands.WCPTP;
 import com.github.lyokofirelyte.WC.Commands.WCPay;
 import com.github.lyokofirelyte.WC.Commands.WCPowerTool;
@@ -417,6 +418,10 @@ public class WCMain extends JavaPlugin {
     getCommand("tpahere").setExecutor(new WCTele(this));
     getCommand("tpall").setExecutor(new WCTele(this));
     getCommand("tpaall").setExecutor(new WCTele(this));
+    
+    getCommand("newmember").setExecutor(new WCNewMember(this));
+    getCommand("nm").setExecutor(new WCNewMember(this));
+    
   }
 
   public void saveYamls() {

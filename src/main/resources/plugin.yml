@@ -331,6 +331,14 @@ commands:
    pay:
       description: WC Pay Command
       usage: /pay
+   newmember:
+      description: WC NM Command
+      permission: wa.staff
+      usage: /newmember
+   nm:
+      description: WC NM Command
+      permission: wa.staff
+      usage: /newmember
 permissions:
     spleef.admin:
         description: Use admin stuff.
