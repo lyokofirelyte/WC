@@ -130,9 +130,9 @@ public class WCMenus implements Listener, CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("root")){
 			
 			colorSelection.put(((Player)sender).getName(), "red");
+			p = ((Player)sender);
 			
 			if (setup == false){
-				p = ((Player)sender);
 				playerSelection.put(p.getName(), "NO"); // We don't want a null pointer here. :D
 				playerTemp.put(p.getName(), "NO");
 				setup = true;

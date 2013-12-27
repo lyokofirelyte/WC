@@ -35,7 +35,7 @@ public class Utils {
 	public static String WC = "§dWC §5// §d";
 	
 	public static void bc(String s){
-		Bukkit.broadcastMessage(WC + Utils.AS(s));
+		Bukkit.broadcastMessage(WC + AS(s));
 	}
 	
 	public static Sound getRandomNote(){
