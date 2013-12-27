@@ -1122,9 +1122,13 @@ public class WCCommands implements CommandExecutor {
     	   
     	   wcp.setParagonBacks(backs - 1);
     	   updatePlayer(wcp, p.getName());
-    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + sender.getName() + " add wc.back");
-    	   Bukkit.getServer().dispatchCommand(sender, "back");
-    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + sender.getName() + " remove wc.back");
+    	   if (!p.isOp()){
+    		   p.setOp(true);
+    		   p.performCommand("back");
+    		   p.setOp(false);
+    	   } else {
+    		   p.performCommand("back");
+    	   }
     	   
 	   break;
 			    	   	
