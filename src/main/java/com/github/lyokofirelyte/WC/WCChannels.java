@@ -180,20 +180,13 @@ public class WCChannels implements CommandExecutor, Listener {
 	  
 	  	Boolean rawr = false;
 	  	
-	  	if (message.contains("http://") || message.contains("https://")){
-	  		
-	  		String[] split = message.split(" ");
-	  		
-	  		for (String s : split){
-	  			
-	  			if (s.startsWith("http") && s.length() > 16){
-	  				
-	  				message = message.replace(s, this.shorten(s));
-	  				
-	  			}
-	  			
+	  	if ((message.contains("http://") || message.contains("https://")) && !message.contains("tinyurl") && !message.contains("bit.ly")){
+	  		String[] split = message.split(" ");	
+	  		for (String s : split){		
+	  			if (s.startsWith("http") && s.length() > 16){		
+	  				message = message.replace(s, shorten(s));		
+	  			}	
 	  		}
-	  		
 	  	}
 	  	
 		for (Player bleh : Bukkit.getOnlinePlayers()){
