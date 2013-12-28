@@ -1368,9 +1368,14 @@ public class WCCommands implements CommandExecutor {
 				}
 			} else {
 				
-				World theEnd = Bukkit.getWorld("world_the_end");
+				final World theEnd = Bukkit.getWorld("world_the_end");
 				
-				theEnd.spawnEntity(new Location(theEnd, -8, 66, -8), EntityType.ENDER_DRAGON);
+				Location loc = p.getLocation();
+				Location end = new Location(Bukkit.getWorld("world_the_end"), -8, 66, -8);
+				
+				p.teleport(end);
+				theEnd.spawnEntity(end, EntityType.ENDER_DRAGON);
+				p.teleport(loc);
 				
 				Bukkit.broadcastMessage(AS(WC + p.getDisplayName() + " &dhas spawned an enderdragon in the end!"));
 				Bukkit.broadcastMessage(AS(WC + "&6&oAnother one will be ready to spawn in 4 hours."));
