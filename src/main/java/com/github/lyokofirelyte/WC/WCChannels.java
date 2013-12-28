@@ -1,5 +1,9 @@
 package com.github.lyokofirelyte.WC;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -175,6 +179,22 @@ public class WCChannels implements CommandExecutor, Listener {
   public void globalChat(Player p, String message){
 	  
 	  	Boolean rawr = false;
+	  	
+	  	if (message.contains("http://") || message.contains("https://")){
+	  		
+	  		String[] split = message.split(" ");
+	  		
+	  		for (String s : split){
+	  			
+	  			if (s.startsWith("http") && s.length() > 16){
+	  				
+	  				message = message.replace(s, this.shorten(s));
+	  				
+	  			}
+	  			
+	  		}
+	  		
+	  	}
 	  	
 		for (Player bleh : Bukkit.getOnlinePlayers()){
 			
@@ -451,5 +471,48 @@ public class WCChannels implements CommandExecutor, Listener {
 	  wcp = pl.wcm.getWCPlayer(player);
 	  wca = pl.wcm.getWCAlliance(alliance);
   }
+  
+  public static String shorten(String URL){
+		
+		String link = "";
+		
+		if (!(URL.startsWith("http"))){
+			
+			URL = "http://" + URL;
+			
+		}
+		
+		int error = 0;
+		
+		try {
+			
+			URL url = new URL("http://www.tinyurl.com/api-create.php?url=" + URL);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			
+			connection.setRequestMethod("GET");
+			
+			if (connection.getResponseCode() != 200){
+				
+				error = connection.getResponseCode();
+				throw new RuntimeException("Failed to shorten link. HTTP error code: " + error);
+				
+			} else {
+				
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				link = reader.readLine();
+				
+			}
+			
+			connection.disconnect();
+			
+		} catch (Exception e){
+			
+			link = "&4&l(&cHTTP Error: " + error + "&4&l)&r";
+			
+		}
+		
+		return link;
+		
+	}
 
 }
