@@ -167,6 +167,41 @@ public class WCCommands implements CommandExecutor {
     	  
       break;
       
+      case "fullprice":
+    	  
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
+    			  int amt = 64;
+    			  int buyPrice = Integer.parseInt(args[1]);
+    			  int sellPrice = Integer.parseInt(args[2]);
+    			  for (int x = 1; x < 6; x++){
+    				  ItemStack i = new ItemStack(p.getItemInHand().getTypeId());
+    				  ItemMeta im = i.getItemMeta();
+    				  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), buyPrice + "", AS("&aSell"), sellPrice + "")));
+    				  im.setDisplayName(AS("&a" + p.getItemInHand().getType().name().toString()));
+    				  i.setItemMeta(im);
+    				  if (x == 5){
+    					  amt = 1;
+    				  } else if (x != 1){
+    					  amt = amt/2;
+    				  }
+    				  if (x == 4){
+        				  buyPrice = buyPrice / 8;
+        				  sellPrice = sellPrice / 8;
+    				  } else {
+        				  buyPrice = buyPrice / 2;
+        				  sellPrice = sellPrice / 2;
+    				  }
+    				  i.setAmount(amt);
+    				  p.getInventory().addItem(i);
+    			  }
+    		  }
+    	  } else {
+    		  s(p, "/wc fullprice <buyPrice> <sellPrice>");
+    	  }
+    	  
+      break;
+      
       case "edit":
     	  
     	  if (p.hasPermission("wa.staff")){
@@ -194,6 +229,19 @@ public class WCCommands implements CommandExecutor {
     		  }
     		  s(p, "Wiped all mails.");
     	  }
+    	  
+      break;
+      
+      case "allowdeathmessage":
+    	  
+    	  if (wcp.getAllowDeathLocation()){
+    		  wcp.setAllowDeathLocation(false);
+    	  } else {
+    		  wcp.setAllowDeathLocation(true);
+    	  }
+    	  
+    	  plugin.wcm.updatePlayerMap(p.getName(), wcp);  
+    	  s(p, "Updated. Wow, you actually use this feature? Glad I didn't waste my time.");
     	  
       break;
       

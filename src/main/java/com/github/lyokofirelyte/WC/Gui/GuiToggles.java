@@ -30,9 +30,10 @@ public class GuiToggles extends WCGui {
 		this.addButton(3, createItem("&bPOKES", new String[] { "&9Toggle pokes" }, Material.STICK));
 		this.addButton(4, createItem("&4PVP", new String[] { "&cToggle PVP Mode" }, Material.DIAMOND_SWORD));
 		this.addButton(5, createItem("&dFIREWORKS", new String[] { "&8Toggle paragon fireworks" }, Material.FIREWORK));
-		this.addButton(6, createItem("&3EMOTES", new String[] { "&aToggle auto-emotes", "on chat" }, Material.CAKE));
+		this.addButton(6, createItem("&3EMOTES", new String[] { "&aToggle auto-emotes", "&aon chat" }, Material.CAKE));
 		this.addButton(7, createItem("&2ROOT SHORTCUT", new String[] { "&3Shift + left click", "&3for root menu" }, Material.ANVIL));
 		this.addButton(8, createItem("&cNAME PLATE", new String[] { "&bToggle alliance nameplate" }, Material.NAME_TAG));
+		this.addButton(9, createItem("&4DEATH LOCATIONS", new String[] { "&bToggle displaying death", "&blocation on death" }, Material.ARROW));
 		this.addButton(13, createItem("&bWATERCLOSET CORE v5", new String[] { "&b< < <" }, Enchantment.DURABILITY, 10, Material.FLINT));
 		
 	}
@@ -85,6 +86,11 @@ public class GuiToggles extends WCGui {
 		case 8:
 			
 			p.performCommand("wc nameplate");
+			break;
+			
+		case 9:
+			
+			p.performCommand("wc allowdeathmessage");
 			break;
 			
 		case 13:
