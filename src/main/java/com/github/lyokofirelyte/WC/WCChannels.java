@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -88,6 +89,10 @@ public class WCChannels implements CommandExecutor, Listener {
   
   @EventHandler(priority = EventPriority.HIGH)
   public void onPlayerChat(AsyncPlayerChatEvent e){
+
+	  if (e.isCancelled()){
+		  return;
+	  }	  
 	  
 	  p = e.getPlayer();
 	  wcp = pl.wcm.getWCPlayer(p.getName());
@@ -106,16 +111,10 @@ public class WCChannels implements CommandExecutor, Listener {
 		  Bukkit.broadcastMessage(AS(p.getDisplayName() + " &dhas formed a patrol (&3" + e.getMessage().replaceAll("&", "") + "&d)."));
 		  s(p, "Talk in patrol chat with /p <message>. Your personal patrol configuration options are in /root -> patrols.");
 	  }
-	  
-	  String globalColor = wcp.getGlobalColor();
 		
-	  if (globalColor == null){
+	  if (wcp.getGlobalColor() == null){
 			wcp.setGlobalColor("7");
 			updatePlayer(wcp, p.getName());
-	  }
-
-	  if (e.isCancelled()){
-		  return;
 	  }
 
 	  if (e.getMessage().startsWith("!stats")){
@@ -183,13 +182,17 @@ public class WCChannels implements CommandExecutor, Listener {
 	  	if ((message.contains("http://") || message.contains("https://")) && !message.contains("tinyurl") && !message.contains("bit.ly")){
 	  		String[] split = message.split(" ");	
 	  		for (String s : split){		
-	  			if (s.startsWith("http") && s.length() > 16){		
+	  			if (s.startsWith("http") && s.length() >= 16){		
 	  				message = message.replace(s, shorten(s));		
 	  			}	
 	  		}
 	  	}
 	  	
 		for (Player bleh : Bukkit.getOnlinePlayers()){
+			
+			if (!p.hasPermission("wa.staff") && !p.hasPermission("wa.citizen")){
+				message = message.replaceAll("&", "");
+			}
 			
 			wcp = pl.wcm.getWCPlayer(bleh.getName());
 			wcpCurrent = pl.wcm.getWCPlayer(p.getName());
@@ -205,46 +208,44 @@ public class WCChannels implements CommandExecutor, Listener {
 			
 			if (lastChat != null && lastChat.equals(p)){
 				rawr = true;
-				bleh.sendMessage(AS("&8>> " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message));
+				message = "&8>> " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message;
+				
 			} else {
 				
-				String prefix = WCVault.chat.getPlayerPrefix(p);
+				String prefix;
 				String suffix = WCVault.chat.getPlayerSuffix(p);
-	
+				
+				List<String> creativeWorlds = Arrays.asList("WACP", "Tripolis", "Keopi", "Alliance", "Syracuse", "Olympia");
+				
+				if (creativeWorlds.contains(bleh.getWorld().getName())){
+					prefix = wcpCurrent.getCreativeRank();
+				} else {	
+					prefix = WCVault.chat.getPlayerPrefix(p);
+				}
+
 				if (wcpCurrent.getPVP()){
 					
-					bleh.sendMessage(AS("&6PvP &f// &6" + wcpCurrent.getNick() + "&f: &" + wcp.getGlobalColor() + message));
+					message = "&6PvP &f// &6" + wcpCurrent.getNick() + "&f: &" + wcp.getGlobalColor() + message;
 					
 				} else if (prefix.toLowerCase().contains("guest")){
 					
-					bleh.sendMessage(AS("&7Guest &f// &7" + wcpCurrent.getNick() + "&f: &" + wcp.getGlobalColor() + message));
+					message = "&7Guest &f// &7" + wcpCurrent.getNick() + "&f: &" + wcp.getGlobalColor() + message;
 						
 				} else if (prefix.toLowerCase().equals("")){
 					
-					bleh.sendMessage(AS("&7M &f// " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message));
+					message = "&7M &f// " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message;
 					
+				}
+
+				if (wcp.getTimeCode()){
+					String time = "&f[" + getTime() + "&f] ";
+					message = time + prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor() + message; 	
 				} else {
-					
-					if (p.hasPermission("wa.staff") || p.hasPermission("wa.citizen")){
-							
-						if (wcp.getTimeCode()){
-							String time = "&f[" + getTime() + "&f] ";
-							bleh.sendMessage(AS(time + prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor() + message));  
-						} else {
-							bleh.sendMessage(AS(prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor() + message));  
-						}
-							
-					} else {
-							
-						if (wcp.getTimeCode()){
-							String time = "&f[" + getTime() + "&f] ";
-							bleh.sendMessage(AS(time + prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor()) + message); 	
-						} else {
-							bleh.sendMessage(AS(prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor()) + message);  
-						}
-					}
+					message = prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor() + message;  
 				}
 			}
+
+			bleh.sendMessage(AS(message));
 		}
 	  
 		lastChat = p;
