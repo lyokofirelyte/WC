@@ -62,8 +62,7 @@ public class WCCommands implements CommandExecutor {
 
   @SuppressWarnings("deprecation")
   public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
-	 	  
-  
+
 	  if (cmd.getName().equalsIgnoreCase("google")){
 		  if (args.length == 0){
 			  sender.sendMessage(AS(WC + "Usage: /google <query>"));

@@ -2,28 +2,25 @@ package com.github.lyokofirelyte.WC.Commands;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.AS;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
-public class WCAFK implements CommandExecutor {
+public class WCAFK {
 	
 	WCMain pl;
 	public WCAFK(WCMain instance){
-	pl = instance;
+		pl = instance;
     }
 	
-	public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
-		  
-		if (cmd.getName().toLowerCase().equals("afk")){
-			
-			Player p = ((Player)sender);
-			
+	@WCCommand(aliases = {"afk", "wcafk"}, help = "Toggles your AFK status!")
+	public void afkToggle(Player p, List<String> args){
+					
 			if (pl.afkers.contains(p)){
 				pl.afkers.remove(p);
 				Bukkit.broadcastMessage(AS("&7&o" + p.getDisplayName() + " &7&ois no longer afk. They were afk for " + Math.round(pl.afkTimer.get(p.getName()) / 60) + " &7&ominutes."));
@@ -34,7 +31,7 @@ public class WCAFK implements CommandExecutor {
 				}
 			    pl.afkers.remove(p);
 				Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent(p));
-				return true;
+				return;
 			}
 	
 			Bukkit.broadcastMessage(AS("&7&o" + p.getDisplayName() + " &7&ois afk."));
@@ -48,9 +45,4 @@ public class WCAFK implements CommandExecutor {
 			pl.afkers.add(p);
 			Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent(p));
 		}
-		
-		return true;
-
-	}
-
 }

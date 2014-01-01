@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -80,7 +82,7 @@ import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 import com.github.lyokofirelyte.WCAPI.Manager.RebootManager;
 
-public class WCMain extends JavaPlugin {
+public class WCMain extends JavaPlugin implements CommandExecutor {
 	
   public WCVault vaultMgr = new WCVault(this);
   
@@ -90,6 +92,7 @@ public class WCMain extends JavaPlugin {
   public File helpFile;
   public File file;
   public File systemFile;
+  public File pluginFile;
   
   public YamlConfiguration config;
   public YamlConfiguration datacore;
@@ -97,6 +100,7 @@ public class WCMain extends JavaPlugin {
   public YamlConfiguration help;
   public YamlConfiguration yaml;
   public YamlConfiguration systemYaml;
+  public YamlConfiguration pluginYaml;
 
   private String url;
   private String username;
@@ -211,17 +215,6 @@ public class WCMain extends JavaPlugin {
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
 	  loadMarkkitInvs();
-	  
-	  try {
-		  
-		  spawnLoc = new Location(Bukkit.getWorld(datacore.getString("spawnLoc.world")), datacore.getInt("spawnLoc.x"), datacore.getInt("spawnLoc.y"), datacore.getInt("spawnLoc.z"));
-		  
-	  } catch (Exception e){
-		  
-		  getLogger().severe("Failed to set the spawnLoc! Set this by /wc setspawnloc!");
-		  
-	  }
-	  
   }
   
   public void saveMarkkitInvs(){
@@ -287,11 +280,6 @@ public class WCMain extends JavaPlugin {
 		  wcs.getPatrolCrystal().remove();
 	  }
 	  
-	  datacore.set("spawnLoc.world", spawnLoc.getWorld().getName());
-	  datacore.set("spawnLoc.x", spawnLoc.getX());
-	  datacore.set("spawnLoc.y", spawnLoc.getY());
-	  datacore.set("spawnLoc.z", spawnLoc.getZ());
-	  
 	  saveMarkkitInvs();
 	  saveYamls();
 	  
@@ -308,9 +296,13 @@ public class WCMain extends JavaPlugin {
 	    
 	  getLogger().info("WaterCloset has been disabled.");
   }
+
   
   private void registerCommands() {
 	  
+	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class));
+	api.reg.registerCommands(commandClasses, "WCMain"); // IT'S SO SEXY OH BBY
+
     getCommand("watercloset").setExecutor(new WCCommands(this));
     getCommand("wc").setExecutor(new WCCommands(this));
     getCommand("blame").setExecutor(new WCCommands(this));
@@ -335,8 +327,6 @@ public class WCMain extends JavaPlugin {
     
     getCommand("ptp").setExecutor(new WCPTP(this));
     
-    getCommand("ds").setExecutor(new WCDisco(this));
-    
     getCommand("suicide").setExecutor(new WCSuicide(this));
     
     getCommand("boots").setExecutor(new WCHat(this));
@@ -356,7 +346,7 @@ public class WCMain extends JavaPlugin {
     getCommand("stringbuilder").setExecutor(new TimeStampEX(this));
     getCommand("itemname").setExecutor(new TimeStampEX(this));
 
-    getCommand("afk").setExecutor(new WCAFK(this));
+    //getCommand("afk").setExecutor(new WCAFK(this));
     
     getCommand("gm").setExecutor(new WCCheats(this));
     getCommand("i").setExecutor(new WCCheats(this));
@@ -478,7 +468,7 @@ public class WCMain extends JavaPlugin {
     String files = "config help games datacore mail system";
     String[] flatFiles = files.split(" ");
     
-    for (int x = 0; x <= 4; x++){
+    for (int x = 0; x <= 5; x++){
     	file = new File("./plugins/WaterCloset/" + flatFiles[x] + ".yml");
     	if (!file.exists()){
     		file.createNewFile();
@@ -505,6 +495,9 @@ public class WCMain extends JavaPlugin {
 	    		systemYaml = yaml;
 	    		systemFile = file;
 	    		break;
+	    	case 5:
+	    		pluginYaml = yaml;
+	    		pluginFile = file;
     	}
     }
   }
