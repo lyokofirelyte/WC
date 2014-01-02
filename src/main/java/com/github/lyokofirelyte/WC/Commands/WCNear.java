@@ -3,30 +3,27 @@ package com.github.lyokofirelyte.WC.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
 
-public class WCNear implements CommandExecutor {
+public class WCNear{
 
 	WCMain pl;
 	public WCNear(WCMain instance){
 	pl = instance;
     }
 
-	  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
+	@WCCommand(aliases = {"near"}, help = "List of players within 200 blocks", max = 0, perm = "wa.divine")
+	  public void onNear(Player sender, String[] args){
 		  
 		  Player p = ((Player)sender);
-		  
-		  if (cmd.getName().toLowerCase().equals("near")){
 			  
 			  List<String> entities = new ArrayList<String>();
 			  
@@ -51,10 +48,11 @@ public class WCNear implements CommandExecutor {
 			  } else {
 				  s2(p, "none");
 			  }
-		  }
-		  
-		  if (cmd.getName().toLowerCase().equals("radar")){
-			  
+	}
+	
+	@WCCommand(aliases = {"radar"}, help = "List of monsters within 20 blocks", max = 0, perm = "wc.townsman")
+	public void onRadar(Player p, String[] args){
+		
 			  List<String> entities = new ArrayList<String>();
 			  
 			  for (Entity e : p.getNearbyEntities(20D, 20D, 20D)){
@@ -78,9 +76,8 @@ public class WCNear implements CommandExecutor {
 			  } else {
 				  s2(p, "none");
 			  }
-		  }
-		  
-		  return true;
-	  }
+		
+		  return;
+	}
 }
 

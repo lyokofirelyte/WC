@@ -97,10 +97,6 @@ commands:
    ptp:
       description: WC Patrol TP Command
       usage: /ptp <player>
-   seen:
-      description: WC Seen Command
-      usage: /ptp <player>
-      permission: wa.settler
    hat:
       description: WC Hawt Hat Command
       usage: /hat

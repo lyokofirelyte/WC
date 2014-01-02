@@ -11,9 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -24,38 +21,35 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
 
-public class WCCheats implements CommandExecutor {
+public class WCCheats{
 
 	WCMain pl;
 	public WCCheats(WCMain instance){
     this.pl = instance;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	@WCCommand(aliases = {"top"}, desc = "teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2")
+	public void onTop(Player p, String[] args){
 
-		Player p = ((Player)sender);
-		
-		switch (cmd.getName().toLowerCase()){
-		
-			case "top":
-				
 				if (p.getWorld().getHighestBlockYAt(p.getLocation()) != -1){
 					p.teleport(new Location(p.getWorld(), p.getLocation().getX(), p.getWorld().getHighestBlockYAt(p.getLocation())+1, p.getLocation().getZ(), p.getLocation().getYaw(), p.getLocation().getPitch()));	
 				} else {
 					s(p, "No location found!");
 				}
 				
-			break;
-		
-			case "sm":
-				
+	}
+	
+	@SuppressWarnings("deprecation")
+	@WCCommand(aliases = {"top"}, desc = "Spawn Mob", help = "/sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>", max = 9, perm = "wa.mod2")
+	public void onSM(Player p, String[] args){
+
 				String armors = "diamond iron chain gold leather";
 				int x = 0;
 				
@@ -65,7 +59,6 @@ public class WCCheats implements CommandExecutor {
 					s2(p, "&dUse a '_' for spaces. Location can be 'aim' or a player.");
 					s2(p, "&dFor more passengers, seperate different mobs with a ','. Use # if you don't want a passenger.");
 					s2(p, "&dYou can use /sm <type> ## to indicate no extra features. Example: /sm zombie ##");
-					break;
 				}
 			
 				for (EntityType e : EntityType.values()){
@@ -164,10 +157,11 @@ public class WCCheats implements CommandExecutor {
 					}
 				}
 				
-			break;
-		
-			case "sit": // Yeah, this is pretty ghetto.
-				
+	}
+	
+	@WCCommand(aliases = {"sit"}, desc = "Like a chair. Be warned: It's ghetto. :D", help = "/sit")
+	private void onSit(Player p, String[] args){
+	
 				if (p.isInsideVehicle()){
 					p.eject();
 				} else {
@@ -178,10 +172,10 @@ public class WCCheats implements CommandExecutor {
 					e.setPassenger(p);	
 				}
 				
-			break;
-		
-			case "dis":
-				
+	}
+	
+	@WCCommand(aliases = {"dis"}, desc = "Disguise", help = "/dis <something>", perm = "wa.staff")
+	public void onDis(Player p, String[] args){
 				if (args.length == 0){
 					p.setCustomName(p.getName());
 					s(p, "Disguised as yourself! Wait a minute...");
@@ -190,10 +184,11 @@ public class WCCheats implements CommandExecutor {
 					s(p, "Disguised as " + args[0] + "!");
 				}
 				
-			break;
-		
-			case "wlist":
-				
+	}
+	
+	@WCCommand(aliases = {"wlist"}, desc = "World List", help = "/wlist")
+	public void onWList(Player p, String[] args){
+
 				for (World w : Bukkit.getWorlds()){
 					StringBuilder sb = new StringBuilder();
 					sb.append("&6" + w.getName() + " ");
@@ -206,10 +201,11 @@ public class WCCheats implements CommandExecutor {
 					s2(p, sb2.replaceAll(" ", "&8, "));
 				}
 				
-			break;
-			
-			case "vanish": case "v":
-				
+	}
+	
+	@WCCommand(aliases = {"vanish", "v"}, desc = "AN ELABORATE VANISH HOAX", help = "/vanish", perm = "wa.staff")
+	public void onVanish(Player p, String[] args){
+
 				WCSystem wcs = pl.wcm.getWCSystem("system");
 				List<String> vanished = wcs.getVanishedPlayers();
 				
@@ -234,10 +230,11 @@ public class WCCheats implements CommandExecutor {
 				wcs.setVanishedPlayers(vanished);
 				pl.wcm.updateSystem("system", wcs);
 	
-			break;
-			
-			case "world":
-			
+	}
+	
+	@WCCommand(aliases = {"world"}, desc = "Warp to specified world", help = "/world <world>", max = 1, perm = "wa.mod2")
+	public void onWorld(Player p, String[] args){
+
 				if (args.length != 1){
 					s(p, "/world <world>");
 				} else if (Bukkit.getWorld(args[0]) == null){
@@ -249,10 +246,11 @@ public class WCCheats implements CommandExecutor {
 					s(p, "Inter-dimensional temporal shift completed.");
 				}
 				
-			break;
-		
-			case "feed":
-				
+	}
+	
+	@WCCommand(aliases = {"feed"}, desc = "Om Nom Nom", help = "/feed", perm = "wa.emperor")
+	public void onWorld1(Player p, String[] args){
+
 				if (args.length == 0){
 					p.setFoodLevel(20);
 					p.setSaturation(3);
@@ -262,13 +260,13 @@ public class WCCheats implements CommandExecutor {
 					s(p, "Player not found!");
 				}
 			
-			break;
-		
-			case "gm":
+	}
 	
+	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]")
+	public void onGM(Player p, String[] args){
+
 				if (args.length == 0){
 					s(p, "/gm s || c || a");
-					break;
 				}
 				
 				GameMode gm;
@@ -279,14 +277,15 @@ public class WCCheats implements CommandExecutor {
 					case "s": gm = GameMode.SURVIVAL; fly = false; break;
 					case "c": gm = GameMode.CREATIVE; fly = true; break;
 					case "a": gm = GameMode.ADVENTURE; fly = false; break;
-					default: s(p, "/gm s || c || a"); return true;
+					default: s(p, "/gm s || c || a"); 
+					
+					return;
 				}
 				
 				if (args.length == 2){
 					
 					if (Bukkit.getPlayer(args[1]) == null){
 						s(p, "That player is not online. /gm <s || c || a> <player>");
-						break;
 					}
 					
 					Player q = Bukkit.getPlayer(args[1]);
@@ -295,7 +294,7 @@ public class WCCheats implements CommandExecutor {
 					q.setFlying(fly);
 					s(q, "GM updated.");
 					s(p, "GM updated for " + q.getDisplayName());
-					return true;
+					return;
 				}
 				
 				p.setGameMode(gm);
@@ -303,17 +302,16 @@ public class WCCheats implements CommandExecutor {
 				p.setFlying(fly);
 				s(p, "GM updated.");
 				
-			break;
-			
-			case "fly":
-				
+	}
+	
+	@WCCommand(aliases = "fly", desc = "It's all in the name", help = "/fly", perm = "wa.mod2")
+	private void onFly(Player p, String[] args){
 				Player q;
 				
 				if (args.length == 1){
 					
 					if (Bukkit.getPlayer(args[0]) == null){
 						s(p, "That player is not online.");
-						break;
 					}
 					
 					q = Bukkit.getPlayer(args[0]);
@@ -332,13 +330,14 @@ public class WCCheats implements CommandExecutor {
 					s(q, "Fly mode &aenabled&d.");
 				}
 				
-			break;
-			
-			case "i":
-				
+	}
+	
+	@SuppressWarnings("deprecation")
+	@WCCommand(aliases = {"i"}, desc = "Give an item to yourself", help = "i <item>", max = 1, perm = "wa.mod2")
+	private void onI(Player p, String[] args){
+
 				if (args.length == 0 || p.getInventory().firstEmpty() == -1){
 					s(p, "/i <item> (must have room!)");
-					break;
 				}
 
 				for (Material m : Material.values()){
@@ -351,10 +350,11 @@ public class WCCheats implements CommandExecutor {
 					}
 				}
 				
-			break;
-			
-			case "ci":
-				
+	}
+	
+	@WCCommand(aliases = {"ci"}, desc = "Clear Inventory (or restor inventory. Results may vary. TM)", help = "/ci [u]")
+	private void onCI(Player p, String[] args){
+
 				if (args.length == 0){
 					pl.backupInvs.put(p.getName(), p.getInventory().getContents());
 					p.getInventory().clear();
@@ -368,18 +368,20 @@ public class WCCheats implements CommandExecutor {
 					s(p, "No backup inventory found.");
 				}
 				
-			break;	
-			
-			case "more":
-				
+	}	
+	
+	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.more2")
+	private void onMore(Player p, String[] args){
+
 				if (p.getInventory().getItemInHand() != null){
 					p.getInventory().getItemInHand().setAmount(64);
 				}
 				
-			break;
-			
-			case "back":
-				
+	}
+	
+	@WCCommand(aliases = {"back"}, desc = "Teleport you to your last location", help = "/back", perm = "wa.mod2")
+	private void onBack(Player p, String[] args){
+
 				WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 				if (wcp.getLastLocation() != null){
 					Location l = p.getLocation();
@@ -391,9 +393,10 @@ public class WCCheats implements CommandExecutor {
 					s(p, "No previous location found!");
 				}
 				
-			break;
-			
-			case "tppos":
+	}
+	
+	@WCCommand(aliases = {"tppos"}, desc = "Teleport yourself to a specified coordinates", help = "/tppos <x> <y> <z>", min = 3 , max = 3, perm = "wa.mod2")
+	private void onTPPos(Player p, String[] args){
 				
 				if (args.length != 3){
 					s(p, "/tppos x y z");
@@ -403,10 +406,11 @@ public class WCCheats implements CommandExecutor {
 					s(p, "/tppos x y z");
 				}
 			
-			break;
-			
-			case "speed":
-				
+	}
+	
+	@WCCommand(aliases = {"speed"}, desc = "Adjust your fly/walk speed", help = "/speed <1-10>", min = 1, max = 1, perm = "wa.mod2")
+	private void onSpeed(Player p, String[] args){
+
 				if (args.length != 1 || !Utils.isInteger(args[0]) || Integer.parseInt(args[0]) > 10 || Integer.parseInt(args[0]) < 0){
 					s(p, "/speed <#>");
 				} else {
@@ -418,10 +422,11 @@ public class WCCheats implements CommandExecutor {
 					s(p, "Speed updated.");
 				}
 				
-			break;
-			
-			case "killall":
-				
+	}
+	
+	@WCCommand(aliases = {"killall"}, desc = "Kill all mobs in a 1000 block radius", help = "/killall", perm = "wa.mod")
+	private void onKillAll(Player p, String[] args){
+	
 				int radius = 1000;
 				int killed = 0;
 				
@@ -437,12 +442,8 @@ public class WCCheats implements CommandExecutor {
 				}
 				
 				s(p, "Killed &6" + killed + " &dmobs!");
-			
-			break;
+
 		}
-		
-		return true;
-	}
 
 	@SuppressWarnings("deprecation")
 	private void formMob(Player p, EntityType e, int health, String nameTag, String armorType, Material m, PotionEffectType pe, String location, List<EntityType> goodPassengers, int amount) {

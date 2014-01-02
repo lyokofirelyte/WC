@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 
+
+
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -12,37 +15,34 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 
-public class TraceFW implements CommandExecutor{
+public class TraceFW{
 	
 	WCMain pl;
 	public TraceFW(WCMain instance){
 	pl = instance;
     }
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-	
-	    if (cmd.getName().equals("bday")){
+	@WCCommand(aliases = {"bday"}, desc = "nope.jpg", help = "nope.png", perm = "wa.admin")
+	public void onBday(Player sender, String[] args){
 	  	  
 		  	  if (args.length == 1 && args[0].equals("clr") && sender.hasPermission("wa.admin")){
 		  		  bday(Bukkit.getWorld("world2"), true);
-		  		  return true;
+		  		  return;
 		  	  }
 		  	  
 		  	  if (sender.hasPermission("wa.admin")){
 		  		  bday(Bukkit.getWorld("world2"), false);
 		  	  }
-	    }
 	
-		return true;
+		return;
 	}
 	
 	public void bday(final World w, Boolean clr) {

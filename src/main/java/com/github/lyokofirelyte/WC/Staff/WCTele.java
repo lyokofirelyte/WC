@@ -1,18 +1,16 @@
 package com.github.lyokofirelyte.WC.Staff;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
-public class WCTele implements CommandExecutor {
+public class WCTele {
 
 	WCMain pl;
 	public WCTele(WCMain instance){
@@ -25,13 +23,11 @@ public class WCTele implements CommandExecutor {
 	WCPlayer wcpCurrent;
 	Player q;
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		Player p = ((Player)sender);
-		
-		if (checks.contains(":" + cmd.getName().toLowerCase() + ":")){
+	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere")
+	public void onTP(Player p, String[] args, String cmd){
+
 			wcp = pl.wcm.getWCPlayer(p.getName());
-			que = cmd.getName().toLowerCase();
+			que = cmd.toLowerCase();
 			if (que.equals("tpa")){
 				if (!wcp.getTpaRequest().equals("none")){
 					if (Bukkit.getPlayer(wcp.getTpaRequest()) == null){
@@ -61,17 +57,16 @@ public class WCTele implements CommandExecutor {
 				}
 			}
 			if (que.equals("tpa") && !p.hasPermission("wa.continental")){
-				return true;
+				return;
 			}
 			if (que.equals("tpahere") && !p.hasPermission("wa.immortal")){
-				return true;
+				return;
 			}
-			if (!argsCheck(1, "/" + cmd.getName().toLowerCase() + " &d<player>", p, args) || !playerCheck(args[0])){
-				return true;
+			if (!argsCheck(1, "/" + cmd.toLowerCase() + " &d<player>", p, args) || !playerCheck(args[0])){
+				return;
 			}
-		}
-		  
-		switch (cmd.getName().toLowerCase()){
+			
+		switch (cmd.toLowerCase()){
 		
 			case "tp":
 				
@@ -148,7 +143,7 @@ public class WCTele implements CommandExecutor {
 		
 		}
 		
-		return true;
+		return;
 	}
 	
 	public Boolean argsCheck(int valid, String error, Player p, String[] args){

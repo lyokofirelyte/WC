@@ -9,9 +9,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -27,6 +25,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 
 public class StaticField extends JavaPlugin
   implements CommandExecutor, Listener
@@ -45,11 +44,8 @@ public class StaticField extends JavaPlugin
     return this.taskID;
   }
 
-  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args)
-  {
-
-    switch (cmd.getName()){
-    case "ff": case "forcefield":
+  @WCCommand(aliases = {"forcefield", "ff"}, help = "Generate a forcefield around you", perm = "ff.use")
+  public void onForcefield(final Player sender, String[] args){
 
         List<String> forceUsers = this.plugin.datacore.getStringList("ForceField.Users");
 
@@ -90,15 +86,10 @@ public class StaticField extends JavaPlugin
           if (this.plugin.datacore.getBoolean("GUI")) {
             sender.sendMessage(this.prefix + "FORCEFIELD OFF!");
           }
-          return true;
-        }
+          return;
+        }        
 
-        break;
-      }
-
-          
-
-    return true;
+    return;
   }
 
   @EventHandler(priority=EventPriority.NORMAL)

@@ -2,14 +2,13 @@ package com.github.lyokofirelyte.WC.Commands;
 
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WC.WCMain;
 
-public class WCHelp implements CommandExecutor {
+public class WCHelp{
 	
 	String WC = "�dWC �5// �d";
 	
@@ -20,15 +19,14 @@ public class WCHelp implements CommandExecutor {
 	
 	public List <String> WCHelpMail;
 
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-	
-		if (cmd.getName().equalsIgnoreCase("search")){
+	@WCCommand(aliases = {"search"}, help = "Perform a search.")
+	public void onSearch(Player sender, String[] args){
 			
 			WCHelpMail = plugin.help.getStringList("WC.Mail");
 			
 			if (args.length == 0){
 				sender.sendMessage(WC + "Type /search <query>.");
-				return true;
+				return;
 			}
 			
 			int x = 0;
@@ -49,9 +47,7 @@ public class WCHelp implements CommandExecutor {
 			
 			
 			sender.sendMessage("�7�o" + x + " �7�oresult(s) found.");
-		}
-	
 
-		return true;
+		return;
 	}
 }

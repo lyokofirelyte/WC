@@ -12,9 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -28,8 +25,9 @@ import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 
-public class WCSEEKRITPARTAY implements CommandExecutor, Listener {
+public class WCSEEKRITPARTAY implements Listener {
 	
 	WCMain pl;
 	public WCSEEKRITPARTAY(WCMain instance){
@@ -73,19 +71,20 @@ public class WCSEEKRITPARTAY implements CommandExecutor, Listener {
 		}
 	}
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	@WCCommand(aliases = {"partyfw"}, desc = "nope.jpeg", help = "nope.png", perm = "wa.admin")
+	public void onPartyFW(Player sender, String[] args){
 		  
-		if (label.equalsIgnoreCase("partyfw") && sender.getName().equals("Hugh_Jasses")){
+		if (sender.getName().equals("Hugh_Jasses")){
 			if (args.length == 1 && args[0].equals("clr")){
 				clr();
-				return true;
+				return;
 			}
 			party();
 			words();
-		} else if (label.equalsIgnoreCase("jesse") && sender.getName().equals("Hugh_Jasses")){
+		} else if (sender.getName().equals("Hugh_Jasses")){
 			jesse();
 		}
-		return true;
+		return;
 	}
 	
 	public void clr(){
@@ -215,6 +214,7 @@ public class WCSEEKRITPARTAY implements CommandExecutor, Listener {
 		}
 	}
 	
+	@WCCommand(aliases = {"jesse"}, desc = "nope.gif", help = "nope.json", perm = "wa.admin")
 	public void jesse(){
 		
 		Location lowerRing = new Location(Bukkit.getWorld("creative"), -1159, 35, 331);

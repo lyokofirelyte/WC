@@ -41,7 +41,6 @@ import com.github.lyokofirelyte.WC.Commands.WCPTP;
 import com.github.lyokofirelyte.WC.Commands.WCPay;
 import com.github.lyokofirelyte.WC.Commands.WCPowerTool;
 import com.github.lyokofirelyte.WC.Commands.WCRanks;
-import com.github.lyokofirelyte.WC.Commands.WCReboot;
 import com.github.lyokofirelyte.WC.Commands.WCReport;
 import com.github.lyokofirelyte.WC.Commands.WCSell;
 import com.github.lyokofirelyte.WC.Commands.WCSoar;
@@ -300,136 +299,8 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   
   private void registerCommands() {
 	  
-	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class));
+	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class, WCSeen.class, WCWB.class, WCSoar.class, WCNear.class, WCSpawn.class, StaticField.class, WCSell.class, WCPay.class, TraceFW.class, WCRanks.class, WCReport.class, WCMail.class, WCHelp.class, WCMenus.class, WCInvSee.class, WCBal.class, WCNewMember.class, WCPowerTool.class, WCPTP.class, WCSuicide.class, WCSudo.class, WCWarps.class, WCChannels.class, TimeStampEX.class, WCSEEKRITPARTAY.class, WCHat.class, WCCheats.class, WACommandEx.class, WCCommands.class, WCHome.class, WCTele.class));
 	api.reg.registerCommands(commandClasses, "WCMain"); // IT'S SO SEXY OH BBY
-
-    getCommand("watercloset").setExecutor(new WCCommands(this));
-    getCommand("wc").setExecutor(new WCCommands(this));
-    getCommand("blame").setExecutor(new WCCommands(this));
-    getCommand("member").setExecutor(new WCCommands(this));
-    getCommand("google").setExecutor(new WCCommands(this));
-    getCommand("ping").setExecutor(new WCCommands(this));
-
-    getCommand("p").setExecutor(new WCChannels(this));
-    
-    getCommand("seen").setExecutor(new WCSeen(this));
-    
-    getCommand("wb").setExecutor(new WCWB(this));
-    getCommand("workbench").setExecutor(new WCWB(this));
-    
-    getCommand("partyfw").setExecutor(new WCSEEKRITPARTAY(this));
-    getCommand("jesse").setExecutor(new WCSEEKRITPARTAY(this));
-    
-    getCommand("soar").setExecutor(new WCSoar(this));
-    
-    getCommand("pt").setExecutor(new WCPowerTool(this));
-    getCommand("powertool").setExecutor(new WCPowerTool(this));
-    
-    getCommand("ptp").setExecutor(new WCPTP(this));
-    
-    getCommand("suicide").setExecutor(new WCSuicide(this));
-    
-    getCommand("boots").setExecutor(new WCHat(this));
-    getCommand("leggings").setExecutor(new WCHat(this));
-    getCommand("chestplate").setExecutor(new WCHat(this));
-    getCommand("hat").setExecutor(new WCHat(this));
-    
-    getCommand("waa").setExecutor(new WACommandEx(this));
-    getCommand("nick").setExecutor(new WACommandEx(this));
-    getCommand("rn").setExecutor(new WACommandEx(this));
-    getCommand("list").setExecutor(new WACommandEx(this));
-    
-    getCommand("sudo").setExecutor(new WCSudo(this));
-
-    getCommand("timestamp").setExecutor(new TimeStampEX(this));
-    getCommand("getnick").setExecutor(new TimeStampEX(this));
-    getCommand("stringbuilder").setExecutor(new TimeStampEX(this));
-    getCommand("itemname").setExecutor(new TimeStampEX(this));
-
-    //getCommand("afk").setExecutor(new WCAFK(this));
-    
-    getCommand("gm").setExecutor(new WCCheats(this));
-    getCommand("i").setExecutor(new WCCheats(this));
-    getCommand("fly").setExecutor(new WCCheats(this));
-    getCommand("more").setExecutor(new WCCheats(this));
-    getCommand("ci").setExecutor(new WCCheats(this));
-    getCommand("tppos").setExecutor(new WCCheats(this));
-    getCommand("speed").setExecutor(new WCCheats(this));
-    getCommand("back").setExecutor(new WCCheats(this));
-    getCommand("feed").setExecutor(new WCCheats(this));
-    getCommand("killall").setExecutor(new WCCheats(this));
-    getCommand("wlist").setExecutor(new WCCheats(this));
-    getCommand("world").setExecutor(new WCCheats(this));
-    getCommand("v").setExecutor(new WCCheats(this));
-    getCommand("vanish").setExecutor(new WCCheats(this));
-    getCommand("dis").setExecutor(new WCCheats(this));
-    getCommand("sm").setExecutor(new WCCheats(this));
-    getCommand("sit").setExecutor(new WCCheats(this));
-    getCommand("top").setExecutor(new WCCheats(this));
-
-    getCommand("near").setExecutor(new WCNear(this));
-    getCommand("radar").setExecutor(new WCNear(this));
-    
-    getCommand("msg").setExecutor(new WCChannels(this));
-    getCommand("tell").setExecutor(new WCChannels(this));
-    getCommand("t").setExecutor(new WCChannels(this));
-    getCommand("r").setExecutor(new WCChannels(this));
-    getCommand("l").setExecutor(new WCChannels(this));
-    getCommand("o").setExecutor(new WCChannels(this));
-    getCommand("wcstats").setExecutor(new WCChannels(this));
-    
-    getCommand("spawn").setExecutor(new WCSpawn(this));
-    getCommand("s").setExecutor(new WCSpawn(this));
-
-    getCommand("forcefield").setExecutor(new StaticField(this));
-    getCommand("ff").setExecutor(new StaticField(this));
-    
-    getCommand("home").setExecutor(new WCHome(this));
-    getCommand("sethome").setExecutor(new WCHome(this));
-    getCommand("remhome").setExecutor(new WCHome(this));
-    getCommand("delhome").setExecutor(new WCHome(this));
-    
-    getCommand("sell").setExecutor(new WCSell(this));
-    
-    getCommand("pay").setExecutor(new WCPay(this));
-    
-    getCommand("bday").setExecutor(new TraceFW(this));
-    
-    getCommand("warp").setExecutor(new WCWarps(this));
-    getCommand("w").setExecutor(new WCWarps(this));
-    getCommand("setwarp").setExecutor(new WCWarps(this));
-    getCommand("remwarp").setExecutor(new WCWarps(this));
-    getCommand("delwarp").setExecutor(new WCWarps(this));
-    
-    getCommand("rankup").setExecutor(new WCRanks(this));
-    
-    getCommand("report").setExecutor(new WCReport(this));
-    
-    getCommand("mail").setExecutor(new WCMail(this));
-    
-    getCommand("search").setExecutor(new WCHelp(this));
-
-    getCommand("root").setExecutor(new WCMenus(this));
-
-    getCommand("invsee").setExecutor(new WCInvSee(this));
-   
-    getCommand("reboot").setExecutor(new WCReboot(this));
-    
-    getCommand("bal").setExecutor(new WCBal(this));
-    getCommand("balance").setExecutor(new WCBal(this));
-    
-    getCommand("qc").setExecutor(new WCMenus(this));
-    
-    getCommand("tp").setExecutor(new WCTele(this));
-    getCommand("tphere").setExecutor(new WCTele(this));
-    getCommand("tpa").setExecutor(new WCTele(this));
-    getCommand("tpahere").setExecutor(new WCTele(this));
-    getCommand("tpall").setExecutor(new WCTele(this));
-    getCommand("tpaall").setExecutor(new WCTele(this));
-    
-    getCommand("newmember").setExecutor(new WCNewMember(this));
-    getCommand("nm").setExecutor(new WCNewMember(this));
-    
   }
 
   public void saveYamls() {

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,8 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 
- public class WCInvSee implements CommandExecutor, Listener {
+ public class WCInvSee implements Listener {
 
 	WCMain plugin;
 	public WCInvSee(WCMain instance){
@@ -27,20 +25,19 @@ import com.github.lyokofirelyte.WC.WCMain;
 	
 	public List<String> invUsers = new ArrayList<String>();
 	
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		if (label.equals("invsee")){
+	@WCCommand(aliases = {"invsee"}, help = "/invee <player>", min = 1, max = 1, perm = "wa.mod")
+	public void onInvSee(Player sender, String[] args){
+
 			Player p = ((Player)sender);
 			
 			if (args.length == 0){
 				WCMain.s(p, "Try /invsee <player>");
-				return true;
+				return;
 			}
 			
 			if (Bukkit.getPlayer(args[0]) == null){
 				WCMain.s(p, "That player is not online!");
-				return true;
+				return;
 			}
 			
 			final Inventory inv = Bukkit.getPlayer(args[0]).getInventory();
@@ -61,9 +58,6 @@ import com.github.lyokofirelyte.WC.WCMain;
 			invUsers.add(p.getName());
 			WCMain.s(p, "Viewing the inventory of " + Bukkit.getPlayer(args[0]).getDisplayName());
 		}
-		
-		return true;
-	}
 	
 	@EventHandler (priority = EventPriority.NORMAL)
 	public void onClick(InventoryClickEvent e){

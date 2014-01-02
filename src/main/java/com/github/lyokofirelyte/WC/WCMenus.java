@@ -16,9 +16,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
@@ -42,10 +39,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.github.lyokofirelyte.WC.Gui.GuiRoot;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-public class WCMenus implements Listener, CommandExecutor {
+public class WCMenus implements Listener{
 	
 	WCMain pl;
 	public WCMenus(WCMain instance){
@@ -125,9 +123,8 @@ public class WCMenus implements Listener, CommandExecutor {
 		}
 	}
 	
-	public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
-		
-		if (cmd.getName().equalsIgnoreCase("root")){
+	@WCCommand(aliases = "root", help = "Open the Root menu GUI Interface. Ooooo shiney!")
+	public void onRoot(final Player sender, String[] args){
 			
 			colorSelection.put(((Player)sender).getName(), "red");
 			p = ((Player)sender);
@@ -143,9 +140,10 @@ public class WCMenus implements Listener, CommandExecutor {
 			
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
 			public void run() {	pl.wcm.displayGui((Player) sender, new GuiRoot(pl)); } }, 20L);
-		}
-		
-		if (cmd.getName().equalsIgnoreCase("qc")){
+	}
+	
+	@WCCommand(aliases = {"qc"}, help = "Fast access to the Quick Commands")
+	public void onQC(Player sender, String[] args){
 			
 			WCPlayer wcp = pl.wcm.getWCPlayer(((Player)sender).getName());
 			Player p = ((Player)sender);
@@ -177,7 +175,7 @@ public class WCMenus implements Listener, CommandExecutor {
 					}
 					p.openInventory(inv);
 				}
-				return true;
+				return;
 			}
 			
 			switch(args[0]){
@@ -224,9 +222,6 @@ public class WCMenus implements Listener, CommandExecutor {
 				break;	
 			}
 		}
-		
-		return true;
-	}
 	
 	
 	public void setBanOption(String name, String option){

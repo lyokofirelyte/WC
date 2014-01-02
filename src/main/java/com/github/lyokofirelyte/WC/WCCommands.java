@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -18,7 +16,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -35,12 +32,13 @@ import com.github.lyokofirelyte.WC.Util.WCVault;
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
-public class WCCommands implements CommandExecutor {
+public class WCCommands {
 	
   private HashMap<String, Long> rainoffCooldown = new HashMap<String, Long>();
   private HashMap<String, Long> dragonCooldown = new HashMap<String, Long>();
@@ -57,55 +55,54 @@ public class WCCommands implements CommandExecutor {
   public static Vector vec = new Vector();
 
   public WCCommands(WCMain instance){
-  this.plugin = instance;
+	  plugin = instance;
   }  	
 
-  @SuppressWarnings("deprecation")
-  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
+  @WCCommand(aliases = {"google"}, desc = "Google anything! Anything!", help = "/google <search>")
+  public void onTheGoogle(Player sender, String[] args){
 
-	  if (cmd.getName().equalsIgnoreCase("google")){
-		  if (args.length == 0){
-			  sender.sendMessage(AS(WC + "Usage: /google <query>"));
+		   if (args.length == 0){
+			  p.sendMessage(AS(WC + "Usage: /google <query>"));
 		  } else {
 			  Bukkit.broadcastMessage(AS(WC + "Google: http://lmgtfy.com/?q=") + createString(args, 0).replace(" ", "+"));
 			  Bukkit.broadcastMessage(AS("&5~" + ((Player)sender).getDisplayName()));  
 		  }
-		  return true;
-	  }
+		  return;
+  }
 	  
-	  if (cmd.getName().equalsIgnoreCase("member") && sender.hasPermission("wa.staff")){
+  @WCCommand(aliases = {"member"}, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
+  private void onMember(Player sender, String[] args){
 		  
-		  if (args.length == 1){
-			  Bukkit.broadcastMessage(AS("&b&lHEY THERE, " + "&4&l" + args[0] + "&b&l!"));
-			  Bukkit.broadcastMessage(AS("&b&lWANT TO &aJOIN US AND BUILD?"));
-			  Bukkit.broadcastMessage(AS("&e&lCLICK BELOW AND SCROLL DOWN TO &c&lMEMBER APPLICATION"));
-			  Bukkit.broadcastMessage(AS("&f&o---> &f&lhttp://bit.ly/SxATSM &f&o<---"));
-		  } else {
-			  Bukkit.broadcastMessage(AS("&b&lWANT TO &aJOIN US AND BUILD?"));
-			  Bukkit.broadcastMessage(AS("&e&lCLICK BELOW AND SCROLL DOWN TO &c&lMEMBER APPLICATION"));
-			  Bukkit.broadcastMessage(AS("&f&o---> &f&lhttp://bit.ly/SxATSM &f&o<---"));
-		  }
-		  return true;
+		 if (args.length == 1){
+			 Bukkit.broadcastMessage(AS("&b&lHEY THERE, " + "&4&l" + args[0] + "&b&l!"));
+		 }
+		  
+		 Bukkit.broadcastMessage(AS("&b&lWANT TO &aJOIN US AND BUILD?"));
+		 Bukkit.broadcastMessage(AS("&e&lCLICK BELOW AND SCROLL DOWN TO &c&lMEMBER APPLICATION"));
+		 Bukkit.broadcastMessage(AS("&f&o---> &f&lhttp://bit.ly/SxATSM &f&o<---"));
 	  }
-	  
-	  if (cmd.getName().equals("ping")){
-		  p = ((Player)sender);
+ 
+  
+	  @WCCommand(aliases = {"ping"}, desc = "Ping the server. Just to check. The results may shock you.")
+	  private void onPing(Player p, String[] args){
+
 		  if (args.length == 0){
 			  s(p, "PONG!");
 		  } else {
 			  s(p, Utils.createString(args, 0));
 		  }
-		  return true;
+		  return;
 	  }
-	  
-    if (cmd.getName().equalsIgnoreCase("wc") || cmd.getName().equalsIgnoreCase("watercloset")) {
+	
+	@SuppressWarnings("deprecation")
+	@WCCommand(aliases = {"wc", "watercloset"}, desc = "WC Root Menu", help = "/wc")
+	public void onWC(final Player p, String[] args){
 
-      p = ((Player)sender);
       wcp = plugin.wcm.getWCPlayer(p.getName());
 
       if (args.length < 1) {
         s(p, "I'm not sure what you mean. Try /wc help or /wc ?. Also, /root is very helpful.");
-        return true;
+        return;
       }
       
       switch (args[0].toLowerCase()){
@@ -406,7 +403,7 @@ public class WCCommands implements CommandExecutor {
     	  
     	  if (pq.hasPermission("wa.admin")){
   
-                for (Entity e1 : ((Player)sender).getNearbyEntities(15.0D, 15.0D, 15.0D)){
+                for (Entity e1 : p.getNearbyEntities(15.0D, 15.0D, 15.0D)){
                 e1.setVelocity(e1.getLocation().getDirection().multiply(-5));
                 }
 
@@ -420,14 +417,13 @@ public class WCCommands implements CommandExecutor {
         		delay = 0L;
         		
         			for (final Location l : circleblocks){
-        				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable()
-         			    {
+        				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
          			      public void run()
          			      {
             				pq.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
             				pq.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
          			      }
-         			    }
+        				}
          			    , delay);
         			}
         			
@@ -546,7 +542,7 @@ public class WCCommands implements CommandExecutor {
     		  break;
     	  }
     	  
-    	  sender.sendMessage(AS(WC + "You've changed your color to &" + args[1] + "this."));
+    	  p.sendMessage(AS(WC + "You've changed your color to &" + args[1] + "this."));
     	  wcp.setGlobalColor(args[1]);
     	  updatePlayer(wcp, p.getName());
     	  
@@ -946,7 +942,7 @@ public class WCCommands implements CommandExecutor {
     		  break;
     	  }
     	  
-    	  sender.sendMessage(AS(WC + "You've changed your color to &" + args[1] + "this."));
+    	  p.sendMessage(AS(WC + "You've changed your color to &" + args[1] + "this."));
     	  wcp.setPMColor(args[1]);
     	  updatePlayer(wcp, p.getName());
     	  
@@ -1025,7 +1021,7 @@ public class WCCommands implements CommandExecutor {
        
        case "paragons": case "paragon":
 
-    	  sender.sendMessage(new String[]{
+    	  p.sendMessage(new String[]{
     		    AS("&5| &dParagon Information Complex"),
     			AS("&5| &f--- ___ --- ___ --- ___ ---"),
     			AS("&5| &bCommands&f:"),
@@ -1039,10 +1035,10 @@ public class WCCommands implements CommandExecutor {
     		   
        case "rewards": case "purchases":
     	   
-    	   List <String> purchases = plugin.datacore.getStringList("Users." + sender.getName() + ".Purchases");
+    	   List <String> purchases = plugin.datacore.getStringList("Users." + p.getName() + ".Purchases");
     	   s(p, "Paragon Purchases:");
     	   	for (String lampPost : purchases){
-    	   		sender.sendMessage(AS("&5| &d" + lampPost));
+    	   		p.sendMessage(AS("&5| &d" + lampPost));
     	   	}
     	   	
     	break;
@@ -1062,7 +1058,7 @@ public class WCCommands implements CommandExecutor {
     	   }
 
     	   wcp.setParagonTps(wcp.getParagonTps() - 1);
-    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + sender.getName() + " " + args[1]);
+    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + p.getName() + " " + args[1]);
       break;
 			
       case "market":
@@ -1074,7 +1070,7 @@ public class WCCommands implements CommandExecutor {
     	    	break;
     	    }
     	    	
-			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "warp markkit " + sender.getName());
+			Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "warp markkit " + p.getName());
 			break;
 			
        case "back":
@@ -1109,7 +1105,7 @@ public class WCCommands implements CommandExecutor {
     		
         case "stafftp":
         	
-        	if (sender.hasPermission("wa.staff") == false){
+        	if (p.hasPermission("wa.staff") == false){
         		s(p, "No.");
         		break;
         	}
@@ -1124,18 +1120,18 @@ public class WCCommands implements CommandExecutor {
         		break;
         	}
         	
-        	if (Bukkit.getPlayer(args[1]).getName().equals(sender.getName())){
+        	if (Bukkit.getPlayer(args[1]).getName().equals(p.getName())){
         		s(p, "You can't check yourself.");
         		break;
         	}
         	
-        		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + sender.getName() + " " + args[1]);
+        		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + p.getName() + " " + args[1]);
         		Bukkit.broadcastMessage(AS(WC + (p).getDisplayName() + " &chas used a grief-check teleport for " + Bukkit.getPlayer(args[1]).getDisplayName()));
         		break;
         
         case "addobelisk":
         	
-        	if (sender.hasPermission("wa.staff")){
+        	if (p.hasPermission("wa.staff")){
         		
         		if (args.length != 3){
         			s(p, "Please use /wc addobelisk <name> <type> (Type = default or custom)!");
@@ -1154,20 +1150,20 @@ public class WCCommands implements CommandExecutor {
         				break;
         			}
         			
-        		plugin.datacore.set("Users." + sender.getName() + ".ObeliskPlaceMode", true);
+        		plugin.datacore.set("Users." + p.getName() + ".ObeliskPlaceMode", true);
         		names.add(args[1]);
         		plugin.config.set("Obelisks.Names", names);
         		plugin.datacore.set("Obelisks.Latest", args[1]);
         		plugin.datacore.set("Obelisks.LatestType", args[2]);
-        		sender.sendMessage(AS(WC + "Place a GLOWSTONE into the spot where the landing location will be set."));
-        		return true;
+        		p.sendMessage(AS(WC + "Place a GLOWSTONE into the spot where the landing location will be set."));
+        		return;
         	}
       
         break;
         
         case "remobelisk":
         	
-        	if (sender.hasPermission("wa.staff")){
+        	if (p.hasPermission("wa.staff")){
         		
         		if (args.length != 2){
         			s(p, "Please use /wc remobelisk <name>!");
@@ -1184,7 +1180,7 @@ public class WCCommands implements CommandExecutor {
         		names.remove(args[1]);
         		plugin.config.set("Obelisks.Names", names);
         		s(p, "Obelisk removed.");
-        		return true;
+        		return;
         	}
       
         break;
@@ -1197,7 +1193,7 @@ public class WCCommands implements CommandExecutor {
         	
       	case "reload":
       		
-      		if (sender.hasPermission("wa.staff")){
+      		if (p.hasPermission("wa.staff")){
       		plugin.loadYamls();
       		plugin.saveYamls();
       		s(p, "Reloaded WC config.");
@@ -1208,7 +1204,7 @@ public class WCCommands implements CommandExecutor {
       		}
       	case "save":
       		
-      	if (sender.hasPermission("wa.staff")){
+      	if (p.hasPermission("wa.staff")){
       		plugin.saveYamls();
       		s(p, "Saved WC config.");
       		break;
@@ -1222,24 +1218,24 @@ public class WCCommands implements CommandExecutor {
       	List <String> help = plugin.config.getStringList("Core.Help");
       	
       		for (String message : help){
-      			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+      			p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
       		}
       		
       	break;
       	
       	case "session":
 
-			Bukkit.getServer().dispatchCommand(sender, "wcs");
+			Bukkit.getServer().dispatchCommand(p, "wcs");
 			
 		break;
 
 		case "rainoff":
 
-			if (!(sender.hasPermission("wa.guardian"))){
+			if (!(p.hasPermission("wa.guardian"))){
 
 				s(p, "You are not the rank Guardian! Sorry, I tried my hardest.'");
 
-				return true;
+				return;
 
 			}
 
@@ -1254,9 +1250,9 @@ public class WCCommands implements CommandExecutor {
 
 					if (timeLeftRO == 1){
 
-						sender.sendMessage(AS(WC + "Wow! You have the actual nerve to try the command when there is still 1 second left on the cooldown. Amazing.!"));
+						p.sendMessage(AS(WC + "Wow! You have the actual nerve to try the command when there is still 1 second left on the cooldown. Amazing.!"));
 
-						return true;
+						return;
 
 					}
 					
@@ -1277,8 +1273,8 @@ public class WCCommands implements CommandExecutor {
 						
 						timeLeft /= 60;				
 					}
-					sender.sendMessage(AS(WC + "Wow. You really can tell time. Except for the fact that there is still " + sb.toString() + " seconds left on the cooldown."));
-					return true;
+					p.sendMessage(AS(WC + "Wow. You really can tell time. Except for the fact that there is still " + sb.toString() + " seconds left on the cooldown."));
+					return;
 				}
 
 			}
@@ -1286,8 +1282,8 @@ public class WCCommands implements CommandExecutor {
 			World currentWorld = p.getWorld();
 
 			if (currentWorld.hasStorm() == false){
-				sender.sendMessage(AS(WC + "Look, I know you're not a meteorologist, but does it &llook &dlike it's raining?"));
-				return true;
+				p.sendMessage(AS(WC + "Look, I know you're not a meteorologist, but does it &llook &dlike it's raining?"));
+				return;
 			}
 
 			currentWorld.setWeatherDuration(1);
@@ -1295,7 +1291,7 @@ public class WCCommands implements CommandExecutor {
 			for (Player ep : Bukkit.getOnlinePlayers()){
 
 				if (ep == p){
-					sender.sendMessage(AS(WC + "You have cleared the heavens!"));
+					p.sendMessage(AS(WC + "You have cleared the heavens!"));
 				} else {
 					ep.sendMessage(AS(WC + p.getDisplayName() + " &dhas cleared the heavens!"));
 				}
@@ -1314,7 +1310,7 @@ public class WCCommands implements CommandExecutor {
 				timeLeftDR = this.getCooldown(dragonCooldown, "global", dragonSpawnSecs);
 				if (timeLeftDR > 0){
 					if (timeLeftDR == 1){
-						sender.sendMessage(AS(WC + "Wow! You have the actual nerve to try the command when there is still 1 second left on the cooldown. Amazing.!"));
+						p.sendMessage(AS(WC + "Wow! You have the actual nerve to try the command when there is still 1 second left on the cooldown. Amazing.!"));
 					} else {
 						int timeLeft = (int) timeLeftDR;
 						StringBuilder sb = new StringBuilder();
@@ -1333,7 +1329,7 @@ public class WCCommands implements CommandExecutor {
 							
 							timeLeft /= 60;
 						}
-						sender.sendMessage(AS(WC + "Wow. You really can tell time. Except for the fact that there is still " + sb.toString() + " left on the cooldown."));
+						p.sendMessage(AS(WC + "Wow. You really can tell time. Except for the fact that there is still " + sb.toString() + " left on the cooldown."));
 					}
 				}
 			} else {
@@ -1367,7 +1363,7 @@ public class WCCommands implements CommandExecutor {
 				serverExp.add(expU);
 			}
 
-			sender.sendMessage(new String[]{
+			p.sendMessage(new String[]{
 					
 					AS(WC + "Exp Leaderboards"),
 					AS(">>> >>> <<< <<<")
@@ -1395,7 +1391,7 @@ public class WCCommands implements CommandExecutor {
 			}
 
 			serverExp.remove(check);
-			sender.sendMessage(new String[]{
+			p.sendMessage(new String[]{
 					
 					AS("&7&ofirst place @ " + expAmount),
 					AS("&b&o" + place)
@@ -1421,7 +1417,7 @@ public class WCCommands implements CommandExecutor {
 			}
 
 			serverExp.remove(check);
-			sender.sendMessage(new String[]{
+			p.sendMessage(new String[]{
 					
 					AS("&7&osecond place @ " + expAmount),
 					AS("&b&o" + place)
@@ -1447,7 +1443,7 @@ public class WCCommands implements CommandExecutor {
 			}
 
 			serverExp.remove(check);
-			sender.sendMessage(new String[]{
+			p.sendMessage(new String[]{
 					
 					AS("&7&othird place @ " + expAmount),
 					AS("&b&o" + place)
@@ -1458,8 +1454,8 @@ public class WCCommands implements CommandExecutor {
 			
 		case "superride":
 			
-			if (!(sender.hasPermission("wa.staff"))){			
-				sender.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
+			if (!(p.hasPermission("wa.staff"))){			
+				p.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
 				break;		
 			}
 			
@@ -1514,8 +1510,8 @@ public class WCCommands implements CommandExecutor {
 		
 		case "superride2":
 			
-			if (!(sender.hasPermission("wa.staff"))){			
-				sender.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
+			if (!(p.hasPermission("wa.staff"))){			
+				p.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
 				break;		
 			}
 			
@@ -1556,7 +1552,7 @@ public class WCCommands implements CommandExecutor {
 		
 		case "controlcarts":
 			
-			if (!(sender.hasPermission("wa.staff"))){
+			if (!(p.hasPermission("wa.staff"))){
 				break;
 			}
 			
@@ -1576,13 +1572,13 @@ public class WCCommands implements CommandExecutor {
 			
 		case "ride":
 			
-			if (!(sender.hasPermission("wa.staff"))){			
-				sender.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
+			if (!(p.hasPermission("wa.staff"))){			
+				p.sendMessage(AS(WC + "Does it look like you have permission to use that? I didn't think so either."));	
 				break;		
 			}
 			
 			plugin.datacore.set("Users." + p.getName() + ".commandUsed", true);
-			sender.sendMessage(AS(WC + "Right click on a mob to begin the madness! (づ｡◕‿‿◕｡)づ"));
+			p.sendMessage(AS(WC + "Right click on a mob to begin the madness! (づ｡◕‿‿◕｡)づ"));
 			break;
 			
 		case "sidebar":
@@ -1611,11 +1607,10 @@ public class WCCommands implements CommandExecutor {
 			plugin.spawnLoc = loc;
 			WCMain.s(p, "Set the spawn loc to &6" + loc.getX() + "&d, &6" + loc.getY() + "&d, &6" + loc.getZ() + "&d!");
 			break;
-			
+
       }
-    }
-    return true;
-  }
+      
+	}
   
 	public long getCooldown(HashMap<String, Long> map, String player, int seconds){	
 		long timeLeft = ((map.get(player) / 1000) + seconds) - (System.currentTimeMillis() / 1000);
@@ -1725,6 +1720,7 @@ public class WCCommands implements CommandExecutor {
 				delay2 = delay2+10L;
 				h++;
 			}
+			
 		
 	}
 
@@ -1801,5 +1797,5 @@ public class WCCommands implements CommandExecutor {
 	 public void returnItem(Player p, int amount){
 		 p.getInventory().addItem(plugin.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, amount));
 	 }
-}
-  
+
+} 

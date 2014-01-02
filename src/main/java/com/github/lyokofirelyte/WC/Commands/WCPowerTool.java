@@ -3,9 +3,6 @@ package com.github.lyokofirelyte.WC.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,22 +10,23 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.github.lyokofirelyte.WC.WCMain;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-public class WCPowerTool implements CommandExecutor, Listener {
+public class WCPowerTool implements Listener {
 
 	WCMain pl;
 	public WCPowerTool(WCMain instance){
 	pl = instance;
     }
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		if (cmd.getName().toLowerCase().equals("powertool") || cmd.getName().toLowerCase().equals("pt")){
-			
+	@WCCommand(aliases = {"powertool", "pt"}, help = "Bind a command to a tool", perm = "wa.regional")
+	public void onPowerTool(Player sender, String[] args){
+					
 			Player p = ((Player)sender);		
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 			String name = p.getItemInHand().getType().name();
@@ -55,7 +53,7 @@ public class WCPowerTool implements CommandExecutor, Listener {
 					if (s.startsWith(name)){
 						if (!p.hasPermission("wa.eternal")){
 							s(p, "You need eternal to add more commands. Use &6/pt &dto remove the current one first.");
-							return true;
+							return;
 						}
 					}
 				}			
@@ -63,9 +61,8 @@ public class WCPowerTool implements CommandExecutor, Listener {
 				s(p, "Powertool added. Type &6/pt &dto remove it, or &6/pt :a &dto remove all of your powertools.");
 				pl.wcm.updatePlayerMap(p.getName(), wcp);
 			}
-		}
 		
-		return true;
+		return;
 	}
 	
 	@EventHandler
