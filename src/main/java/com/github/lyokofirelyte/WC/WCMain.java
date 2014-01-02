@@ -301,7 +301,7 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   private void registerCommands() {
 	  
 	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class));
-	api.reg.registerCommands(commandClasses, "WCMain"); // IT'S SO SEXY OH BBY
+	api.reg.registerCommands(commandClasses, this); // IT'S SO SEXY OH BBY
 
     getCommand("watercloset").setExecutor(new WCCommands(this));
     getCommand("wc").setExecutor(new WCCommands(this));
