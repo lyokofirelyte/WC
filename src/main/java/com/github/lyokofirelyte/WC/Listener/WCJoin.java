@@ -1,15 +1,20 @@
 package com.github.lyokofirelyte.WC.Listener;
 
-import java.io.File;
+
+import java.util.Arrays;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.bobacadodl.JSONChatLib.JSONChatColor;
+import com.bobacadodl.JSONChatLib.JSONChatExtra;
+import com.bobacadodl.JSONChatLib.JSONChatFormat;
+import com.bobacadodl.JSONChatLib.JSONChatHoverEventType;
+import com.bobacadodl.JSONChatLib.JSONChatMessage;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
@@ -79,20 +84,13 @@ WCAlliance wca;
 		}
 		, 20L);
 
-		if (!wcp.getTransfered()){
-			File essFile = new File("./plugins/Essentials/userdata/" + p.getName().toLowerCase() + ".yml");
-			YamlConfiguration essYaml = YamlConfiguration.loadConfiguration(essFile);
-			String oldCash = essYaml.getString("money");
-			int a = (int) Math.round(Double.parseDouble(oldCash));
-			wcp.setBalance(a);
-			wcp.setTransfered(true);
-			WCMain.s(p, "&aWCV5 IS HERE! VIEW NEW FEATURES & FIXES AT OHSOTOTES.COM!");
-		}
-		
 		updatePlayer(wcp, p.getName());
 	
-		WCMain.s(p, "Welcome, " + p.getDisplayName() + "&d! We are currently running &6WaterCloset v5.0 &dby Hugs.");
-	
+        JSONChatMessage message = new JSONChatMessage("Welcome. We are current running ", JSONChatColor.GOLD, null);
+        JSONChatExtra extra = new JSONChatExtra("WaterCloset v5", JSONChatColor.DARK_PURPLE, Arrays.asList(JSONChatFormat.BOLD));
+        extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, Utils.AS("&6The core plugin of Worlds Apart!"));
+        message.addExtra(extra);
+        message.sendToPlayer(event.getPlayer());
 		return true;
   	}
 

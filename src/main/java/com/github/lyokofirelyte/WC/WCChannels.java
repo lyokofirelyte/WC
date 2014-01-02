@@ -16,6 +16,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import com.bobacadodl.JSONChatLib.JSONChatClickEventType;
+import com.bobacadodl.JSONChatLib.JSONChatExtra;
+import com.bobacadodl.JSONChatLib.JSONChatHoverEventType;
+import com.bobacadodl.JSONChatLib.JSONChatMessage;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
@@ -173,21 +177,25 @@ public class WCChannels implements Listener {
 	  }
   }
 
-  public void globalChat(Player p, String message){
+  public void globalChat(Player p, String msg){
 	  
 	  	Boolean rawr = false;
 	  	
-	  	if ((message.contains("http://") || message.contains("https://")) && !message.contains("tinyurl") && !message.contains("bit.ly")){
-	  		String[] split = message.split(" ");	
+	  	if ((msg.contains("http://") || msg.contains("https://")) && !msg.contains("tinyurl") && !msg.contains("bit.ly")){
+	  		String[] split = msg.split(" ");	
 	  		for (String s : split){		
 	  			if (s.startsWith("http") && s.length() >= 16){		
-	  				message = message.replace(s, shorten(s));		
+	  				msg = msg.replace(s, shorten(s));		
 	  			}	
 	  		}
 	  	}
 	  	
 		for (Player bleh : Bukkit.getOnlinePlayers()){
 			
+			String message = new String(msg);
+			
+	      	JSONChatMessage newDispName = new JSONChatMessage("", null, null);
+	      	
 			if (!p.hasPermission("wa.staff") && !p.hasPermission("wa.citizen")){
 				message = message.replaceAll("&", "");
 			}
@@ -206,7 +214,8 @@ public class WCChannels implements Listener {
 			
 			if (lastChat != null && lastChat.equals(p)){
 				rawr = true;
-				message = "&8>> " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message;
+				newDispName = new JSONChatMessage(AS("&8>> "), null, null);
+				message = "&f: &" + wcp.getGlobalColor() + message;
 				
 			} else {
 				
@@ -220,38 +229,56 @@ public class WCChannels implements Listener {
 				} else {	
 					prefix = WCVault.chat.getPlayerPrefix(p);
 				}
+				
+				if (prefix == null){
+					prefix = "";
+				}
 
 				if (wcpCurrent.getPVP()){
 					
-					message = "&6PvP &f// &6" + wcpCurrent.getNick() + "&f: &" + wcp.getGlobalColor() + message;
+					newDispName = new JSONChatMessage(AS("&6PvP &f// &6"), null, null);
 					
 				} else if (prefix.toLowerCase().contains("guest")){
 					
-					message = "&7Guest &f// &7" + wcpCurrent.getNick() + "&f: &" + wcp.getGlobalColor() + message;
+					newDispName = new JSONChatMessage(AS("&7Guest &f// &7"), null, null);
 						
 				} else if (prefix.toLowerCase().equals("")){
 					
-					message = "&7M &f// " + p.getDisplayName() + "&f: &" + wcp.getGlobalColor() + message;
-					
+					newDispName = new JSONChatMessage(AS("&7M &f//"), null, null);
 				}
+				
+				message = "&f: &" + wcp.getGlobalColor() + message;
 
 				if (wcp.getTimeCode()){
 					String time = "&f[" + getTime() + "&f] ";
-					message = time + prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor() + message; 	
+					newDispName = new JSONChatMessage(AS(time + prefix + suffix + " &f// "), null, null);	
 				} else {
-					message = prefix + suffix + " §f// " + p.getDisplayName() + "§f: &" + wcp.getGlobalColor() + message;  
+					newDispName = new JSONChatMessage(AS(prefix + suffix + " &f// "), null, null);
 				}
 			}
-
-			bleh.sendMessage(AS(message));
+			
+	      	JSONChatExtra extra = new JSONChatExtra(AS(p.getDisplayName()), null, null);
+	      	extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, AS(p.getDisplayName() + " &f@ &7" + wcpCurrent.getAlliance() +
+	      	"\nStats:" +
+	      	"\n&6Balance&f: &6" + wcpCurrent.getBalance() +
+	      	"\n&6Rank&f: &6" + wcpCurrent.getRank() +
+	      	"\n&6Deaths&f: &6" + wcpCurrent.getDeathCount() +
+	      	"\n&6Exp&f: &6" + wcpCurrent.getExp() +
+	      	"\n&6Holding&f: &6" + p.getItemInHand().getType().name().toString() +
+	      	"\n&6IGN&f: &7" + p.getName()));
+	      	extra.setClickEvent(JSONChatClickEventType.SUGGEST_COMMAND, "/msg " + p.getName());
+	      	newDispName.addExtra(extra);
+	      	JSONChatExtra extra2 = new JSONChatExtra(AS(message), null, null);
+	      	newDispName.addExtra(extra2);
+	      	newDispName.sendToPlayer(bleh);
 		}
 	  
 		lastChat = p;
 		
 		if (rawr){
-			Bukkit.getServer().getConsoleSender().sendMessage(AS("&8>> " + p.getDisplayName() + "&f: " + message));
+			Bukkit.getServer().getConsoleSender().sendMessage(AS("&8>> " + p.getDisplayName() + "&f: " + msg));
 		} else {
-			Bukkit.getServer().getConsoleSender().sendMessage(AS(WCVault.chat.getPlayerSuffix(p) + " §f// " + p.getDisplayName() + "§f: " + message));
+			Bukkit.getServer().getConsoleSender().sendMessage(AS(WCVault.chat.getPlayerSuffix(p) + " §f// " + p.getDisplayName() + "§f: " + msg));
 		}
   }
 

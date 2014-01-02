@@ -139,6 +139,19 @@ public class WCCommands {
     	  
       break;
       
+      case "setexp":
+    	  
+    	  if (p.hasPermission("wa.mod2")){
+    		  if (args.length != 3 || !Utils.isInteger(args[2]) || plugin.wcm.getWCPlayer(args[1]) == null){
+    			  s(p, "/wc setexp <player> <amount>. You either didn't type a number or the player was not found.");
+    		  } else {
+    			  plugin.wcm.getWCPlayer(args[1]).setExp(Integer.parseInt(args[2]));
+    			  s(p, "Updated!");
+    		  }
+    	  }
+    	  
+      break;
+      
       case "creativerank":
     	  
     	  if (args.length < 3){

@@ -298,9 +298,9 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 
   
   private void registerCommands() {
-	  
+
 	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class, WCSeen.class, WCWB.class, WCSoar.class, WCNear.class, WCSpawn.class, StaticField.class, WCSell.class, WCPay.class, TraceFW.class, WCRanks.class, WCReport.class, WCMail.class, WCHelp.class, WCMenus.class, WCInvSee.class, WCBal.class, WCNewMember.class, WCPowerTool.class, WCPTP.class, WCSuicide.class, WCSudo.class, WCWarps.class, WCChannels.class, TimeStampEX.class, WCSEEKRITPARTAY.class, WCHat.class, WCCheats.class, WACommandEx.class, WCCommands.class, WCHome.class, WCTele.class));
-	api.reg.registerCommands(commandClasses, "WCMain"); // IT'S SO SEXY OH BBY
+	api.reg.registerCommands(commandClasses, this); // IT'S SO SEXY OH BBY
   }
 
   public void saveYamls() {
