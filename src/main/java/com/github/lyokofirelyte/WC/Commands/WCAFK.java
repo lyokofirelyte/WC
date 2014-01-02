@@ -2,13 +2,11 @@ package com.github.lyokofirelyte.WC.Commands;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.AS;
 
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 public class WCAFK {
@@ -19,7 +17,7 @@ public class WCAFK {
     }
 	
 	@WCCommand(aliases = {"afk", "wcafk"}, help = "Toggles your AFK status!")
-	public void afkToggle(Player p, List<String> args){
+	public void afkToggle(Player p, String[] args){
 					
 			if (pl.afkers.contains(p)){
 				pl.afkers.remove(p);

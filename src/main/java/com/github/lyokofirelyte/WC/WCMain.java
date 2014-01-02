@@ -47,6 +47,7 @@ import com.github.lyokofirelyte.WC.Commands.WCSell;
 import com.github.lyokofirelyte.WC.Commands.WCSoar;
 import com.github.lyokofirelyte.WC.Commands.WCSpawn;
 import com.github.lyokofirelyte.WC.Commands.WCSuicide;
+import com.github.lyokofirelyte.WC.Commands.WCThis;
 import com.github.lyokofirelyte.WC.Commands.WCWB;
 import com.github.lyokofirelyte.WC.Commands.WCWarps;
 import com.github.lyokofirelyte.WC.Extras.StaticField;
@@ -300,7 +301,7 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   
   private void registerCommands() {
 	  
-	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class));
+	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class, WCCommands.class, WCThis.class));
 	api.reg.registerCommands(commandClasses, this); // IT'S SO SEXY OH BBY
 
     getCommand("watercloset").setExecutor(new WCCommands(this));

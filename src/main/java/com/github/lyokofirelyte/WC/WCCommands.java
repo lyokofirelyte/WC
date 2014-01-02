@@ -36,7 +36,9 @@ import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+import com.github.lyokofirelyte.WCAPI.Loops.WCLoop;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
@@ -60,6 +62,20 @@ public class WCCommands implements CommandExecutor {
   this.plugin = instance;
   }  	
 
+  @WCCommand(aliases = {"loopTest"}, help = "Loop!", perm = "wa.staff")
+  public void loopTest(Player p, String[] args){
+	try {
+		plugin.api.ls.callLoop(getClass().getMethod("looper"), this.getClass(), plugin);
+	} catch (Exception e) {
+		e.printStackTrace();
+	} 
+  }
+  
+  @WCLoop(delay = 0L, repeats = 3, time = 20L)
+  public void looper(){
+	  Bukkit.broadcastMessage("test");
+  }
+  
   @SuppressWarnings("deprecation")
   public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
 
