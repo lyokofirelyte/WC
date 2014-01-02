@@ -1,6 +1,5 @@
 package com.github.lyokofirelyte.WC;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -64,8 +62,7 @@ public class WCCommands implements CommandExecutor {
 
   @SuppressWarnings("deprecation")
   public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
-	 	  
-  
+
 	  if (cmd.getName().equalsIgnoreCase("google")){
 		  if (args.length == 0){
 			  sender.sendMessage(AS(WC + "Usage: /google <query>"));
@@ -113,29 +110,66 @@ public class WCCommands implements CommandExecutor {
       
       switch (args[0].toLowerCase()){
       
-      case "latest":
+      case "troll":
     	  
-    	  List<String> goodUsers = new ArrayList<String>();
+    	  long delay = 0L;
     	  
-    	  for (String s : plugin.wcm.getWCSystem("system").getUsers()){
-  				File essFile = new File("./plugins/Essentials/userdata/" + s + ".yml");
-  				if (essFile.exists()){
-	  				YamlConfiguration essYaml = YamlConfiguration.loadConfiguration(essFile);
-	  				long lastLogout = essYaml.getLong("timestamps.logout");
-	  				if (lastLogout >= (System.currentTimeMillis() - 2592000000L)){
-	  					goodUsers.add(s);
-	  				}
-  				}
+    	  if (p.hasPermission("wa.staff")){
+    	    	for (int x = 7; x > 0; x--){
+    	    		  Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+    	    		  public void run() { 
+    	    				  
+    	        		  for (Player p : Bukkit.getOnlinePlayers()){
+    	        			  p.openInventory(p.getInventory());
+    	        		  }
+    	    			  
+    	    		  } }, delay);
+    	    		  
+    	    		  delay = delay + 10L;
+    	    		  
+    	    		  Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
+    	    		  public void run() { 
+    	    				  
+    	        		  for (Player p : Bukkit.getOnlinePlayers()){
+    	        			  p.closeInventory();
+    	        		  }
+    	    			  
+    	    		  } }, delay);
+    	    		  
+    	    		  delay = delay + 10L;
+    	    	}
     	  }
     	  
-    	  StringBuilder sb2 = new StringBuilder();
+      break;
+      
+      case "setexp":
     	  
-    	  for (String s : goodUsers){
-    		  sb2.append("&7" + s + " ");
+    	  if (p.hasPermission("wa.mod2")){
+    		  if (args.length != 3 || !Utils.isInteger(args[2]) || plugin.wcm.getWCPlayer(args[1]) == null){
+    			  s(p, "/wc setexp <player> <amount>. You either didn't type a number or the player was not found.");
+    		  } else {
+    			  plugin.wcm.getWCPlayer(args[1]).setExp(Integer.parseInt(args[2]));
+    			  s(p, "Updated!");
+    		  }
     	  }
     	  
-    	  String finalString = sb2.toString().trim();
-    	  s(p, finalString.replaceAll(" ", "&8, "));
+      break;
+      
+      case "creativerank":
+    	  
+    	  if (args.length < 3){
+    		  s(p, "/wc creativerank <player> <rank>");
+    	  } else if (p.hasPermission("wa.mod2")){
+    		  WCPlayer giveRank = plugin.wcm.getWCPlayer(args[1]);
+    		  if (giveRank == null){
+    			  s(p, "That player was not found in the API!");
+    		  } else {
+    			  giveRank.setCreativeRank(Utils.createString(args, 1));
+    			  s(p, "Updated!");
+    		  }
+    	  } else {
+    		  s(p, "Nope!");
+    	  }
     	  
       break;
       
@@ -167,6 +201,41 @@ public class WCCommands implements CommandExecutor {
     	  
       break;
       
+      case "fullprice":
+    	  
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
+    			  int amt = 64;
+    			  int buyPrice = Integer.parseInt(args[1]);
+    			  int sellPrice = Integer.parseInt(args[2]);
+    			  for (int x = 1; x < 6; x++){
+    				  ItemStack i = new ItemStack(p.getItemInHand().getTypeId());
+    				  ItemMeta im = i.getItemMeta();
+    				  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), buyPrice + "", AS("&aSell"), sellPrice + "")));
+    				  im.setDisplayName(AS("&a" + p.getItemInHand().getType().name().toString()));
+    				  i.setItemMeta(im);
+    				  if (x == 5){
+    					  amt = 1;
+    				  } else if (x != 1){
+    					  amt = amt/2;
+    				  }
+    				  if (x == 4){
+        				  buyPrice = buyPrice / 8;
+        				  sellPrice = sellPrice / 8;
+    				  } else {
+        				  buyPrice = buyPrice / 2;
+        				  sellPrice = sellPrice / 2;
+    				  }
+    				  i.setAmount(amt);
+    				  p.getInventory().addItem(i);
+    			  }
+    		  }
+    	  } else {
+    		  s(p, "/wc fullprice <buyPrice> <sellPrice>");
+    	  }
+    	  
+      break;
+      
       case "edit":
     	  
     	  if (p.hasPermission("wa.staff")){
@@ -194,6 +263,19 @@ public class WCCommands implements CommandExecutor {
     		  }
     		  s(p, "Wiped all mails.");
     	  }
+    	  
+      break;
+      
+      case "allowdeathmessage":
+    	  
+    	  if (wcp.getAllowDeathLocation()){
+    		  wcp.setAllowDeathLocation(false);
+    	  } else {
+    		  wcp.setAllowDeathLocation(true);
+    	  }
+    	  
+    	  plugin.wcm.updatePlayerMap(p.getName(), wcp);  
+    	  s(p, "Updated. Wow, you actually use this feature? Glad I didn't waste my time.");
     	  
       break;
       
@@ -301,109 +383,6 @@ public class WCCommands implements CommandExecutor {
   
       break;
       
-      case "spawnadd":
-    	  
-    	  if (args.length != 3){
-    		  s(p, "/wc spawnadd <player> <team>");
-    		  s(p, "Valid teams: yellow, pink, cyan, red, green, blue, magenta, orange");
-    		  break;
-    	  }
-    	  
-    	  String valids = "yellow pink cyan red green blue magenta orange";
-    	  
-    	  if (!valids.contains(args[2])){
-    		  s(p, "Valid teams: yellow, pink, cyan, red, green, blue, magenta, orange");
-    		  break;
-    	  }
-    	  
-    	  if (!Bukkit.getOfflinePlayer(args[1]).hasPlayedBefore()){
-    		  s(p, "That player is invalid.");
-    		  break;
-    	  }
-    	  
-    	  if (plugin.datacore.getStringList(args[2] + ".Team").contains(args[1])){
-    		  s(p, "That player is already on that team.");
-    		  break;
-    	  }
-    	  
-    	  List<String> list = plugin.datacore.getStringList(args[2] + ".Team");
-    	  list.add(args[1]);
-    	  plugin.datacore.set(args[2] + ".Team", list);
-    	  s(p, "Added!");
-    	  
-      break;
-      
-      case "spawnbuild":
-    	  
-    	  List<String> list1 = plugin.datacore.getStringList("yellow.Team");
-    	  List<String> list2 = plugin.datacore.getStringList("pink.Team");
-    	  List<String> list3 = plugin.datacore.getStringList("cyan.Team");
-    	  List<String> list4 = plugin.datacore.getStringList("red.Team");
-    	  List<String> list5 = plugin.datacore.getStringList("green.Team");
-    	  List<String> list6 = plugin.datacore.getStringList("blue.Team");
-    	  List<String> list7 = plugin.datacore.getStringList("magenta.Team");
-    	  List<String> list8 = plugin.datacore.getStringList("orange.Team");
-    	  
-    	  if (list1.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn1");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list2.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn2");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list3.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn3");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list4.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn4");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list5.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn5");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list6.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn6");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list7.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn7");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  if (list8.contains(p.getName())){
-    		  p.setOp(true);
-    		  p.performCommand("warp spawn8");
-    		  p.setOp(false);
-    		  break;
-    	  }
-    	  
-    	  s(p, "You don't have a team.");
-    	  
-      break;
-      
       case "nameplate":
     	  
     	  if (wcp.getNamePlate()){
@@ -451,7 +430,7 @@ public class WCCommands implements CommandExecutor {
         		List<Location> circleblocks5 = circle(pq.getLocation(), 5, 1, true, false, 1);
         		List<Location> circleblocks6 = circle(pq.getLocation(), 6, 1, true, false, 1);
         		pq.getWorld().playSound(pq.getLocation(), Sound.BLAZE_HIT, 3.0F, 0.5F);
-        		long delay = 0L;
+        		delay = 0L;
         		
         			for (final Location l : circleblocks){
         				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable()
@@ -1226,6 +1205,7 @@ public class WCCommands implements CommandExecutor {
         case "placeholders":
         	
         	s(p, "%t = town, %c = coords, %p = paragons");
+        	
         break;
         	
       	case "reload":
@@ -1257,12 +1237,14 @@ public class WCCommands implements CommandExecutor {
       		for (String message : help){
       			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
       		}
+      		
       	break;
       	
       	case "session":
 
 			Bukkit.getServer().dispatchCommand(sender, "wcs");
-			break;
+			
+		break;
 
 		case "rainoff":
 
@@ -1332,8 +1314,9 @@ public class WCCommands implements CommandExecutor {
 				}
 			}
 
-			this.resetCooldown(rainoffCooldown, p.getName());
-			break;
+			resetCooldown(rainoffCooldown, p.getName());
+			
+		break;
 			
 		case "dragonspawn":
 			
@@ -1380,10 +1363,10 @@ public class WCCommands implements CommandExecutor {
 				Bukkit.broadcastMessage(AS(WC + p.getDisplayName() + " &dhas spawned an enderdragon in the end!"));
 				Bukkit.broadcastMessage(AS(WC + "&6&oAnother one will be ready to spawn in 4 hours."));
 				
-				this.resetCooldown(dragonCooldown, "global");
+				resetCooldown(dragonCooldown, "global");
 			}
 			
-			break;
+		break;
 			
 		case "exptop":
 

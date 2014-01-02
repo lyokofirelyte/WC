@@ -1,21 +1,14 @@
 package com.github.lyokofirelyte.WC.Listener;
 
-import java.util.List;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
@@ -53,43 +46,27 @@ public class WCDeath implements Listener{
 	  }
 
 	@EventHandler (priority = EventPriority.NORMAL)
-	public void onKerSmashSplode(EntityDeathEvent e){
+	public void onKerSmashSplode(PlayerDeathEvent e){
 
-		Entity ent = e.getEntity();
-		EntityDamageEvent ede = ent.getLastDamageCause();
-		DamageCause dc = ede.getCause();
-
-		if (ent instanceof Player){
-
-			Player p = (Player) ent;
+		/*EntityDamageEvent ede = ent.getLastDamageCause();
+		DamageCause dc = ede.getCause();*/
+			Player p = e.getEntity();
+			Location l = p.getLocation();
 			wcp = plugin.wcm.getWCPlayer(p.getName());
-			wcp.setLastLocation(p.getLocation());
+			wcp.setLastLocation(l);
 			int deaths = wcp.getDeathCount();
 			deaths++;
 			wcp.setDeathCount(deaths);
 			plugin.wcm.updatePlayerMap(p.getName(), wcp);
-			((PlayerDeathEvent) e).setDeathMessage(null);
-			String message = null;
-
-			if (dc == DamageCause.ENTITY_ATTACK){
-
-				EntityDamageByEntityEvent edee = (EntityDamageByEntityEvent) ede;
-				message = tPD(p, dc, edee);
-
-
+			e.setDeathMessage(null);
+			if (wcp.getAllowDeathLocation()){
+				Bukkit.broadcastMessage(Utils.AS("&6>> " + p.getDisplayName() + " &ehas died at " + Math.round(l.getX()) + "," + Math.round(l.getY()) + "," + Math.round(l.getZ()) + " &6<<"));
 			} else {
-
-				message = tPD(p, dc);
-
+				Bukkit.broadcastMessage(Utils.AS("&6>> " + p.getDisplayName() + " &ehas died &6<<"));
 			}
-
-			Bukkit.broadcastMessage(message);
-
-		}
-
 	}
 
-	public String tPD(Player p, DamageCause dc){
+	/*public String tPD(Player p, DamageCause dc){
 
 		Random rand = new Random();
 		List<String> dML = plugin.config.getStringList("Core.DeathMessages." + dc.toString());
@@ -153,6 +130,6 @@ public class WCDeath implements Listener{
 
 		return message;
 
-	}
+	}*/
 
 }

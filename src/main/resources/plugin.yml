@@ -172,9 +172,6 @@ commands:
    l:
       description: Alliance Chat
       usage: /l <message>
-   afk:
-      description: WC AFK
-      usage: /afk
    spawn:
       description: WC Spawn
       usage: /spawn

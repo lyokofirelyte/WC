@@ -8,9 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,18 +15,19 @@ import org.bukkit.entity.Sheep;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
-public class WCDisco implements CommandExecutor {
+public class WCDisco {
 
 	WCMain pl;
 	public WCDisco(WCMain instance){
 	pl = instance;
     }
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	@WCCommand(aliases = {"disco"}, help = "WC Disco!")
+	public void disco(Player sender, List<String> args) {
 		
-		if (cmd.getName().toLowerCase().equals("ds")){
 			
 			Bukkit.broadcastMessage(Utils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));
 			
@@ -79,9 +77,6 @@ public class WCDisco implements CommandExecutor {
 			WCSystem wcs = pl.wcm.getWCSystem("system");
 			wcs.setSheepStart(System.currentTimeMillis()/1000);
 			pl.wcm.updateSystem("system", wcs);
-		}
-		
-		return true;
 	}
 
 	public void updateSheep(List<LivingEntity> ents){
