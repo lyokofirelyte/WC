@@ -296,10 +296,10 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	  getLogger().info("WaterCloset has been disabled.");
   }
 
-  
+
   private void registerCommands() {
 
-	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class, WCSeen.class, WCWB.class, WCSoar.class, WCNear.class, WCSpawn.class, StaticField.class, WCSell.class, WCPay.class, TraceFW.class, WCRanks.class, WCReport.class, WCMail.class, WCHelp.class, WCMenus.class, WCInvSee.class, WCBal.class, WCNewMember.class, WCPowerTool.class, WCPTP.class, WCSuicide.class, WCSudo.class, WCWarps.class, WCChannels.class, TimeStampEX.class, WCSEEKRITPARTAY.class, WCHat.class, WCCheats.class, WACommandEx.class, WCCommands.class, WCHome.class, WCTele.class));
+	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class));
 	api.reg.registerCommands(commandClasses, this); // IT'S SO SEXY OH BBY
   }
 
