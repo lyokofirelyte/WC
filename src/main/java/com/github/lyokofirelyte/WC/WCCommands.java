@@ -180,7 +180,7 @@ public class WCCommands implements CommandExecutor {
     		  if (giveRank == null){
     			  s(p, "That player was not found in the API!");
     		  } else {
-    			  giveRank.setCreativeRank(Utils.createString(args, 1));
+    			  giveRank.setCreativeRank(Utils.createString(args, 2));
     			  s(p, "Updated!");
     		  }
     	  } else {

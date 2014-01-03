@@ -113,6 +113,7 @@ public class WCChannels implements CommandExecutor, Listener {
 		  pl.wcm.updatePatrol(e.getMessage().replaceAll("&", ""), wcpp);
 		  Bukkit.broadcastMessage(AS(p.getDisplayName() + " &dhas formed a patrol (&3" + e.getMessage().replaceAll("&", "") + "&d)."));
 		  s(p, "Talk in patrol chat with /p <message>. Your personal patrol configuration options are in /root -> patrols.");
+		  return;
 	  }
 		
 	  if (wcp.getGlobalColor() == null){
@@ -181,14 +182,20 @@ public class WCChannels implements CommandExecutor, Listener {
   public void globalChat(Player p, String msg){
 	  
 	  	Boolean rawr = false;
+	  	String link = "none";
 	  	
 	  	if ((msg.contains("http://") || msg.contains("https://")) && !msg.contains("tinyurl") && !msg.contains("bit.ly")){
 	  		String[] split = msg.split(" ");	
 	  		for (String s : split){		
 	  			if (s.startsWith("http") && s.length() >= 16){		
-	  				msg = msg.replace(s, shorten(s));		
+	  				link = shorten(s);		
+	  				msg = msg.replace(s, "");
 	  			}	
 	  		}
+	  	}
+	  	
+	  	if (msg.equals(msg.toUpperCase())){
+	  		msg = msg.toLowerCase();
 	  	}
 	  	
 		for (Player bleh : Bukkit.getOnlinePlayers()){
@@ -271,6 +278,13 @@ public class WCChannels implements CommandExecutor, Listener {
 	      	newDispName.addExtra(extra);
 	      	JSONChatExtra extra2 = new JSONChatExtra(AS(message), null, null);
 	      	newDispName.addExtra(extra2);
+	      	
+	      	if (!link.equals("none")){
+		      	JSONChatExtra extra3 = new JSONChatExtra(" " + link, null, null);
+		      	extra3.setClickEvent(JSONChatClickEventType.OPEN_URL, link);
+		      	newDispName.addExtra(extra3);
+	      	}
+	      	
 	      	newDispName.sendToPlayer(bleh);
 		}
 	  

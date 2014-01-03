@@ -30,6 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
+import com.github.lyokofirelyte.WC.Commands.WCGcmd;
 import com.github.lyokofirelyte.WC.Commands.WCHat;
 import com.github.lyokofirelyte.WC.Commands.WCHelp;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
@@ -123,6 +124,7 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   public Map <String, Integer> afkTimer = new HashMap<>();
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
+  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class, WCCommands.class, WCThis.class, WCGcmd.class));
   
   public Location spawnLoc;
   
@@ -301,7 +303,6 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   
   private void registerCommands() {
 	  
-	List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCAFK.class, WCDisco.class, WCHat.class, WCCommands.class, WCThis.class));
 	api.reg.registerCommands(commandClasses, this); // IT'S SO SEXY OH BBY
 
     getCommand("watercloset").setExecutor(new WCCommands(this));

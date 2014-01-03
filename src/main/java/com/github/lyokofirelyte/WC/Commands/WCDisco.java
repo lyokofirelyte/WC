@@ -22,13 +22,12 @@ public class WCDisco {
 
 	WCMain pl;
 	public WCDisco(WCMain instance){
-	pl = instance;
-    }
+		pl = instance;
+	}
 	
 	@WCCommand(aliases = {"disco"}, help = "WC Disco!")
-	public void disco(Player sender, List<String> args) {
+	public void disco(Player sender, String[] args) {
 		
-			
 			Bukkit.broadcastMessage(Utils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));
 			
 			for (final Player p : Bukkit.getOnlinePlayers()){
@@ -55,23 +54,23 @@ public class WCDisco {
 				wcs.setSheepTasks(tasks);
 				pl.wcm.updateSystem("system", wcs);
 				
-	        	List<Location> circleblocks = Utils.circle(p.getLocation(), 5, 1, true, false, 1);
-		        long delay =  0L;
-		        	for (final Location l : circleblocks){
-		        		delay = delay + 2L;
-		        		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
-		        	      public void run() {
-		        	        	try {
+						List<Location> circleblocks = Utils.circle(p.getLocation(), 5, 1, true, false, 1);
+						long delay =	0L;
+							for (final Location l : circleblocks){
+								delay = delay + 2L;
+								Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable() {
+										public void run() {
+												try {
 									pl.fw.playFirework(p.getWorld(), l,
 									FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
 								} catch (IllegalArgumentException e) {
 									e.printStackTrace();
 								} catch (Exception e) {
 									e.printStackTrace();
-								}        	      }
-		        	    }
-		        	    , delay);
-		        	}
+								}								}
+									}
+									, delay);
+							}
 			}
 			
 			WCSystem wcs = pl.wcm.getWCSystem("system");
