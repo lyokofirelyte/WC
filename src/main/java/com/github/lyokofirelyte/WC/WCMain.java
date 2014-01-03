@@ -46,6 +46,7 @@ import com.github.lyokofirelyte.WC.Commands.WCSell;
 import com.github.lyokofirelyte.WC.Commands.WCSoar;
 import com.github.lyokofirelyte.WC.Commands.WCSpawn;
 import com.github.lyokofirelyte.WC.Commands.WCSuicide;
+import com.github.lyokofirelyte.WC.Commands.WCThis;
 import com.github.lyokofirelyte.WC.Commands.WCWB;
 import com.github.lyokofirelyte.WC.Commands.WCWarps;
 import com.github.lyokofirelyte.WC.Extras.StaticField;
@@ -295,7 +296,6 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	    
 	  getLogger().info("WaterCloset has been disabled.");
   }
-
 
   private void registerCommands() {
 

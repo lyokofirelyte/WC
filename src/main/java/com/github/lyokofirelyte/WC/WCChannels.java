@@ -15,11 +15,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import com.bobacadodl.JSONChatLib.JSONChatClickEventType;
-import com.bobacadodl.JSONChatLib.JSONChatExtra;
-import com.bobacadodl.JSONChatLib.JSONChatHoverEventType;
-import com.bobacadodl.JSONChatLib.JSONChatMessage;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
@@ -32,6 +27,10 @@ import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.PlayerEmoteEvent;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatClickEventType;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
 
 import static com.github.lyokofirelyte.WC.WCMain.*;
 
@@ -266,7 +265,7 @@ public class WCChannels implements Listener {
 	      	"\n&6Exp&f: &6" + wcpCurrent.getExp() +
 	      	"\n&6Holding&f: &6" + p.getItemInHand().getType().name().toString() +
 	      	"\n&6IGN&f: &7" + p.getName()));
-	      	extra.setClickEvent(JSONChatClickEventType.SUGGEST_COMMAND, "/msg " + p.getName());
+	      	extra.setClickEvent(JSONChatClickEventType.SUGGEST_COMMAND, "/msg " + p.getName() + " ");
 	      	newDispName.addExtra(extra);
 	      	JSONChatExtra extra2 = new JSONChatExtra(AS(message), null, null);
 	      	newDispName.addExtra(extra2);
