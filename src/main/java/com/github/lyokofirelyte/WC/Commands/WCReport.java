@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import com.github.lyokofirelyte.WC.WCMain;
+import org.bukkit.entity.Player;
 
-	public class WCReport implements CommandExecutor {
+import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
+
+	public class WCReport{
 		
 	 WCMain plugin;
 	 public WCReport(WCMain instance){
@@ -21,10 +21,9 @@ import com.github.lyokofirelyte.WC.WCMain;
 	  private Connection conn;
 	  private PreparedStatement pst;
 	  
-	  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		  
-	    if ((cmd.getName().equalsIgnoreCase("report")) && (args.length >= 2)) {
-	    	
+	  @WCCommand(aliases = {"report"}, help = "Report a player for aboose with /report <playername> <reason>", min = 2)
+	  public void onReport(Player sender, String[] args){
+
 	        String url = plugin.config.getString("url");
 	        String username = plugin.config.getString("username");
 	        String password = plugin.config.getString("password");
@@ -57,14 +56,14 @@ import com.github.lyokofirelyte.WC.WCMain;
 	        this.conn.close();
 
 	        sender.sendMessage(new StringBuilder().append("[ waOS ] Your report has been received! ").append(args[0]).append(" Report: ").append(message).toString());
-	        return true;
+	        return;
 	      }
 	      catch (SQLException e)
 	      {
 	        e.printStackTrace();
 	        sender.sendMessage("[ waOS ] Something went wrong! Contact a System Administrator!");
 	      }
-	    }
-	    return false;
+
+	    return;
 	  }
 	}	

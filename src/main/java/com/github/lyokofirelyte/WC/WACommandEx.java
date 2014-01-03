@@ -3,22 +3,23 @@ package com.github.lyokofirelyte.WC;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 //import org.kitteh.tag.TagAPI;
 
+
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
+
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
-public class WACommandEx implements CommandExecutor {
+public class WACommandEx {
 	
   WCMain plugin;
   WCPlayer wcp;
@@ -33,8 +34,9 @@ public class WACommandEx implements CommandExecutor {
   this.plugin = instance;
   }
 
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-    if ((cmd.getName().equalsIgnoreCase("waa")) && ((sender instanceof Player))) {
+  @WCCommand(aliases = {"waa"}, desc = "WC Alliances root menu", help = "/waa")
+  public void onWAA(Player sender, String[] args){
+    if (sender instanceof Player) {
     	
       Player p = (Player)sender;
       String pl = p.getName();
@@ -1011,11 +1013,10 @@ public class WACommandEx implements CommandExecutor {
     		s(p, "Try /waa help!");
     	}
   	}
+  }
 
-    
-    if (cmd.getName().equalsIgnoreCase("rn")){
-    	
-    	Player p = ((Player)sender);
+    @WCCommand(aliases = {"rn"}, desc = "Learn the real name of a player", help = "/rn <nickname>", min = 1)
+    public void onRealName(Player p, String[] args){
     	
     	if (args.length != 1){
     		s(p, "/rn <name>");
@@ -1028,9 +1029,9 @@ public class WACommandEx implements CommandExecutor {
     	}
     }
     
-    if (cmd.getName().equalsIgnoreCase("list")){
-    	
-    	Player p = ((Player)sender);
+    @WCCommand(aliases = {"list"}, desc = "List all players on the server", help = "/list")
+    public void onList(Player p, String[] args){
+
     	StringBuilder sb = new StringBuilder();
     	
     	for (Player pp : Bukkit.getOnlinePlayers()){
@@ -1040,31 +1041,30 @@ public class WACommandEx implements CommandExecutor {
     	s(p, s.replace(" ", "&8, "));
     }
   
-    if (cmd.getName().equalsIgnoreCase("nick")){
-    	
-    	Player p = ((Player)sender);
-    	
+    @WCCommand(aliases = {"nick"}, desc = "Give yourself a new nickname", help = "/nick <nick>", min = 1 , max = 1)
+    public void onNick(Player p, String[] args){
+
     	wcp = plugin.wcm.getWCPlayer(p.getName());
     	wca = plugin.wcm.getWCAlliance(wcp.getAlliance());
     	
     	if (args.length != 1){
     		s(p, "/nick <name>");
-    		return true;
+    		return;
     	}
     	
     	if (!args[0].substring(0, 3).equalsIgnoreCase(p.getName().substring(0, 3))){
     		s(p, "Your nick must start with the first three letters of your name.");
-    		return true;
+    		return;
     	}
     	
     	if (args[0].length() > 16){
     		s(p, "You can't have a nick over 16 letters long.");
-    		return true;
+    		return;
     	}
     	
     	if (args[0].contains("&") || args[0].contains("§")){
     		s(p, "Your color will be updated automatically based on which alliance you are in. Don't use &.");
-    		return true;
+    		return;
     	}
     	
     	wcp.setNick(args[0]);
@@ -1080,9 +1080,6 @@ public class WACommandEx implements CommandExecutor {
     	p.setDisplayName(plugin.wcm.getCompleted(wcp.getNick(), wca.getColor1(), wca.getColor2()));
     	s(p, "Updated!");
     }
-	return true;
-  }
-
 
   public void updatePlayer(WCPlayer wcp, String name){
 	plugin.wcm.updatePlayerMap(name, wcp);  

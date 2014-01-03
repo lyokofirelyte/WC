@@ -1,30 +1,26 @@
 package com.github.lyokofirelyte.WC.Commands;
 
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
-public class WCHat implements CommandExecutor {
+public class WCHat{
 
 	WCMain pl;
 	public WCHat(WCMain instance){
 	pl = instance;
     }
 
-	  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
+	  @WCCommand(aliases = {"hat"}, desc = "Put on a hat", help = "/hat", max = 0, perm = "wa.districtman")
+	  public void onHat(Player sender, String[] args){
 		  
 		  Player p = ((Player)sender);
-		  
-		  switch (cmd.getName().toLowerCase()){
-		  
-			  case "hat":
-				  
+
 				  if (p.getItemInHand() != null){
 					  if (p.getEquipment().getHelmet() != null){
 						  p.getInventory().addItem(p.getEquipment().getHelmet());
@@ -34,9 +30,10 @@ public class WCHat implements CommandExecutor {
 					  s(p, "Hat updated!");
 				  }
 				  
-				  break;
-				  
-			  case "chestplate":
+	  }
+				 
+	  @WCCommand(aliases = {"chestplate"}, desc = "Put on a chestplate", help = "/chestplate", max = 0, perm = "wa.districtman")
+	  public void onChestplate(Player p, String[] args){
 				  
 				  if (p.getItemInHand() != null){
 					  if (p.getEquipment().getChestplate() != null){
@@ -47,9 +44,10 @@ public class WCHat implements CommandExecutor {
 					  s(p, "Chestplate updated!");
 				  }
 				  
-				  break;
-				  
-			  case "leggings":
+	  }
+	  
+	  @WCCommand(aliases = {"leggings"}, desc = "Put on leggings", help = "/leggings", max = 0, perm = "wa.districtman")
+	  public void onLeggings(Player p, String[] args){
 				  
 				  if (p.getItemInHand() != null){
 					  if (p.getEquipment().getLeggings() != null){
@@ -60,10 +58,11 @@ public class WCHat implements CommandExecutor {
 					  s(p, "Leggings updated!");
 				  }
 				  
-				  break;
-				  
-			  case "boots":
-				  
+	  }
+	  
+	  @WCCommand(aliases = {"boots"}, desc = "Put on boots", help = "/boots", max = 0, perm = "wa.districtman")
+	  public void onBoots(Player p, String[] args){
+ 
 				  if (p.getItemInHand() != null){
 					  if (p.getEquipment().getBoots() != null){
 						  p.getInventory().addItem(p.getEquipment().getBoots());
@@ -73,9 +72,6 @@ public class WCHat implements CommandExecutor {
 					  s(p, "Boots updated!");
 				  }
 				  
-				  break;
 		  }
 
-		  return true;
 	  }
-}

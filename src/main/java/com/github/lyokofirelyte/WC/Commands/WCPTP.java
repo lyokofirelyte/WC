@@ -1,36 +1,34 @@
 package com.github.lyokofirelyte.WC.Commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.WCMain;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-public class WCPTP implements CommandExecutor {
+public class WCPTP{
 
 	WCMain pl;
 	public WCPTP(WCMain instance){
 	pl = instance;
     }
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		if (cmd.getName().toLowerCase().equals("ptp")){
-			
+	@WCCommand(aliases = {"ptp"}, help = "WC Patrol TP command")
+	public void onPTP(Player sender, String[] args){
+					
 			Player p = ((Player)sender);
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 			
 			if (args.length != 1){
 				s(p, "/ptp <player>");
-				return true;
+				return;
 			}
 			
 			for (ItemStack i : wcp.getPatrolActives()){
@@ -53,13 +51,12 @@ public class WCPTP implements CommandExecutor {
 							}
 						}
 					}
-					return true;
+					return;
 				}
 			}
 			s(p, "You're missing either a teleport cube, being in a patrol, or the other player being online.");
-		}
-		
-		return true;
+
+		return;
 	}
 	
 	public void tpAllow(WCPatrol wcpp){

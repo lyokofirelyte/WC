@@ -1,14 +1,12 @@
 package com.github.lyokofirelyte.WC.Commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 
-public class WCNewMember implements CommandExecutor {
+public class WCNewMember{
 	
 	public WCMain main;
 	
@@ -18,9 +16,8 @@ public class WCNewMember implements CommandExecutor {
 		
 	}
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-		
-		if ((label.equalsIgnoreCase("newmember") || label.equalsIgnoreCase("nm")) && sender.hasPermission("wa.staff")){
+	@WCCommand(aliases={"newmember", "nm"}, help = "Initiate a new member", min = 1, max = 1, perm = "wa.staff")
+	public void onNewMember(Player sender, String[] args){
 			
 			Player p = (Player) sender;
 			
@@ -54,11 +51,7 @@ public class WCNewMember implements CommandExecutor {
 				
 			}
 			
-			return true;
-			
-		}
-		
-		return false;
+			return;
 		
 	}
 	
