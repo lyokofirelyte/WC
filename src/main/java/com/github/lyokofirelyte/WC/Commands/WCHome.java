@@ -7,16 +7,14 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WC.WCMain;
 
-public class WCHome implements CommandExecutor {
+public class WCHome{
 	
 	WCMain plugin;
 	public WCHome(WCMain instance){
@@ -27,31 +25,39 @@ public class WCHome implements CommandExecutor {
 	
 	String commands = "home sethome remhome delhome";
 	
-	  public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
-		  
-		  if (commands.contains(label.toLowerCase())){
-			  
-			  WCPlayer wcp = plugin.wcm.getWCPlayer(sender.getName());
+	  @WCCommand(aliases = {"home"}, desc = "Teleports you back home", help = "/home <home name>")
+	  public void onHome(Player p, String[] args){
+
+			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
 			  List<String> homes = wcp.getHomes();
-			  Player p = ((Player)sender);
+			  String pName = p.getName();
+			  int homeLimit = limitCheck(p);
+
+					  home(args, wcp, p, pName, homeLimit, homes);
+		}
+		  
+		@WCCommand(aliases = {"sethome"}, desc = "Set a new home", help = "/sethome <name>", min = 1, max = 1)
+		public void onSetHome(Player p, String[] args){
+			
+			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
+			  List<String> homes = wcp.getHomes();
 			  String pName = p.getName();
 			  int homeLimit = limitCheck(p);
 			  
-			  switch (label.toLowerCase()){
-				  case "home":
-					  home(args, wcp, p, pName, homeLimit, homes);
-					  break;
-				  case "sethome":
 				     sethome(args, wcp, p, pName, homeLimit, homes);
-				     break;
-				  case "remhome": case "delhome":
+		}
+		
+		@WCCommand(aliases = {"remhome", "delhome"}, desc = "Remove a home", help = "/remhome <name>", min = 1, max = 1)
+		public void onRemHome(Player p, String[] args){
+			
+			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
+			  List<String> homes = wcp.getHomes();
+			  String pName = p.getName();
+			  int homeLimit = limitCheck(p);
+			  
 					 remhome(args, wcp, p, pName, homeLimit, homes);
-					 break;
-			  }
-		  }
-	  
-		  return true;
-	  }
+
+		}
 
 	public void home(String[] args, WCPlayer wcp, Player p, String pName, int homeLimit, List<String> homes) {
 		

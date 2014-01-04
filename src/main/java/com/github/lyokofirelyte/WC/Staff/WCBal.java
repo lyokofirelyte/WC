@@ -5,19 +5,18 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-public class WCBal implements CommandExecutor {
+public class WCBal{
 
 	 WCMain pl;
 	 public WCBal(WCMain instance){
@@ -26,16 +25,15 @@ public class WCBal implements CommandExecutor {
 	 
 	 WCPlayer wcpCurrent;
 	 
-	 public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
-			  
-		if (cmd.getName().equalsIgnoreCase("bal") || cmd.getName().equalsIgnoreCase("balance")){
-			
+	 @WCCommand(aliases = {"balance", "bal"}, desc = "WC Bal Command", help = "/balance <set, take, give, top> [player] [amount]")
+	 public void onBal(Player sender, String[] args){
+			  			
 			Player p = ((Player)sender);
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 			
 			if (args.length == 0){
 				s(p, "Balance: &6" + wcp.getBalance());
-				return true;
+				return;
 			}
 			
 			switch (args[0].toLowerCase()){
@@ -44,22 +42,22 @@ public class WCBal implements CommandExecutor {
 					
 					if (args.length != 3){
 						s(p, "/bal " + args[0].toLowerCase() + " <player> <amount>");
-						return true;
+						return;
 					}
 					
 					if (!p.hasPermission("wa.admin")){
 						s(p, "Admin only command!");
-						return true;
+						return;
 					}
 					
 					if (!Bukkit.getOfflinePlayer(args[1]).hasPlayedBefore() || pl.wcm.getWCPlayer(args[1]) == null){
 						s(p, "That player is not registered with the API! (Check spelling?)");
-						return true;
+						return;
 					}
 					
 					if (!Utils.isInteger(args[2]) || Integer.parseInt(args[2]) > 10000000 || Integer.parseInt(args[2]) < 0){
 						s(p, "Invalid number!");
-						return true;
+						return;
 					}
 					
 					wcpCurrent = pl.wcm.getWCPlayer(args[1]);
@@ -107,7 +105,7 @@ public class WCBal implements CommandExecutor {
 					
 					if (pl.wcm.getWCPlayer(args[0]) == null){
 						s(p, "Player not found in API! Try /bal help for more options...");
-						return true;
+						return;
 					}
 					
 					wcpCurrent = pl.wcm.getWCPlayer(args[0]);
@@ -115,9 +113,8 @@ public class WCBal implements CommandExecutor {
 					
 				break;
 			}
-		}
-		
-		return true;
+
+		return;
 	 }
 	 
 	 public void balTop(Player sendTo){

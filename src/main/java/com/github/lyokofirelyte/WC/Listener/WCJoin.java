@@ -10,14 +10,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.bobacadodl.JSONChatLib.JSONChatColor;
-import com.bobacadodl.JSONChatLib.JSONChatExtra;
-import com.bobacadodl.JSONChatLib.JSONChatFormat;
-import com.bobacadodl.JSONChatLib.JSONChatHoverEventType;
-import com.bobacadodl.JSONChatLib.JSONChatMessage;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatColor;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatFormat;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCJoin implements Listener {
@@ -86,9 +86,9 @@ WCAlliance wca;
 
 		updatePlayer(wcp, p.getName());
 	
-        JSONChatMessage message = new JSONChatMessage("Welcome. We are current running ", JSONChatColor.GOLD, null);
-        JSONChatExtra extra = new JSONChatExtra("WaterCloset v5", JSONChatColor.DARK_PURPLE, Arrays.asList(JSONChatFormat.BOLD));
-        extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, Utils.AS("&6The core plugin of Worlds Apart!"));
+        JSONChatMessage message = new JSONChatMessage("Welcome. We are currently running ", JSONChatColor.GOLD, null);
+        JSONChatExtra extra = new JSONChatExtra("WaterCloset v5.1", JSONChatColor.DARK_PURPLE, Arrays.asList(JSONChatFormat.BOLD));
+        extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, Utils.AS("&6NOW WITH CHAT INTERACTION! (Results vary)"));
         message.addExtra(extra);
         message.sendToPlayer(event.getPlayer());
 		return true;

@@ -13,40 +13,37 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WC.WCMain;
 
-public class WCWarps implements CommandExecutor {
+public class WCWarps{
 	
 	WCMain plugin;
 	public WCWarps(WCMain instance){
 	plugin = instance;
 	}
 
-	
-	  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		  
-		  if (cmd.getName().equalsIgnoreCase("remwarp") || cmd.getName().equalsIgnoreCase("delwarp")){
+	@WCCommand(aliases = {"remwarp", "delwarp"}, desc = "Remove a warp", help = "/remwarp <name>", max = 1, perm = "wa.mod2")
+	public void onRemWarp(Player sender, String[] args){
 			  
 			  Player p = ((Player)sender);
 			  
 			  if (args.length == 0){
 				  WCMain.s(p, "Try /remwarp <name>.");
-				  return true;
+				  return;
 			  }
 			  
 			  File warpFile = new File(plugin.getDataFolder() + File.separator + "Warps", args[0].toLowerCase() + ".yml");
 			  
 			  if (!warpFile.exists()) {
 				  WCMain.s(p, "That warp does not exist!");
-				  return true;
+				  return;
 			  }
 			  
 			  warpFile.delete();
@@ -58,13 +55,14 @@ public class WCWarps implements CommandExecutor {
 			  WCMain.s(p, "Warp removed. There are now &6" + fileNames.length + " &dwarps.");
 		  }
 		  
-		  if (cmd.getName().equalsIgnoreCase("setwarp")){
+	@WCCommand(aliases = {"setwarp"}, desc = "Create a new warp", help = "/setwarp <name>", max = 1, perm = "wa.mod2")
+	public void onSetWarp(Player sender, String[] args){
 			  
 			  Player p = ((Player)sender);
 			  
 			  if (args.length == 0){
 				  WCMain.s(p, "Try /setwarp <name>.");
-				  return true;
+				  return;
 			  }
 			  
 			  YamlConfiguration warpLoad = new YamlConfiguration();
@@ -104,8 +102,9 @@ public class WCWarps implements CommandExecutor {
 		      WCMain.s(p, "Set warp &6" + args[0].toLowerCase() + "&d. There are now &6" + fileNames.length + " &dwarps.");
 
 		  }
-		  
-		  if (cmd.getName().equalsIgnoreCase("warp") || cmd.getName().equalsIgnoreCase("w")){
+	
+	@WCCommand(aliases = {"warp", "w"}, desc = "Teleport to a specified location", help = "/warp <name>", max = 1, perm = "wa.mod2")
+	public void onWarp(Player sender, String[] args){
 			  
 			  final Player p = ((Player)sender);
 			  
@@ -121,7 +120,7 @@ public class WCWarps implements CommandExecutor {
 	                }
 	                
 	                paginate(sender, map, 1, 20, fileNames.length);
-	                return true;
+	                return;
 			  }
 			  
 			  if (Utils.isInteger(args[0])){
@@ -137,11 +136,11 @@ public class WCWarps implements CommandExecutor {
 	                
 	                if (Integer.parseInt(args[0]) > Math.round((double) (fileNames.length / 20))){
 	                	WCMain.s(p, "There aren't that many pages!");
-	                	return true;
+	                	return;
 	                }
 	                
 	                paginate(sender, map, Integer.parseInt(args[0]), 20, fileNames.length);
-	                return true;
+	                return;
 			  }
 			  
 				YamlConfiguration warpLoad = new YamlConfiguration();
@@ -149,7 +148,7 @@ public class WCWarps implements CommandExecutor {
 
 				    if (!fileToCheck.exists()) {
 				    	WCMain.s(p, "That warp does not exist!");
-				    	return true;
+				    	return;
 				    }
 				    
 				    try {
@@ -172,7 +171,7 @@ public class WCWarps implements CommandExecutor {
 			    	
 			    		if (!tpOther.isOnline()){
 			    			WCMain.s(p, "That player is not online!");
-			    			return true;
+			    			return;
 			    		}
 			    		
 			    	Player other = Bukkit.getPlayer(args[1]);	
@@ -186,7 +185,7 @@ public class WCWarps implements CommandExecutor {
 				    plugin.wcm.updatePlayerMap(other.getName(), wcp);
 					other.teleport(warpTo);
 				    WCMain.s(other, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple + " &dby " + p.getDisplayName() + "&d.");
-				    return true;
+				    return;
 			    }
 			    
 			    double xP = p.getLocation().getX();
@@ -214,11 +213,8 @@ public class WCWarps implements CommandExecutor {
 					}
 					
 			    WCMain.s(p, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple);
-		  }
-		  
-	  return true;
+	 }
 	  
-	  }
 	  
 	  public  void paginate(CommandSender sender, SortedMap<Integer, String> map,
 			  int page, int pageLength, int warps) {

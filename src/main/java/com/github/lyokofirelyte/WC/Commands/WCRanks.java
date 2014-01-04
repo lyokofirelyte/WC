@@ -7,21 +7,20 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WC.WCMain;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
 
-public class WCRanks implements CommandExecutor {
+public class WCRanks{
 
 	WCMain pl;
 	public WCRanks(WCMain instance){
@@ -30,9 +29,8 @@ public class WCRanks implements CommandExecutor {
 	
 	WCPlayer wcp;
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		if (cmd.getName().equals("rankup")){
+	@WCCommand(aliases = {"rankup"}, help = "Upgrade your rank!", max = 0)
+	public void onRankup(Player sender, String[] args){
 			
 			Player p = ((Player)sender);
 			wcp = pl.wcm.getWCPlayer(p.getName());
@@ -76,7 +74,7 @@ public class WCRanks implements CommandExecutor {
 					s2(p, "&d| Hand holding golden carrot renamed to 'rainbow dash'");
 					s2(p, "&d| 825 exp in /wc exp");
 					s2(p, "&d| 600,000 shinies");
-					return true;
+					return;
 				}
 				p.setItemInHand(new ItemStack(Material.AIR, 1));
 				wcp.setExp(wcp.getExp() - 825);
@@ -91,7 +89,7 @@ public class WCRanks implements CommandExecutor {
 					s2(p, "&d| Hand holding cobblestone renamed to 'supercobble'");
 					s2(p, "&d| 2475 exp in /wc exp");
 					s2(p, "&d| 1,000,000 shinies");
-					return true;
+					return;
 				}
 				p.setItemInHand(new ItemStack(Material.AIR, 1));
 				wcp.setExp(wcp.getExp() - 2475);
@@ -102,18 +100,17 @@ public class WCRanks implements CommandExecutor {
 						
 					if (y > ranks.size() - 1){
 						WCMain.s(p, "You are already the highest rank!");
-						return true;
+						return;
 					}
 						
 					if (wcp.getRank().toLowerCase().equals(r.substring(2).toLowerCase())){
 						checkCash(p, ranks.get(y+1).substring(2), wcp.getRank(), ranks.get(y+1));
-						return true;
+						return;
 					}
 					y++;
-			}
-	    } 
+			} 
 	
-		return true;
+		return;
 	}
 
 	private void checkCash(Player p, String newGroup, String oldGroup, String newGroupFancy) {

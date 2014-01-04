@@ -10,19 +10,11 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import com.bobacadodl.JSONChatLib.JSONChatClickEventType;
-import com.bobacadodl.JSONChatLib.JSONChatExtra;
-import com.bobacadodl.JSONChatLib.JSONChatHoverEventType;
-import com.bobacadodl.JSONChatLib.JSONChatMessage;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
@@ -30,15 +22,20 @@ import static com.github.lyokofirelyte.WC.Util.Utils.*;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.PlayerEmoteEvent;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatClickEventType;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
+import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
 
 import static com.github.lyokofirelyte.WC.WCMain.*;
 
 
-public class WCChannels implements CommandExecutor, Listener {
+public class WCChannels implements Listener {
 	
   WCMain pl;
   String WC = "§dWC §5// §d";
@@ -268,7 +265,7 @@ public class WCChannels implements CommandExecutor, Listener {
 	      	"\n&6Exp&f: &6" + wcpCurrent.getExp() +
 	      	"\n&6Holding&f: &6" + p.getItemInHand().getType().name().toString() +
 	      	"\n&6IGN&f: &7" + p.getName()));
-	      	extra.setClickEvent(JSONChatClickEventType.SUGGEST_COMMAND, "/msg " + p.getName());
+	      	extra.setClickEvent(JSONChatClickEventType.SUGGEST_COMMAND, "/msg " + p.getName() + " ");
 	      	newDispName.addExtra(extra);
 	      	JSONChatExtra extra2 = new JSONChatExtra(AS(message), null, null);
 	      	newDispName.addExtra(extra2);
@@ -284,31 +281,26 @@ public class WCChannels implements CommandExecutor, Listener {
 		}
   }
 
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-	 
-    switch (cmd.getName()) { 
-
-    	case "wcstats":
+  @WCCommand(aliases = {"wcstats"}, desc = "Pull stats on any player", help = "!stats <playername>", max = 1)
+  public void onStats(Player sender, String[] args){
     		
     		stats("!stats" + createString(args, 0), ((Player)sender));
+
+  }
     	
-    	break;
-    	
-    	case "msg": case "tell": case "t":
+ @WCCommand(aliases = {"msg", "tell", "t"}, desc = "Private message a player", help = "/tell <playername> <msg>", min = 2)
+ public void onMSG(Player sender, String[] args){
     		
 	    	p = ((Player)sender);
 	     
 	        if (args.length <= 1){
 	        	s(p, "It seems you were trying to message someone. Try /msg <player> <message> instead...");
-	        	break;
 	        }
 
 	        String message2 = createString(args, 1);
 	
 	        if (sender.getName().toLowerCase().contains(args[0].toLowerCase())){
 	        	s(p, "Welp, you're forever alone. #sendingmessagestomyself");
-	        	break;
 	        }
 	
 	        wcp = pl.wcm.getWCPlayer(p.getName());
@@ -333,17 +325,16 @@ public class WCChannels implements CommandExecutor, Listener {
 	        		break;
 	        	}
 	        }
+ }
 
-	        break;
-        
-	    case "r":
+ @WCCommand(aliases = {"r", "replay"}, desc = "Quickly reply to a private message", help = "/r <msg>", min = 1)
+ public void onReply(Player sender, String[] args){
 	
 	    	p = ((Player)sender);
 	    	wcp = pl.wcm.getWCPlayer(p.getName());
 	    	
 	    	if (Bukkit.getPlayer(wcp.getLastChat()) == null){
 	    		s(p, "That player is not online.");
-	    		break;
 	    	}
 	    	
 	    	wcpCurrent = pl.wcm.getWCPlayer(wcp.getLastChat());
@@ -355,10 +346,10 @@ public class WCChannels implements CommandExecutor, Listener {
     		if (pl.afkTimer.get(wcp.getLastChat()) >= 180){
     			sender.sendMessage(AS("&7&oThat player is afk."));
     		}
-	        break;
     }
 
-    if (label.equalsIgnoreCase("o") && sender instanceof Player && sender.hasPermission("wa.staff")) {
+ @WCCommand(aliases = {"o"}, desc = "Chat in StaffChat. Soup or Seekrit", help = "/o <msg>", min = 1, perm = "wa.staff")
+ public void onO(Player sender, String[] args){
     	
     	chatUsers = pl.datacore.getStringList("StaffChat.Users");
     	
@@ -366,7 +357,7 @@ public class WCChannels implements CommandExecutor, Listener {
       
     	if (args.length <= 0) {
     		s(p, "Try /o -join, /o -leave, or /o -list");
-    		return true;
+    		return;
     	}
       
       switch (args[0].toLowerCase()){
@@ -381,7 +372,7 @@ public class WCChannels implements CommandExecutor, Listener {
 		          }
 	          }
 	          
-		  return true;
+		  return;
 	      
 	      case "-join":
 	    	  
@@ -401,7 +392,7 @@ public class WCChannels implements CommandExecutor, Listener {
 	              }
 	          }
 	    	  
-		  return true;    
+		  return;    
 	      
 	      case "-leave":
 	    	  
@@ -421,7 +412,7 @@ public class WCChannels implements CommandExecutor, Listener {
 	              }
 	          }
 	    	 
-	      return true;
+	      return;
       
       }
 
@@ -431,17 +422,18 @@ public class WCChannels implements CommandExecutor, Listener {
           }
       }
         
-    return true;
+    return;
   }
 
-	  if ((cmd.getName().equalsIgnoreCase("l")) && ((sender instanceof Player))) {
+ @WCCommand(aliases = {"l"}, desc = "Alliance Chat", help = "/l <msg>", min = 1)
+ public void onL(Player sender, String[] args){
 		  
 	      Player p = (Player)sender;
 		  wcp = pl.wcm.getWCPlayer(p.getName());
 		  
 		  if (!wcp.getInChat()){
 			  s(p, "You're not in a chat.");
-			  return true;
+			  return;
 		  }
 		  
 		  WCAlliance wcaCurrent = pl.wcm.getWCAlliance(wcp.getCurrentChat());
@@ -455,8 +447,9 @@ public class WCChannels implements CommandExecutor, Listener {
 	
 	  }
 	  
-	  if (cmd.getName().equalsIgnoreCase("p")){
-		  
+ @WCCommand(aliases = {"p"}, desc = "WC Patrol Chat", help = "/p <msg>", min = 1)
+ public void onP(Player sender, String[] args){
+ 
 		  Player p = (Player)sender;
 		  wcp = pl.wcm.getWCPlayer(p.getName());
 		  
@@ -470,10 +463,8 @@ public class WCChannels implements CommandExecutor, Listener {
 				  }
 			  }
 		  }
-	  }
-	  
-    return true;
-  }
+ }
+
   
   public void updatePlayer(WCPlayer wcp, String name){
 	  pl.wcm.updatePlayerMap(name, wcp);  

@@ -57,10 +57,10 @@
     </dependency>
   </dependencies>
   <repositories>
-  	<repository>
-		<id>vault-repo</id>
-		<url>http://ci.herocraftonline.com/plugin/repository/everything</url>
-	</repository>
+          <repository>
+                <id>vault-repo</id>
+                <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+        </repository>
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
@@ -78,8 +78,8 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-	<plugins>
-	  <plugin>
+        <plugins>
+          <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -111,6 +111,6 @@
           </execution>
         </executions>
       </plugin>
-	</plugins>
+        </plugins>
   </build>
 </project>

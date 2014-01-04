@@ -9,9 +9,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,12 +16,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
+
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-public class WCMail implements CommandExecutor, Listener {
+public class WCMail implements Listener {
 public static String WC = "§dWC §5// §d";
 List <String> mail;
 private Connection conn;
@@ -38,16 +37,15 @@ String message;
 
 	List<String> WCHelpMail;
 	
+	@WCCommand(aliases = {"mail"}, help = "Send mail to another player", min = 1)
+	public void onMail(Player sender, String[] args){
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-	
-	if (cmd.getName().equals("mail")){
 		
 		WCHelpMail = plugin.help.getStringList("WC.Mail");
 		
 		if (sender instanceof Player == false){
 			sender.sendMessage(Utils.AS(WC + "Sorry console, I'm too lazy to allow you to send mails. That's like, extra effort."));
-			return true;
+			return;
 		}
 		
 		Player p = (Player) sender;
@@ -175,8 +173,7 @@ String message;
 		  }
 		}
 	
-		}
-	return true;
+	return;
 	}
 	
 	private void mailAlliance(Player p, String message){

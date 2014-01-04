@@ -1,26 +1,25 @@
 package com.github.lyokofirelyte.WC.Commands;
 
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
+
 import static com.github.lyokofirelyte.WC.WCMain.s;
+
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-public class WCSoar implements CommandExecutor {
+public class WCSoar{
 
 	WCMain pl;
 	public WCSoar(WCMain instance){
 	pl = instance;
 	}
 	
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-	
-		if (cmd.getName().toLowerCase().equals("soar")){
+	@WCCommand(aliases = {"soar"}, help = "Soar for a short period of time", max = 0, perm = "wa.elysian")
+	public void onSoar(Player sender, String[] args){
 			
 			Player p = ((Player)sender);
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
@@ -38,9 +37,8 @@ public class WCSoar implements CommandExecutor {
 				long timeLeft = (wcp.getCanSoarTimer() - (System.currentTimeMillis()/1000L));
 				s(p, "You can soar again in " + timeLeft + " &dseconds.");
 			}
-		}
 		
-		return true;
+		return;
 	}
 	
 }

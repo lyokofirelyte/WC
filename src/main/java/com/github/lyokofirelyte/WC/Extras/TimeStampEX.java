@@ -1,20 +1,18 @@
 package com.github.lyokofirelyte.WC.Extras;
 
 import java.util.Date;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCCommand;
 import com.github.lyokofirelyte.WC.WCMain;
 
-public class TimeStampEX
-  implements CommandExecutor
-{
+public class TimeStampEX{
+	
   public WCMain plugin;
   private Long unixTime;
 
@@ -23,10 +21,9 @@ public class TimeStampEX
     this.plugin = plugin;
   }
 
-  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
-  {
-    if (cmd.getName().equalsIgnoreCase("timestamp"))
-    {
+  @WCCommand(aliases = {"timestamp"}, desc = "Consol command", help = "TIMESTAMP", max = 0)
+  public void onTimeStamp(Player sender, String[] args){
+
       if ((sender instanceof Player)) {
         sender.sendMessage(ChatColor.RED + "This is a console command.");
       } else {
@@ -37,8 +34,9 @@ public class TimeStampEX
       }
     }
 
-    if (cmd.getName().equalsIgnoreCase("getnick"))
-    {
+  @WCCommand(aliases = {"getnick"}, desc = "Consol command", help = "GETNICK", max = 0)
+  public void onGetNick(Player sender, String[] args){
+
       if ((sender instanceof Player)) {
         sender.sendMessage(ChatColor.RED + "This is a console command.");
       }
@@ -55,8 +53,9 @@ public class TimeStampEX
       }
     }
 
-    if (cmd.getName().equalsIgnoreCase("stringbuilder"))
-    {
+  @WCCommand(aliases = {"stringbuilder"}, desc = "Consol command", help = "STRINGBUILDER", max = 0)
+  public void onStringBuilder(Player sender, String[] args){
+	  
       if ((sender instanceof Player)) {
         sender.sendMessage(ChatColor.RED + "This is a console command.");
       } else if (args.length > 0) {
@@ -75,8 +74,9 @@ public class TimeStampEX
 
     }
 
-    if ((cmd.getName().equalsIgnoreCase("itemname")) && (sender.hasPermission("vte.itemname")))
-    {
+  @WCCommand(aliases = {"itemname"}, desc = "Fetch item name", help = "/itemname", min = 0)
+  public void onItemName(Player sender, String[] args){
+
       if (!(sender instanceof Player)) {
         sender.sendMessage(ChatColor.RED + "Use @CMDOP!");
       }
@@ -90,7 +90,4 @@ public class TimeStampEX
       }
 
     }
-
-    return true;
   }
-}
