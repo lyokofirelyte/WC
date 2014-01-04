@@ -61,7 +61,7 @@ public class GuiRoot extends WCGui {
 	}
 	
 	@Override
-	public void actionPerformed(Player p){
+	public void actionPerformed(final Player p){
 	
 		switch (this.slot){
 		
@@ -97,7 +97,7 @@ public class GuiRoot extends WCGui {
 					
 					public void run(){
 						
-						
+						main.wcm.displayGui(p, new GuiStaff(main, p, new GuiRoot(main)));
 						
 					}
 					
