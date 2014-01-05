@@ -50,7 +50,7 @@ public class WCCommandsFixed {
 	}
 	
 	@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
-	private void onTheHugeWayToLongMainWCCommand(Player p, String[] args){
+	private void onTheHugeWayTooLongMainWCCommand(Player p, String[] args){
 		
 		WCPlayer wcp = main.wcm.getWCPlayer(p.getName());
 		
@@ -225,17 +225,99 @@ public class WCCommandsFixed {
 				
 			} else {
 				
-				int tpt = wcp.getParagonTps();
+				int tokens = wcp.getParagonTps();
 				
-				if (tpt < 1){
+				if (tokens < 1){
 					
 					s(p, "You don't have any TP tokens!");
 					
+				} else if (Bukkit.getPlayer(args[1]) == null){
+					
+					s(p, "That player is not online!");
+					
 				} else {
 					
-					wcp.setParagonTps(tpt - 1);
-					Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + p.getName() + " " + args[1]);
+					wcp.setParagonTps(tokens - 1);
+					tempOp(p, "tp " + args[1]);
 					s(p, "Teleporting!");
+					
+				}
+				
+			}
+			
+			break;
+			
+		case "markkit":
+			
+			if (wcp.getParagonMarket()){
+				
+				Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "warp markkit " + p.getName());
+				
+			} else {
+				
+				s(p, "You don't have a markkit warp!");
+			}
+			
+			break;
+			
+		case "back":
+			
+			int tokens = wcp.getParagonBacks();
+			
+			if (tokens < 1){
+				
+				s(p, "You don't have any back tokens!");
+				
+			} else {
+				
+				wcp.setParagonBacks(tokens - 1);
+				tempOp(p, "back");
+				
+			}
+			
+			break;
+			
+		case "home":
+			
+			if (wcp.getParagonSpecialHomeSet()){
+				
+				p.teleport(wcp.getParagonSpecialHome());
+				s(p, "Teleporting!");
+				
+			} else {
+				
+				s(p, "You don't have a special home set!");
+				
+			}
+			
+			break;
+			
+		case "stafftp":
+			
+			if (checkPerm(p, "wa.staff")){
+				
+				if (args.length < 2){
+					
+					s(p, "/wc stafftp <player>");
+					
+				} else {
+					
+					Player pp = Bukkit.getPlayer(args[1]);
+					
+					if (pp == null){
+						
+						s(p, "That player is not online!");
+						
+					} else if (pp.getName().equals(p.getName())){
+						
+						s(p, "Why would you even want to check yourself?");
+						
+					} else {
+						
+						tempOp(p, "tp " + args[1]);
+						b(WC + "&7" + p.getDisplayName() + " &dhas used a staff teleport for &7" + pp.getDisplayName() + "&d!");
+						
+					}
 					
 				}
 				
@@ -258,6 +340,22 @@ public class WCCommandsFixed {
 		} else {
 			
 			return false;
+			
+		}
+		
+	}
+	
+	private void tempOp(Player p, String cmd){
+		
+		if (p.isOp()){
+			
+			p.performCommand(cmd);
+			
+		} else {
+			
+			p.setOp(true);
+			p.performCommand(cmd);
+			p.setOp(false);
 			
 		}
 		
