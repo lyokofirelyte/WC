@@ -123,6 +123,15 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   public Map <String, Integer> afkTimer = new HashMap<>();
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
+  public Map <String, WCLiftFloor> elevatorMap = new HashMap<>();
+  
+  public Map <String, WCLiftFloor> getElevatorMap(){
+	  return elevatorMap;
+  }
+	
+  public void setElevatorMap(Map <String, WCLiftFloor> a){
+	  elevatorMap = a;
+  }
   
   private int msg = 0;
 
