@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 
+
+
+
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -23,12 +27,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockIterator;
 
 
-import com.github.lyokofirelyte.WC.WCMain;
 
-public class Utils {
+
+
+
+import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCAPI;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
+
+public class Utils extends WCUtils {
 	
-	WCMain plugin;
+	public static WCMain plugin;
+	
 	public Utils(WCMain instance){
+		super(new WCAPI());
 	    plugin = instance;
 	}
 	
@@ -151,6 +163,18 @@ public class Utils {
 		
 	}
 	
+	public static String[] AS(String[] DecorativeToasterCozyLaikSoTotesObvi){
+		
+		for (int i = 0; i < DecorativeToasterCozyLaikSoTotesObvi.length; i++){
+			
+			DecorativeToasterCozyLaikSoTotesObvi[i] = AS(DecorativeToasterCozyLaikSoTotesObvi[i]);
+			
+		}
+		
+		return DecorativeToasterCozyLaikSoTotesObvi;
+		
+	}
+	
  	public static boolean hasPerms(String w, String p, String usepermission) {
     return WCVault.perms.playerHas(w, p, usepermission);
 	}
@@ -213,4 +237,55 @@ public class Utils {
 		int sel = rand.nextInt(entities.size());
 		return entities.get(sel);
 	}
+	
+	public static void s(Player p, String[] s){
+		
+		p.sendMessage(AS(s));
+		
+	}
+	
+	public static void b(String s){
+		
+		Bukkit.broadcastMessage(AS(WC + s));
+		  
+	}
+	
+	public static void b(String[] s){
+		
+		for (String ss : s){
+			
+			Bukkit.broadcastMessage(AS(ss));
+			
+		}
+		
+	}
+	
+	public static void blankB(String s){
+		
+		Bukkit.broadcastMessage(s);
+		
+	}
+	
+	public static void blankB(String[] s){
+		
+		for (String ss : s){
+			  
+			blankB(ss);
+			
+		}
+		
+	}
+	  
+	public static void b2(String s){
+		
+		Bukkit.broadcastMessage(AS(s));
+		
+	}
+	
+	public static void delay(Runnable run, long delay){
+		
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, run, delay);
+		
+	}
+	
 }
