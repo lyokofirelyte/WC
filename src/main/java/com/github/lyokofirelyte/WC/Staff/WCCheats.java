@@ -160,7 +160,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = {"sit"}, desc = "Like a chair. Be warned: It's ghetto. :D", help = "/sit")
-	private void onSit(Player p, String[] args){
+	public void onSit(Player p, String[] args){
 	
 				if (p.isInsideVehicle()){
 					p.eject();
@@ -305,7 +305,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = "fly", desc = "It's all in the name", help = "/fly", perm = "wa.mod2")
-	private void onFly(Player p, String[] args){
+	public void onFly(Player p, String[] args){
 				Player q;
 				
 				if (args.length == 1){
@@ -334,7 +334,7 @@ public class WCCheats{
 	
 	@SuppressWarnings("deprecation")
 	@WCCommand(aliases = {"i"}, desc = "Give an item to yourself", help = "i <item>", max = 1, perm = "wa.mod2")
-	private void onI(Player p, String[] args){
+	public void onI(Player p, String[] args){
 
 				if (args.length == 0 || p.getInventory().firstEmpty() == -1){
 					s(p, "/i <item> (must have room!)");
@@ -353,7 +353,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = {"ci"}, desc = "Clear Inventory (or restor inventory. Results may vary. TM)", help = "/ci [u]")
-	private void onCI(Player p, String[] args){
+	public void onCI(Player p, String[] args){
 
 				if (args.length == 0){
 					pl.backupInvs.put(p.getName(), p.getInventory().getContents());
@@ -371,7 +371,7 @@ public class WCCheats{
 	}	
 	
 	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.more2")
-	private void onMore(Player p, String[] args){
+	public void onMore(Player p, String[] args){
 
 				if (p.getInventory().getItemInHand() != null){
 					p.getInventory().getItemInHand().setAmount(64);
@@ -380,7 +380,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = {"back"}, desc = "Teleport you to your last location", help = "/back", perm = "wa.mod2")
-	private void onBack(Player p, String[] args){
+	public void onBack(Player p, String[] args){
 
 				WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 				if (wcp.getLastLocation() != null){
@@ -396,7 +396,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = {"tppos"}, desc = "Teleport yourself to a specified coordinates", help = "/tppos <x> <y> <z>", min = 3 , max = 3, perm = "wa.mod2")
-	private void onTPPos(Player p, String[] args){
+	public void onTPPos(Player p, String[] args){
 				
 				if (args.length != 3){
 					s(p, "/tppos x y z");
@@ -409,7 +409,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = {"speed"}, desc = "Adjust your fly/walk speed", help = "/speed <1-10>", min = 1, max = 1, perm = "wa.mod2")
-	private void onSpeed(Player p, String[] args){
+	public void onSpeed(Player p, String[] args){
 
 				if (args.length != 1 || !Utils.isInteger(args[0]) || Integer.parseInt(args[0]) > 10 || Integer.parseInt(args[0]) < 0){
 					s(p, "/speed <#>");
@@ -425,7 +425,7 @@ public class WCCheats{
 	}
 	
 	@WCCommand(aliases = {"killall"}, desc = "Kill all mobs in a 1000 block radius", help = "/killall", perm = "wa.mod")
-	private void onKillAll(Player p, String[] args){
+	public void onKillAll(Player p, String[] args){
 	
 				int radius = 1000;
 				int killed = 0;
@@ -446,7 +446,7 @@ public class WCCheats{
 		}
 
 	@SuppressWarnings("deprecation")
-	private void formMob(Player p, EntityType e, int health, String nameTag, String armorType, Material m, PotionEffectType pe, String location, List<EntityType> goodPassengers, int amount) {
+	public void formMob(Player p, EntityType e, int health, String nameTag, String armorType, Material m, PotionEffectType pe, String location, List<EntityType> goodPassengers, int amount) {
 		
 		List<LivingEntity> les = new ArrayList<LivingEntity>();
 		List<LivingEntity> passengers = new ArrayList<LivingEntity>();
