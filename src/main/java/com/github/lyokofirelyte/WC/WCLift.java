@@ -158,7 +158,7 @@ public class WCLift implements Listener {
 						Map<String, WCLiftFloor> map = new HashMap<String, WCLiftFloor>();
 						map.put(p.getName(), wclf);
 						pl.wcm.getWCSystem("system").setElevatorUser(p);
-						pl.wcm.getWCSystem("system").setElevatorMap(map);
+						pl.setElevatorMap(map);
 						for (Location l : matsAll.keySet()){
 							if (l.getBlock().getType() != Material.WALL_SIGN){
 								l.getBlock().setType(Material.AIR);
@@ -190,7 +190,7 @@ public class WCLift implements Listener {
 	@WCDelay (time = 1L)
 	public void ascend(){
 		
-		WCLiftFloor wclf = pl.wcm.getWCSystem("system").getElevatorMap().get(pl.wcm.getWCSystem("system").getElevatorUser().getName());
+		WCLiftFloor wclf = pl.getElevatorMap().get(pl.wcm.getWCSystem("system").getElevatorUser().getName());
 		List<Player> endPlayers = new ArrayList<Player>();
 			
 		for (String s : wclf.getPlayers().keySet()){
