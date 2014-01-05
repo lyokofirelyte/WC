@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
@@ -23,7 +23,7 @@ public class WCTele {
 	WCPlayer wcpCurrent;
 	Player q;
 	
-	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere")
+	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere",  name = "TP")
 	public void onTP(Player p, String[] args, String cmd){
 
 			wcp = pl.wcm.getWCPlayer(p.getName());
@@ -40,6 +40,7 @@ public class WCTele {
 						pl.wcm.updatePlayerMap(wcp.getTpaRequest(), wcpCurrent);
 						wcp.setTpaRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
+						return;
 					}
 				}
 			}
@@ -53,6 +54,7 @@ public class WCTele {
 						q = p; Utils.effects(q); s(p, "Teleporting!"); s(q, "Accepted.");
 						wcp.setTpahereRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
+						return;
 					}
 				}
 			}

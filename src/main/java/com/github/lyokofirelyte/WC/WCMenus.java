@@ -39,7 +39,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.github.lyokofirelyte.WC.Gui.GuiRoot;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
@@ -123,7 +123,7 @@ public class WCMenus implements Listener{
 		}
 	}
 	
-	@WCCommand(aliases = "root", help = "Open the Root menu GUI Interface. Ooooo shiney!")
+	@WCCommand(aliases = {"root"}, help = "Open the Root menu GUI Interface. Ooooo shiney!")
 	public void onRoot(final Player sender, String[] args){
 			
 			colorSelection.put(((Player)sender).getName(), "red");

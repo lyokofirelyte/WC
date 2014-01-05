@@ -15,7 +15,6 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
@@ -28,7 +27,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -59,25 +57,6 @@ public class WCMiscEvents implements Listener {
 	
 	public WCMiscEvents(WCMain plugin){
 		this.plugin = plugin;
-	}
-	
-	@EventHandler(priority = EventPriority.LOW)
-	public void thereIsAnEventForEverything(HangingBreakByEntityEvent e){
-		
-		Entity ent = e.getEntity();
-		
-		if (ent instanceof ItemFrame && ent.getLocation().distance(plugin.spawnLoc) <= 500 && e.getRemover() instanceof Player){
-			
-			Player p = (Player) e.getRemover();
-			
-			if (!(p.hasPermission("wa.staff"))){
-				
-				e.setCancelled(true);
-				
-			}
-			
-		}
-		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)

@@ -14,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
  public class WCInvSee implements Listener {
 

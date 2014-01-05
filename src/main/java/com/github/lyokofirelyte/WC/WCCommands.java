@@ -32,9 +32,8 @@ import com.github.lyokofirelyte.WC.Util.WCVault;
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
-import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WCAPI.Loops.WCLoop;
 
@@ -72,7 +71,7 @@ public class WCCommands {
 		  return;
   }
   
-  @WCCommand(aliases = {"loopTest"}, help = "Loop!", perm = "wa.staff")
+  @WCCommand(aliases = {"looptest"}, help = "Loop!", perm = "wa.staff")
   public void loopTest(Player p, String[] args){
 	try {
 		plugin.api.ls.callLoop(getClass().getMethod("looper"), this.getClass(), plugin);
@@ -1629,14 +1628,6 @@ public class WCCommands {
 				wcp.setFireworks(true);
 				s(p, "Fireworks will display when you find paragons.");
 			}
-		
-		case "setspawnloc":
-			
-			Location loc = p.getLocation();
-			plugin.spawnLoc = loc;
-			WCMain.s(p, "Set the spawn loc to &6" + loc.getX() + "&d, &6" + loc.getY() + "&d, &6" + loc.getZ() + "&d!");
-			break;
-
       }
       
 	}

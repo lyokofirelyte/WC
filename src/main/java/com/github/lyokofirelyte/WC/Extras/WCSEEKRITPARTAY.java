@@ -25,7 +25,7 @@ import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
 public class WCSEEKRITPARTAY implements Listener {
 	

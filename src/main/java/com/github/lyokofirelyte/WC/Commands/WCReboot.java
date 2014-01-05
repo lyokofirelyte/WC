@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 

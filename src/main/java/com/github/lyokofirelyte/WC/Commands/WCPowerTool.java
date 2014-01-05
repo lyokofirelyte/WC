@@ -14,7 +14,7 @@ import com.github.lyokofirelyte.WC.WCMain;
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 public class WCPowerTool implements Listener {

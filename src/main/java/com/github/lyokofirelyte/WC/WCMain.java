@@ -123,9 +123,7 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   public Map <String, Integer> afkTimer = new HashMap<>();
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
-  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class));
-  
-  public Location spawnLoc;
+  public Map <String, WCLiftFloor> elevatorMap = new HashMap<>();
   
   private int msg = 0;
 
@@ -159,7 +157,8 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	  pm.registerEvents(new WCMarkkit(this),this);
 	  pm.registerEvents(new WCMember(this),this);
 	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
-	
+	  pm.registerEvents(new WCLift(this), this);
+	  
 	  vaultMgr.hookSetup();
 	    
 	  try {
@@ -299,12 +298,9 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	  getLogger().info("WaterCloset has been disabled.");
   }
 
-  private void registerCommands() {
-	  
-	api.reg.registerCommands(commandClasses, this); // IT'S SO SEXY OH BBY
-
-
-	
+  private void registerCommands() {  
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
+	  api.reg.registerCommands(commandClasses, this);
   }
 
   public void saveYamls() {

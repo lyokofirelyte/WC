@@ -25,7 +25,7 @@ public class WCDisco {
 		pl = instance;
 	}
 	
-	@WCCommand(aliases = {"disco"}, help = "WC Disco!")
+	@WCCommand(aliases = {"ds"}, help = "WC Disco!")
 	public void disco(Player sender, String[] args) {
 		
 			Bukkit.broadcastMessage(Utils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));

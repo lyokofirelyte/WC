@@ -371,15 +371,17 @@ public class WCPatrols implements Listener {
 		WCSystem wcs = pl.wcm.getWCSystem("system");
 		Player p = e.getPlayer();
 		
-		for (Location l : wcs.getPatrolHotSpotAreas()){
-			if (l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
-				for (ItemStack i : pl.wcm.getWCPlayer(e.getPlayer().getName()).getPatrolActives()){
-					if (dispName(i, "Build Charm")){
-						return;
+		if (e.getBlock().getWorld().getName().equals("world") && pl.wcm.getWCPlayer(e.getPlayer().getName()).getPatrol() != null){
+			for (Location l : wcs.getPatrolHotSpotAreas()){
+				if (l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
+					for (ItemStack i : pl.wcm.getWCPlayer(e.getPlayer().getName()).getPatrolActives()){
+						if (dispName(i, "Build Charm")){
+							return;
+						}
 					}
+					e.setCancelled(true);
+					s(p, "You can't build in hotzones without the build charm equipped!");
 				}
-				e.setCancelled(true);
-				s(p, "You can't build in hotzones without the build charm equipped!");
 			}
 		}
 	}
@@ -437,7 +439,7 @@ public class WCPatrols implements Listener {
 			return;
 		}
 				
-    	wcs.setPatrolHotSpotAreas(Utils.circle(wcs.getPatrolHotSpot(), 75, 75, false, true, 0));
+    	wcs.setPatrolHotSpotAreas(Utils.circle(wcs.getPatrolHotSpot(), 50, 50, false, true, 0));
     	wcs.setPatrolCrystal(Bukkit.getWorld("world").spawnEntity(wcs.getPatrolHotSpot(), EntityType.ENDER_CRYSTAL));
 
 		int checkTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){

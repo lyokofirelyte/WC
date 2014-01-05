@@ -14,6 +14,7 @@ public class GuiStaff extends WCGui {
 	private WCMain main;
 	private WCGui parent;
 	
+	@SuppressWarnings("unused")
 	private Player p;
 	
 	public GuiStaff(WCMain main, Player p, WCGui parent){

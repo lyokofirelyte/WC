@@ -3,7 +3,7 @@ package com.github.lyokofirelyte.WC.Commands;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
 public class WCSpawn{
 	

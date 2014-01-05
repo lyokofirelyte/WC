@@ -21,7 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
@@ -35,7 +35,7 @@ public class WCCheats{
     this.pl = instance;
 	}
 	
-	@WCCommand(aliases = {"top"}, desc = "teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2")
+	@WCCommand(aliases = {"top"}, desc = "Teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2")
 	public void onTop(Player p, String[] args){
 
 				if (p.getWorld().getHighestBlockYAt(p.getLocation()) != -1){
@@ -47,7 +47,7 @@ public class WCCheats{
 	}
 	
 	@SuppressWarnings("deprecation")
-	@WCCommand(aliases = {"top"}, desc = "Spawn Mob", help = "/sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>", max = 9, perm = "wa.mod2")
+	@WCCommand(aliases = {"sm"}, desc = "Spawn Mob", help = "/sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>", max = 9, perm = "wa.mod2")
 	public void onSM(Player p, String[] args){
 
 				String armors = "diamond iron chain gold leather";

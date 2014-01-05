@@ -5,7 +5,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
-import com.github.lyokofirelyte.WCAPI.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCHelp{
