@@ -1628,6 +1628,14 @@ public class WCCommands {
 				wcp.setFireworks(true);
 				s(p, "Fireworks will display when you find paragons.");
 			}
+			
+			break;
+			
+		case "elevatorreset":
+			
+			plugin.wcm.getWCSystem("system").setElevatorActive(false);
+			break;
+			
       }
       
 	}
