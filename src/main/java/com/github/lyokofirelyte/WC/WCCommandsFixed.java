@@ -1,5 +1,7 @@
 package com.github.lyokofirelyte.WC;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -19,7 +21,7 @@ public class WCCommandsFixed {
 	}
 	
 	@WCCommand(aliases = { "google" }, desc = "Google anything! Anything!", help = "/google <search>", min = 1)
-	private void onTheGoogle(Player p, String[] args){
+	public void onTheGoogle(Player p, String[] args){
 		
 		blankB(new String[] {
 				
@@ -31,7 +33,7 @@ public class WCCommandsFixed {
 	}
 	
 	@WCCommand(aliases = { "google" }, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
-	private void onTheMember(Player p, String[] args){
+	public void onTheMember(Player p, String[] args){
 		
 		if (args.length > 0){
 			
@@ -49,8 +51,23 @@ public class WCCommandsFixed {
 		
 	}
 	
+	@WCCommand(aliases = { "ping" }, desc = "Ping the server. Just to check. The results may shock you.", help = "/ping")
+	public void onThePing(Player p, String[] args){
+		
+		if (args.length == 0){
+			
+			s(p, "PONG!");
+			
+		} else {
+			
+			s2(p, createString(args, 0));
+			
+		}
+		
+	}
+	
 	@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
-	private void onTheHugeWayTooLongMainWCCommand(Player p, String[] args){
+	public void onTheHugeWayTooLongMainWCCommand(Player p, String[] args){
 		
 		WCPlayer wcp = main.wcm.getWCPlayer(p.getName());
 		
@@ -171,25 +188,25 @@ public class WCCommandsFixed {
 										case "set":
 											
 											player.setExp(exp);
-											s(p, "&7" + args[4] + "&d's exp has been set to &6" + exp + "&d!");
+											s(p, "&7" + args[4] + "&d's exp bank has been set to &6" + exp + "&d!");
 											break;
 											
 										case "add":
 											
 											player.setExp(player.getExp() + exp);
-											s(p, "Added &6" + exp + " &dexp. &7" + args[4] + " &dnow has &6" + player.getExp() + " &dexp!");
+											s(p, "Added &6" + exp + " &dexp. &7" + args[4] + " &dnow has &6" + player.getExp() + " &dexp in their bank!");
 											break;
 											
 										case "rem": case "remove": case "del": case "delete":
 											
 											if (player.getExp() > exp){
 												
-												s(p, "&7" + args[4] + " &d does not have &6" + exp + " exp!");
+												s(p, "&7" + args[4] + " &d does not have &6" + exp + " exp in their bank!");
 												
 											} else {
 												
 												player.setExp(player.getExp() - exp);
-												s(p, "Removed &6" + exp + " &dexp. &7" + args[4] + " &dnow has &6" + player.getExp() + " &dexp!");
+												s(p, "Removed &6" + exp + " &dexp. &7" + args[4] + " &dnow has &6" + player.getExp() + " &dexp in their bank!");
 												
 											}
 											
@@ -320,6 +337,165 @@ public class WCCommandsFixed {
 					}
 					
 				}
+				
+			}
+			
+			break;
+			
+		case "creativerank":
+			
+			if (checkPerm(p, "wa.mod2")){
+				
+				if (args.length < 3){
+					
+					s(p, "/wc creativerank <player> <rank>");
+					
+				} else {
+					
+					WCPlayer player = main.wcm.getWCPlayer(args[1]);
+					
+					if (player == null){
+						
+						s(p, "That player does not exist!");
+						
+					} else {
+						
+						player.setCreativeRank(createString(args, 2));
+						s(p, "&7" + args[1] + " &dhas given the creative rank &6" + args[2] + "&d!");
+						
+					}
+					
+				}
+				
+			}
+			
+			break;
+			
+		case "creative":
+			
+			tempOp(p, "warp wacp");
+			break;
+			
+		case "edit":
+			
+			if (checkPerm(p, "wa.staff")){
+				
+				wcp.setMarkkitEditMode(!(wcp.getMarkkitEditMode()));
+				wcp.setCurrentMarkkitEdit("none");
+				
+				if (wcp.getMarkkitEditMode()){
+					
+					s(p, "Toggled edit mode &6OFF&d!");
+					
+				} else {
+					
+					s(p, "Toggled edit mode &6ON&d!");
+					
+				}
+				
+			}
+			
+			break;
+			
+		case "wipemails":
+			
+			if (p.getName().equals("Hugh_Jasses")){
+				
+				for (String user : main.wcm.getWCSystem("system").getUsers()){
+					
+					WCPlayer player = main.wcm.getWCPlayer(user);
+					player.setMail(new ArrayList<String>());
+					
+				}
+				
+			} else {
+				
+				s(p, "Are you Hugh_Jasses? Didn't think so.");
+				
+			}
+			
+			break;
+			
+		case "allowdeathmessage":
+			
+			wcp.setAllowDeathLocation(!(wcp.getAllowDeathLocation()));
+			
+			if (wcp.getAllowDeathLocation()){
+				
+				s(p, "Toggled death location to &6ON&d!");
+				
+			} else {
+				
+				s(p, "Toggled death location to &6OFF&d!");
+				
+			}
+			
+			break;
+			
+		case "hugdebug":
+			
+			s(p, "This used to be a command. Now it isn't. Sucks, doesn't it.");
+			break;
+			
+		case "rootshortcut":
+			
+			wcp.setRootShortCut(!(wcp.getRootShortCut()));
+			
+			if (wcp.getRootShortCut()){
+				
+				s(p, "Toggled the shift-left click shortcut to &6ON&d!");
+				
+			} else {
+				
+				s(p, "Toggled the shift-left click shortcut to &6OFF&d!");
+				
+			}
+			
+			break;
+			
+		case "sideboardcoords":
+			
+			wcp.setNamePlate(!(wcp.getNamePlate()));
+			
+			if (wcp.getNamePlate()){
+				
+				s(p, "Toggled the coord display to &6ON&d!");
+				
+			} else {
+				
+				s(p, "Toggled the coord display to &6OFF&d!");
+				
+			}
+			
+			break;
+			
+		case "nameplate":
+			
+			wcp.setRootShortCut(!(wcp.getRootShortCut()));
+			
+			if (wcp.getRootShortCut()){
+				
+				s(p, "Toggled the shift-left click shortcut to &6ON&d!");
+				
+			} else {
+				
+				s(p, "Toggled the shift-left click shortcut to &6OFF&d!");
+				
+			}
+			
+			break;
+			
+		case "pvp":
+			
+			wcp.setPVP(!(wcp.getPVP()));
+			
+			if (wcp.getPVP()){
+				
+				b("&7" + p.getDisplayName() + " &6has enabled PVP mode!");
+				
+			} else {
+				
+				b("&7" + p.getDisplayName() + " &6has disabled PVP mode!");
 				
 			}
 			

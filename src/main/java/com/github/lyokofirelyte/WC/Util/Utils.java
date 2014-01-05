@@ -12,6 +12,7 @@ import java.util.Random;
 
 
 
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -25,6 +26,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockIterator;
+
 
 
 
@@ -241,6 +243,12 @@ public class Utils extends WCUtils {
 	public static void s(Player p, String[] s){
 		
 		p.sendMessage(AS(s));
+		
+	}
+	
+	public static void s2(Player p, String s){
+		
+		p.sendMessage(Utils.AS(s));
 		
 	}
 	

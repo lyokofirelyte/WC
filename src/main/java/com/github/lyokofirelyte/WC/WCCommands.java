@@ -86,7 +86,7 @@ public class WCCommands {
   }
 	  
   @WCCommand(aliases = {"member"}, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
-  private void onMember(Player sender, String[] args){
+  public void onMember(Player sender, String[] args){
 		  
 		 if (args.length == 1){
 			 Bukkit.broadcastMessage(AS("&b&lHEY THERE, " + "&4&l" + args[0] + "&b&l!"));
@@ -99,7 +99,7 @@ public class WCCommands {
  
   
 	  @WCCommand(aliases = {"ping"}, desc = "Ping the server. Just to check. The results may shock you.")
-	  private void onPing(Player p, String[] args){
+	  public void onPing(Player p, String[] args){
 
 		  if (args.length == 0){
 			  s(p, "PONG!");
