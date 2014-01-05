@@ -32,8 +32,6 @@ import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
 
-import static com.github.lyokofirelyte.WC.WCMain.*;
-
 
 public class WCChannels implements Listener {
 	

@@ -373,11 +373,15 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
   }
 	  
   public static void s(Player p, String s){
+	  
 		p.sendMessage(Utils.AS(WCMail.WC + s));
+		
   }
 	  
   public static void s2(Player p, String s){
+	  
 	   p.sendMessage(Utils.AS(s));
+	   
   }
   
   public void sendAnnounce(){
