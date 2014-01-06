@@ -1251,6 +1251,15 @@ public class WCCommands {
       		
       	break;
       	
+      	case "elevatorreset":
+      		
+      		if (p.hasPermission("wa.staff")){
+      			plugin.wcm.getWCSystem("system").setElevatorActive(false);
+      			s(p, "Reset");
+      		}
+      		
+      	break;
+      	
       	case "session":
 
 			Bukkit.getServer().dispatchCommand(p, "wcs");

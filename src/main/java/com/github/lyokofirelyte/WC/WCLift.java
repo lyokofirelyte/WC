@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WCAPI.WCUtils;
@@ -74,7 +76,7 @@ public class WCLift implements Listener {
 				Location sl = sign.getLocation();
 				Location theFloor = new Location(sl.getWorld(), sl.getX(), sl.getY()-2, sl.getZ());
 				
-				if (theFloor.getBlock().getType().equals(Material.GLASS)){
+				if (theFloor.getBlock().getType().equals(Material.GLASS) || theFloor.getBlock().equals(Material.STAINED_GLASS)){
 					
 					pl.wcm.getWCSystem("system").setElevatorActive(true);
 					WCLiftFloor wclf = new WCLiftFloor(p.getName());
@@ -83,6 +85,7 @@ public class WCLift implements Listener {
 					Map<Location, Material> matsFloor = new HashMap<Location, Material>();
 					Map<Location, Material> matsAll = new HashMap<Location, Material>();
 					Map<Integer, Location> floorSigns = new HashMap<Integer, Location>();
+					Map<Location, ItemStack[]> chests = new HashMap<Location, ItemStack[]>();
 					List<Location> toCheck = WCUtils.circle(theFloor, 5, 1, false, false, 0);
 
 					for (int x = 1; x < 256; x++){
@@ -101,7 +104,7 @@ public class WCLift implements Listener {
 					}
 					
 					for (Location checkBlock : toCheck){
-						if (checkBlock.getBlock().getType().equals(Material.GLASS)){
+						if (checkBlock.getBlock().getType().equals(Material.GLASS) || checkBlock.getBlock().getType().equals(Material.STAINED_GLASS)){
 							matsFloor.put(checkBlock, checkBlock.getBlock().getType());
 							matsAll.put(checkBlock, checkBlock.getBlock().getType());
 						}
@@ -139,12 +142,17 @@ public class WCLift implements Listener {
 						for (Location l : matsFloor.keySet()){
 							Location ll = new Location(l.getWorld(), l.getX(), x, l.getZ());
 							matsAll.put(ll, ll.getBlock().getType());
+							if (ll.getBlock().getState() instanceof Chest){
+								Chest chest = (Chest) ll.getBlock().getState();
+								chests.put(ll, chest.getInventory().getContents());
+							}
 						}
 					}
 					
 					wclf.setFloors(matsAll);
 					wclf.setFloorSigns(floorSigns);
 					wclf.setPlayers(players);
+					wclf.setChests(chests);
 					wclf.setElevatorSpeed(Double.parseDouble(sign.getLine(1).substring(9)));
 					
 					if (Integer.parseInt(sign.getLine(2).substring(8)) > Integer.parseInt(sign.getLine(3).substring(11))){
@@ -235,6 +243,10 @@ public class WCLift implements Listener {
 				for (Location l : wclf.getFloors().keySet()){
 					if (l.getBlock().getType() != Material.WALL_SIGN){
 						l.getBlock().setType(wclf.getFloors().get(l));
+						if (l.getBlock().getState() instanceof Chest){
+							Chest chest = (Chest) l.getBlock().getState();
+							chest.getInventory().setContents(wclf.getChests().get(l));
+						}
 					}
 				}
 				return;

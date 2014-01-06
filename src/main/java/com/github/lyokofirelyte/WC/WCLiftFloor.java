@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class WCLiftFloor {
 
@@ -17,10 +18,15 @@ public class WCLiftFloor {
 	public Map<String, Map<Float, Float>> players = new HashMap<String, Map<Float, Float>>();
 	public Map<Location, Material> floors = new HashMap<Location, Material>();
 	public Map<Integer, Location> floorSigns = new HashMap<Integer, Location>();
+	public Map<Location, ItemStack[]> chests = new HashMap<Location, ItemStack[]>();
 	public double elevatorSpeed = 0;
 	public int floorAmount = 0;
 	public int dest = 0;
 	public String start;
+	
+	public void setChests(Map<Location, ItemStack[]> a){
+		chests = a;
+	}
 	
 	public void setFloorSigns(Map<Integer, Location> a){
 		floorSigns = a;
@@ -56,6 +62,10 @@ public class WCLiftFloor {
 	
 	public Map<String, Map<Float, Float>> getPlayers(){
 		return players;
+	}
+	
+	public Map<Location, ItemStack[]> getChests(){
+		return chests;
 	}
 	
 	public Map<Location, Material> getFloors(){
