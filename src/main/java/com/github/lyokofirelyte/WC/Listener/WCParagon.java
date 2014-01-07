@@ -50,9 +50,7 @@ public class WCParagon implements Listener {
 		}
 
 		ItemStack token = pl.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, 1);
-        
 
-        
         wcp.setBlocksMined(0);
         
         if (p.getInventory().firstEmpty() == -1){
@@ -86,5 +84,4 @@ public class WCParagon implements Listener {
 	        	}
         }
 	}
-
 }

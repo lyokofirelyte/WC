@@ -166,6 +166,7 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	  pm.registerEvents(new WCMember(this),this);
 	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
 	  pm.registerEvents(new WCLift(this), this);
+	  pm.registerEvents(new WCMineNDash(this), this);
 	  
 	  vaultMgr.hookSetup();
 	    

@@ -60,11 +60,11 @@ public class WCMarkkit implements Listener {
 						inv.setContents(pl.markkitInvs.get(sign.getLine(1).substring(2)).getContents());
 						gui.setInv(inv);
 						pl.wcm.displayGui(e.getPlayer(), gui);
+						pl.wcm.getWCPlayer(e.getPlayer().getName()).setCurrentMarkkitEdit(sign.getLine(1).substring(2));
 					} else if (sign.getLine(0).equals(Utils.AS("&dWC &5Markkit"))){
 						pl.wcm.displayGui(e.getPlayer(), new GuiMarkkit(pl));
+						pl.wcm.getWCPlayer(e.getPlayer().getName()).setCurrentMarkkitEdit(sign.getLine(1).substring(2));
 					}
-					pl.wcm.getWCPlayer(e.getPlayer().getName()).setCurrentMarkkitEdit(sign.getLine(1).substring(2));
-					return;
 				}
 			}
 		}

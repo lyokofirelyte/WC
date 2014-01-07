@@ -28,11 +28,12 @@ import com.github.lyokofirelyte.WCAPI.WCSystem;
 import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.WCMain.s2;
 
-public class WCCheats{
+public class WCCheats {
 
 	WCMain pl;
+	
 	public WCCheats(WCMain instance){
-    this.pl = instance;
+		pl = instance;
 	}
 	
 	@WCCommand(aliases = {"top"}, desc = "Teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2")

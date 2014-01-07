@@ -1639,12 +1639,6 @@ public class WCCommands {
 			}
 			
 			break;
-			
-		case "elevatorreset":
-			
-			plugin.wcm.getWCSystem("system").setElevatorActive(false);
-			break;
-			
       }
       
 	}
