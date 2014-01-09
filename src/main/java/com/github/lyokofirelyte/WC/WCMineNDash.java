@@ -63,7 +63,7 @@ public class WCMineNDash implements Listener {
     @EventHandler
     public void onSign(SignChangeEvent e){
 
-    	if (e.getLine(0).equals("MineNDash")){
+    	if (e.getLine(0).contains("MineNDash")){
     		if (!e.getPlayer().hasPermission("wa.staff")){
     			e.setLine(0, AS("&4INVALID"));
     		} else {

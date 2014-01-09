@@ -1,6 +1,6 @@
 package com.github.lyokofirelyte.WC;
 
-import static com.github.lyokofirelyte.WC.Util.Utils.AS;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.AS;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -26,8 +25,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
 import com.github.lyokofirelyte.WC.Commands.WCGcmd;
@@ -73,17 +70,17 @@ import com.github.lyokofirelyte.WC.Staff.WCSeen;
 import com.github.lyokofirelyte.WC.Staff.WCSudo;
 import com.github.lyokofirelyte.WC.Staff.WCTele;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
 import com.github.lyokofirelyte.WCAPI.WCManager;
+import com.github.lyokofirelyte.WCAPI.WCNode;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 import com.github.lyokofirelyte.WCAPI.Manager.RebootManager;
 
-public class WCMain extends JavaPlugin implements CommandExecutor {
+public class WCMain extends WCNode {
 	
   public WCVault vaultMgr = new WCVault(this);
   
@@ -137,6 +134,9 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 
   public void onEnable() {
 
+	  Plugin WCAPI = Bukkit.getServer().getPluginManager().getPlugin("WCAPI");
+	  api = (WCAPI) WCAPI;
+
 	  PluginManager pm = getServer().getPluginManager();
 	  pm.registerEvents(new WCJoin(this), this);
 	  pm.registerEvents(new WCQuit(this), this);
@@ -179,10 +179,7 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	  url = config.getString("url");
 	  username = config.getString("username");
 	  password = config.getString("password");
-	    
-	  Plugin WCAPI = Bukkit.getServer().getPluginManager().getPlugin("WCAPI");
-	  
-	  api = (WCAPI) WCAPI;
+
 	    
 	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
@@ -384,13 +381,13 @@ public class WCMain extends JavaPlugin implements CommandExecutor {
 	  
   public static void s(Player p, String s){
 	  
-		p.sendMessage(Utils.AS(WCMail.WC + s));
+		p.sendMessage(AS(WCMail.WC + s));
 		
   }
 	  
   public static void s2(Player p, String s){
 	  
-	   p.sendMessage(Utils.AS(s));
+	   p.sendMessage(AS(s));
 	   
   }
   
