@@ -70,11 +70,7 @@ import com.github.lyokofirelyte.WC.Staff.WCSeen;
 import com.github.lyokofirelyte.WC.Staff.WCSudo;
 import com.github.lyokofirelyte.WC.Staff.WCTele;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
-<<<<<<< HEAD
-=======
 import com.github.lyokofirelyte.WC.Util.LagUtils;
-import com.github.lyokofirelyte.WC.Util.Utils;
->>>>>>> FETCH_HEAD
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
 import com.github.lyokofirelyte.WCAPI.WCManager;
