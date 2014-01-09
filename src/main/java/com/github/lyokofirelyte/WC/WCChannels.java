@@ -190,10 +190,6 @@ public class WCChannels implements Listener {
 	  		}
 	  	}
 	  	
-	  	if (msg.equals(msg.toUpperCase())){
-	  		msg = msg.toLowerCase();
-	  	}
-	  	
 		for (Player bleh : Bukkit.getOnlinePlayers()){
 			
 			String message = new String(msg);
@@ -250,8 +246,6 @@ public class WCChannels implements Listener {
 					
 					newDispName = new JSONChatMessage(AS("&7M &f//"), null, null);
 				}
-				
-				message = "&f: &" + wcp.getGlobalColor() + message;
 
 				if (wcp.getTimeCode()){
 					String time = "&f[" + getTime() + "&f] ";
@@ -260,6 +254,42 @@ public class WCChannels implements Listener {
 					newDispName = new JSONChatMessage(AS(prefix + suffix + " &f// "), null, null);
 				}
 			}
+			
+			/*String[] array = message.split("");
+			String currentColour = "&" + wcp.getGlobalColor();
+			
+			StringBuilder sb = new StringBuilder();
+			
+			for (int i = 0; i < array.length; i++){
+				
+				String s = array[i];
+				
+				if (s == "&"){
+					
+					String colour = array[i + 1];						
+					List<Character> list = Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f');
+					
+					if (list.contains(colour.toLowerCase())){
+						
+						currentColour = "&" + colour;
+						i++;
+						
+					} else if (colour.equalsIgnoreCase("r")){
+						
+						currentColour = "&" + wcp.getGlobalColor();
+						i++;
+						
+					}
+					
+				}
+				
+				sb.append(currentColour);
+				sb.append(s);
+				
+			}
+			
+			message = "&f: &" + wcp.getGlobalColor() + sb.toString();*/
+			message = "&f: &" + wcp.getGlobalColor() + message;
 			
 	      	JSONChatExtra extra = new JSONChatExtra(AS(p.getDisplayName()), null, null);
 	      	extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, AS(p.getDisplayName() + " &f@ &7" + wcpCurrent.getAlliance() +

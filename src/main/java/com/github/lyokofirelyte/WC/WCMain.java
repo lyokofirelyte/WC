@@ -70,6 +70,11 @@ import com.github.lyokofirelyte.WC.Staff.WCSeen;
 import com.github.lyokofirelyte.WC.Staff.WCSudo;
 import com.github.lyokofirelyte.WC.Staff.WCTele;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
+<<<<<<< HEAD
+=======
+import com.github.lyokofirelyte.WC.Util.LagUtils;
+import com.github.lyokofirelyte.WC.Util.Utils;
+>>>>>>> FETCH_HEAD
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
 import com.github.lyokofirelyte.WCAPI.WCManager;
@@ -121,6 +126,8 @@ public class WCMain extends WCNode {
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
   public Map <String, WCLiftFloor> elevatorMap = new HashMap<>();
+  
+  private int id = 0;
   
   public Map <String, WCLiftFloor> getElevatorMap(){
 	  return elevatorMap;
@@ -218,6 +225,8 @@ public class WCMain extends WCNode {
 		  }
 	  } 
 	  
+	  id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new LagUtils(), 100L, 1L);
+	  
 	  Inventory inv = Bukkit.createInventory(null, 9, "§cLOCATIONS");
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
@@ -301,11 +310,12 @@ public class WCMain extends WCNode {
 	      e.printStackTrace();
 	    }
 	    
+	  Bukkit.getServer().getScheduler().cancelTask(id);
 	  getLogger().info("WaterCloset has been disabled.");
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
 	  api.reg.registerCommands(commandClasses, this);
   }
 
