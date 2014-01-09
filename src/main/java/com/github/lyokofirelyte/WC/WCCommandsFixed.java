@@ -3,10 +3,15 @@ package com.github.lyokofirelyte.WC;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import com.github.lyokofirelyte.WC.Util.LagUtils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Loops.WCDelay;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
@@ -63,6 +68,30 @@ public class WCCommandsFixed {
 			s2(p, createString(args, 0));
 			
 		}
+		
+	}
+	
+	@WCCommand(aliases = { "serverinfo", "si" }, desc = "Server info in a nutshell!", help = "/si")
+	public void onTheServerInfo(Player p, String[] args){
+		
+		s(p, new String[] {
+				
+				WC + "Server Info & Stats",
+				"&5- &dBukkit Version&5: &6" + Bukkit.getServer().getBukkitVersion(),
+				"&5- &dTicks per Second (tps)&5: &6" + LagUtils.getRoundedTps(),
+				"&5- &dLag Percentage&5: &6" + LagUtils.getLagPercent() + "%",
+				"&5.....m..u..c..h.....s..t..a..t..s.....",
+				WC + "World Name &5// &dLoaded Entities &5// &dLoaded Chunks"
+				
+		});
+		
+		for (World world : Bukkit.getWorlds()){
+			
+			s2(p, "&5- &6" + world.getName() + " &5// &6" + world.getEntities().size() + " &5// &6" + world.getLoadedChunks().length);
+			
+		}
+		
+		s2(p, "&5.......m..a..n..y.....i..n..f..o.......");
 		
 	}
 	
@@ -502,6 +531,12 @@ public class WCCommandsFixed {
 			break;
 			
 		}
+		
+	}
+	
+	private void circleEffects(Location center, int radius, int height, Effect effect){
+		
+		
 		
 	}
 	

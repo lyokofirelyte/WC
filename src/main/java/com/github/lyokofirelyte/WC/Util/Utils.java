@@ -248,7 +248,7 @@ public class Utils extends WCUtils {
 	
 	public static void s2(Player p, String s){
 		
-		p.sendMessage(Utils.AS(s));
+		p.sendMessage(AS(s));
 		
 	}
 	

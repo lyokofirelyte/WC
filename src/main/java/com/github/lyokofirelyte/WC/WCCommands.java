@@ -35,7 +35,6 @@ import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
-import com.github.lyokofirelyte.WCAPI.Loops.WCLoop;
 
 import static com.github.lyokofirelyte.WC.WCMain.s;
 
@@ -59,56 +58,6 @@ public class WCCommands {
 	  plugin = instance;
   }  	
 
-  @WCCommand(aliases = {"google"}, desc = "Google anything! Anything!", help = "/google <search>")
-  public void onTheGoogle(Player sender, String[] args){
-
-		   if (args.length == 0){
-			  p.sendMessage(AS(WC + "Usage: /google <query>"));
-		  } else {
-			  Bukkit.broadcastMessage(AS(WC + "Google: http://lmgtfy.com/?q=") + createString(args, 0).replace(" ", "+"));
-			  Bukkit.broadcastMessage(AS("&5~" + ((Player)sender).getDisplayName()));  
-		  }
-		  return;
-  }
-  
-  @WCCommand(aliases = {"looptest"}, help = "Loop!", perm = "wa.staff")
-  public void loopTest(Player p, String[] args){
-	try {
-		plugin.api.ls.callLoop(getClass().getMethod("looper"), this.getClass(), plugin);
-	} catch (Exception e) {
-		e.printStackTrace();
-	} 
-  }
-  
-  @WCLoop(delay = 0L, repeats = 3, time = 20L)
-  public void looper(){
-	  Bukkit.broadcastMessage("test");
-  }
-	  
-  @WCCommand(aliases = {"member"}, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
-  public void onMember(Player sender, String[] args){
-		  
-		 if (args.length == 1){
-			 Bukkit.broadcastMessage(AS("&b&lHEY THERE, " + "&4&l" + args[0] + "&b&l!"));
-		 }
-		  
-		 Bukkit.broadcastMessage(AS("&b&lWANT TO &aJOIN US AND BUILD?"));
-		 Bukkit.broadcastMessage(AS("&e&lCLICK BELOW AND SCROLL DOWN TO &c&lMEMBER APPLICATION"));
-		 Bukkit.broadcastMessage(AS("&f&o---> &f&lhttp://bit.ly/SxATSM &f&o<---"));
-	  }
- 
-  
-	  @WCCommand(aliases = {"ping"}, desc = "Ping the server. Just to check. The results may shock you.")
-	  public void onPing(Player p, String[] args){
-
-		  if (args.length == 0){
-			  s(p, "PONG!");
-		  } else {
-			  s(p, Utils.createString(args, 0));
-		  }
-		  return;
-	  }
-	
 	@SuppressWarnings("deprecation")
 	@WCCommand(aliases = {"wc", "watercloset"}, desc = "WC Root Menu", help = "/wc")
 	public void onWC(final Player p, String[] args){
