@@ -179,7 +179,7 @@ public class WCLift implements Listener {
 							player.setAllowFlight(true);
 							player.setFlying(true);
 							try {
-								pl.api.ls.callDelay(getClass().getMethod("ascend"), getClass(), pl);
+								pl.api.ls.callDelay(pl, this, "ascend");
 							} catch (Exception eq){
 								eq.printStackTrace();
 							}
@@ -254,7 +254,7 @@ public class WCLift implements Listener {
 		}
 		
 		try {
-			pl.api.ls.callDelay(getClass().getMethod("ascend"), getClass(), pl);
+			pl.api.ls.callDelay(pl, this, "ascend");
 		} catch (Exception e){
 			e.printStackTrace();
 		}

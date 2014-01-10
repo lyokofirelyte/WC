@@ -579,7 +579,7 @@ public class WCCommandsFixed {
 			Field field = this.getClass().getDeclaredField("delay");
 			
 			changeFinalStatic(field, delay);
-			simpleDelay(run);
+			main.api.ls.callDelay(main, this, "simpleDelay", run);
 			
 		} catch (Exception e){
 			
@@ -618,7 +618,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	private void tempOp(Player p, String cmd){ // move to WC utils please :)
+	private void tempOp(Player p, String cmd){
 		
 		if (p.isOp()){
 			
@@ -635,7 +635,7 @@ public class WCCommandsFixed {
 	}
 	
 	@WCDelay(time = delay)
-	private void simpleDelay(Runnable run){
+	public void simpleDelay(Runnable run){
 		
 		run.run();
 		

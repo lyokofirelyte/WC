@@ -91,13 +91,9 @@ public class WCMineNDash implements Listener {
 	    				pl.wcm.getWCSystem("system").setMinendashActive(true);
 	    				pl.wcm.getWCSystem("system").setMinendashUser(e.getPlayer());
 	    				
-	    				try {
-							pl.api.ls.callLoop(getClass().getMethod("scheduleCountdown"), getClass(), pl);
-							pl.api.ls.callDelay(getClass().getMethod("endCount"), getClass(), pl);
-							pl.api.ls.callDelay(getClass().getMethod("endRound"), getClass(), pl);
-						} catch (NoSuchMethodException | SecurityException e1) {
-							e1.printStackTrace();
-						}
+						pl.api.ls.callLoop(pl, this, "scheduleCountdown");
+						pl.api.ls.callDelay(pl, this, "endCount");
+						pl.api.ls.callDelay(pl, this, "endRound");
 	    				
 	    				setArena(e.getClickedBlock().getLocation());
 	    				s(p, "You have 5 minutes to mine!");
@@ -109,12 +105,7 @@ public class WCMineNDash implements Listener {
     
     @WCDelay(time = 5900L)
     public void endCount(){
-    	
-		try {
-			pl.api.ls.callLoop(getClass().getMethod("scheduleCountdown"), getClass(), pl);
-		} catch (NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
-		}
+		pl.api.ls.callLoop(pl, this, "scheduleCountdown");
     }
     
     @WCDelay(time = 6000L)
