@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -226,12 +227,12 @@ public class WCPatrols implements Listener {
 	@EventHandler
 	public void onHeart(PlayerPickupItemEvent e){
 		if (dispName(e.getItem().getItemStack(), "HEART")){
-			if (e.getPlayer().getHealth() > e.getPlayer().getMaxHealth()-4){
+			if (((Damageable)e.getPlayer()).getHealth() > ((Damageable)e.getPlayer()).getMaxHealth()-4){ // bullshit bukkit, complete bullshit
 				e.setCancelled(true);
 				return;
 			}
 			try {
-			e.getPlayer().setHealth(e.getPlayer().getHealth() + 4);
+			e.getPlayer().setHealth(((Damageable)e.getPlayer()).getHealth() + 4); // Casting damagable because of int/double conflictions gah
 			} catch (IllegalArgumentException iae){}
 			e.getItem().remove();
 		}
@@ -314,15 +315,15 @@ public class WCPatrols implements Listener {
 							if (wcp.getPatrolHeal() >= 1){
 								for (String s : wcpp.getMembers()){
 									if (Bukkit.getPlayer(s) != null){
-										hps.add(Bukkit.getPlayer(s).getHealth());
-									}
+										hps.add(((Damageable)Bukkit.getPlayer(s)).getHealth());
+									} 
 								}
 								Collections.sort(hps);
 								for (String s : wcpp.getMembers()){
-									if (Bukkit.getPlayer(s) != null && Bukkit.getPlayer(s).getHealth() == hps.get(0)){
-										if (Bukkit.getPlayer(s).getHealth() < Bukkit.getPlayer(s).getMaxHealth() && wcp.getPatrolHeal() >= 1){
+									if (Bukkit.getPlayer(s) != null && ((Damageable)Bukkit.getPlayer(s)).getHealth() == hps.get(0)){
+										if (((Damageable)Bukkit.getPlayer(s)).getHealth() < ((Damageable)Bukkit.getPlayer(s)).getMaxHealth() && wcp.getPatrolHeal() >= 1){
 											try{
-												Bukkit.getPlayer(s).setHealth(Bukkit.getPlayer(s).getHealth() + 1);
+												Bukkit.getPlayer(s).setHealth(((Damageable)Bukkit.getPlayer(s)).getHealth() + 1);
 											} catch (IllegalArgumentException iae){}
 											wcp.setPatrolHeal(wcp.getPatrolHeal() - 1);
 											pl.wcm.updatePlayerMap(p.getName(), wcp);
@@ -490,8 +491,8 @@ public class WCPatrols implements Listener {
 				wcs.getPatrolCrystal().remove();
 			}
 		} else {
-			for (Player p : Bukkit.getOnlinePlayers()){
-				BarAPI.setMessage(p, "§cHOTSPOT BOSS", (float)(le.getHealth()/le.getMaxHealth())*100);
+			for (Player p : Bukkit.getOnlinePlayers()){ // well shit
+				BarAPI.setMessage(p, "§cHOTSPOT BOSS", (float)(((Damageable)le).getHealth()/((Damageable)le).getMaxHealth())*100);
 			}
 		}
 		
@@ -598,6 +599,7 @@ public class WCPatrols implements Listener {
 		wcs.getPatrolCrystal().remove();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void bossTime(){
 	
 		WCSystem wcs = pl.wcm.getWCSystem("system");
@@ -676,6 +678,7 @@ public class WCPatrols implements Listener {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void checkPlayers(){
 		
 		WCSystem wcs = pl.wcm.getWCSystem("system");

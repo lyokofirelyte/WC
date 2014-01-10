@@ -20,11 +20,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>WCAPI</groupId>
+      <groupId>com.github.lyokofirelyte</groupId>
       <artifactId>WCAPI</artifactId>
-      <scope>system</scope>
       <version>5</version>
-      <systemPath>${project.basedir}\src\lib\WCAPI.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
@@ -38,9 +36,7 @@
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <systemPath>${project.basedir}\src\lib\VaultCompile.jar</systemPath>
       <artifactId>Vault</artifactId>
-      <scope>system</scope>
       <version>1.2.27</version>
     </dependency>
     <dependency>
@@ -55,6 +51,10 @@
     <repository>
 	  <id>vault-repo</id>
   	  <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+    </repository>
+    <repository>
+      <id>WCAPI</id>
+      <url>https://github.com/lyokofirelyte/WCAPI/tree/mvn-repo/</url>
     </repository>
     <repository>
       <id>bukkit-repo</id>

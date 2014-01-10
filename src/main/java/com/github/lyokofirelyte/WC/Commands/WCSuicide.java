@@ -22,7 +22,7 @@ public abstract class WCSuicide implements CommandExecutor {
 			  
 			  p.playSound(p.getLocation(), Sound.EXPLODE, 0.5F, 3F);
 			  Utils.effects(p);
-			  p.setHealth(0);
+			  p.setHealth((double)0);
 		  
 		  return;
 	  }
