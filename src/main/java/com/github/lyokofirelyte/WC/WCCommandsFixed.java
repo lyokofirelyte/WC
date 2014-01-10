@@ -99,8 +99,8 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
-	public void onTheHugeWayTooLongMainWCCommand(Player p, String[] args){
+	/*@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
+	public void onTheHugeWayTooLongMainWCCommand(final Player p, String[] args){
 		
 		WCPlayer wcp = main.wcm.getWCPlayer(p.getName());
 		
@@ -546,13 +546,21 @@ public class WCCommandsFixed {
 					
 				}
 				
-				for (int i = 0; i < 3; i ++){
+				for (int i = 0; i < 3; i++){
 					
 					int delay = i * 20;
+					final int fI = i;
 					
-					circleEffects(p.getLocation(), i + 1, 1, true, Effect.MOBSPAWNER_FLAMES);
-					circleEffects(p.getLocation(), i + 1, 1, true, Effect.ENDER_SIGNAL);
-					
+					delay(delay, new Runnable(){
+						
+						public void run(){
+							
+							circleEffects(p.getLocation(), fI + 1, 1, true, Effect.MOBSPAWNER_FLAMES);
+							circleEffects(p.getLocation(), fI + 1, 1, true, Effect.ENDER_SIGNAL);
+							
+						}
+						
+					});
 					
 					
 				}
@@ -562,7 +570,7 @@ public class WCCommandsFixed {
 			
 		}
 		
-	}
+	}*/
 	
 	public void delay(long delay, Runnable run){
 		
@@ -594,7 +602,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	private boolean checkPerm(Player p, String perm){
+	private boolean checkPerm(Player p, String perm){ // No.
 		
 		if (p.hasPermission(perm)){
 			
@@ -610,7 +618,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	private void tempOp(Player p, String cmd){
+	private void tempOp(Player p, String cmd){ // move to WC utils please :)
 		
 		if (p.isOp()){
 			

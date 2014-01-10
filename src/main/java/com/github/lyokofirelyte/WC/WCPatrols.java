@@ -36,14 +36,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
-import static com.github.lyokofirelyte.WC.Util.Utils.AS;
-import static com.github.lyokofirelyte.WC.Util.Utils.dispName;
-import static com.github.lyokofirelyte.WC.WCMain.s;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCPatrols implements Listener {
 
@@ -256,7 +253,7 @@ public class WCPatrols implements Listener {
 					if (wcs.getPatrolKills() >= (wcs.getPatrolDiff()*100)){
 						Bukkit.getServer().getScheduler().cancelTask(wcs.getPatrolCheckTask());
 						wcs.setPatrolHotSpotAreas(new ArrayList<Location>());
-						Bukkit.broadcastMessage(AS(Utils.WC + "The active hotspot has been deactivated! Only the boss remains!"));
+						Bukkit.broadcastMessage(AS(WC + "The active hotspot has been deactivated! Only the boss remains!"));
 						bossTime();
 					}
 					return;
@@ -351,7 +348,7 @@ public class WCPatrols implements Listener {
 							if (chance == 15){
 								for (Entity ee : p.getNearbyEntities(10D, 10D, 10D)){
 									if (ee instanceof Player == false && !hit){
-										Utils.effects(ee.getLocation());
+										effects(ee.getLocation());
 										p.playSound(p.getLocation(), Sound.EXPLODE, 0.5F, 3F);
 										ee.remove();
 										hit = true;
@@ -427,7 +424,7 @@ public class WCPatrols implements Listener {
 				if (current.getBlock().getType() != Material.AIR && current.getBlock().getType() != Material.WATER &&  current.getBlock().getType() != Material.STATIONARY_WATER && current.getBlock().getType() != Material.STATIONARY_LAVA && current.getBlock().getType() != Material.LAVA && current.getBlock() != null){
 					if (new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.LAVA && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_LAVA){
 						wcs.setPatrolHotSpot(new Location(Bukkit.getWorld("world"), xR, y+1, zR));
-						Bukkit.broadcastMessage(AS(Utils.WC + "A new hotspot has been found at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Difficulty &6" + wcs.getPatrolDiff() + "&d)"));
+						Bukkit.broadcastMessage(AS(WC + "A new hotspot has been found at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Difficulty &6" + wcs.getPatrolDiff() + "&d)"));
 						rawr = true;
 					}
 				}
@@ -439,7 +436,7 @@ public class WCPatrols implements Listener {
 			return;
 		}
 				
-    	wcs.setPatrolHotSpotAreas(Utils.circle(wcs.getPatrolHotSpot(), 50, 50, false, true, 0));
+    	wcs.setPatrolHotSpotAreas(circle(wcs.getPatrolHotSpot(), 50, 50, false, true, 0));
     	wcs.setPatrolCrystal(Bukkit.getWorld("world").spawnEntity(wcs.getPatrolHotSpot(), EntityType.ENDER_CRYSTAL));
 
 		int checkTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
@@ -470,10 +467,10 @@ public class WCPatrols implements Listener {
 			}
 			dropChance();
 			Bukkit.getServer().getScheduler().cancelTask(wcs.getPatrolHealthTimerTask());
-			Bukkit.broadcastMessage(AS(Utils.WC + "The hotspot boss has been defeated! All participants were awarded!"));
+			Bukkit.broadcastMessage(AS(WC + "The hotspot boss has been defeated! All participants were awarded!"));
 			WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§cINACTIVE!", "§4...", false, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
 			rewardPlayers();
-        	List<Location> circleblocks = Utils.circle(wcs.getPatrolHotSpot(), 20, 1, true, false, 1);
+        	List<Location> circleblocks = circle(wcs.getPatrolHotSpot(), 20, 1, true, false, 1);
 	        long delay =  0L;
 		        for (final Location l : circleblocks){
 		        	delay = delay + 2L;
@@ -481,7 +478,7 @@ public class WCPatrols implements Listener {
 		        	public void run() {
 		        	    try {
 		        	    	pl.fw.playFirework(l.getWorld(), l,
-							FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
+							FireworkEffect.builder().with(Type.BURST).withColor(getRandomColor()).build());
 							} catch (IllegalArgumentException e) {
 								e.printStackTrace();
 							} catch (Exception e) {
@@ -533,7 +530,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
+			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
 		if (defenderShield == 5){
@@ -547,7 +544,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
+			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
 		if (teleportCube == 5){
@@ -561,7 +558,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
+			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
 		if (buildCharm == 5){
@@ -574,7 +571,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(Utils.WC + "The boss has dropped something at the hotspot origin!"));
+			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 	}
 	
@@ -694,8 +691,8 @@ public class WCPatrols implements Listener {
 							LivingEntity le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.ZOMBIE);
 							le.setMaxHealth(30); le.setHealth(30);
 							ents.add(le);
-							le.setCustomName(AS(Utils.getRandomChatColor() + "Hotspot Guardian")); le.setCustomNameVisible(true);
-							le = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), Utils.getRandomEntity());
+							le.setCustomName(AS(getRandomChatColor() + "Hotspot Guardian")); le.setCustomNameVisible(true);
+							le = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), getRandomEntity());
 							le.getEquipment().setItemInHand(wcs.getPatrolItems().get(wcs.getPatrolDiff()-1));
 							if (wcs.getPatrolDiff() == 3){
 								ItemStack i = wcs.getPatrolItems().get(wcs.getPatrolDiff()-1);
@@ -708,7 +705,7 @@ public class WCPatrols implements Listener {
 							le.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 							le.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
 							ents.add(le);
-							le.setCustomName(AS(Utils.getRandomChatColor() + "Hotspot Minion")); le.setCustomNameVisible(true);
+							le.setCustomName(AS(getRandomChatColor() + "Hotspot Minion")); le.setCustomNameVisible(true);
 						}
 						used.add(p);
 						if (!wcs.getPatrolHotSpotParticipants().contains(p.getName())){
