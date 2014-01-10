@@ -99,7 +99,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
+	/*@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
 	public void onTheHugeWayTooLongMainWCCommand(final Player p, String[] args){
 		
 		WCPlayer wcp = main.wcm.getWCPlayer(p.getName());
@@ -570,7 +570,7 @@ public class WCCommandsFixed {
 			
 		}
 		
-	}
+	}*/
 	
 	public void delay(long delay, Runnable run){
 		
