@@ -58,7 +58,7 @@ public class WCCommands {
 	  plugin = instance;
   }  	
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	@WCCommand(aliases = {"wc", "watercloset"}, desc = "WC Root Menu", help = "/wc")
 	public void onWC(final Player p, String[] args){
 
@@ -1590,7 +1590,7 @@ public class WCCommands {
 			break;
       }
       
-	}
+	}*/
   
 	public long getCooldown(HashMap<String, Long> map, String player, int seconds){	
 		long timeLeft = ((map.get(player) / 1000) + seconds) - (System.currentTimeMillis() / 1000);

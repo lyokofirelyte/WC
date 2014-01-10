@@ -1,11 +1,15 @@
 package com.github.lyokofirelyte.WC.Util;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+
+
 
 
 
@@ -26,6 +30,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BlockIterator;
+
+
 
 
 
@@ -238,6 +244,18 @@ public class Utils extends WCUtils {
 		Random rand = new Random();
 		int sel = rand.nextInt(entities.size());
 		return entities.get(sel);
+	}
+	
+	public static void changeFinalStatic(Field field, Object value) throws Exception {
+		
+		Field mod = Field.class.getDeclaredField("modifiers");
+		
+		field.setAccessible(true);
+		mod.setAccessible(true);
+		mod.setInt(field, field.getModifiers() & ~ Modifier.FINAL);
+		
+		field.set(null, value);
+		
 	}
 	
 	public static void s(Player p, String[] s){

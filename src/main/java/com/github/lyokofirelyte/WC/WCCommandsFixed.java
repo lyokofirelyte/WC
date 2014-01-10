@@ -1,11 +1,14 @@
 package com.github.lyokofirelyte.WC;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.Util.LagUtils;
@@ -17,6 +20,7 @@ import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 public class WCCommandsFixed {
 	
+	private static final long delay = 0;
 	private WCMain main;
 	
 	public WCCommandsFixed(WCMain main){
@@ -110,7 +114,7 @@ public class WCCommandsFixed {
 				
 				for (int i = 0; i < 7; i++){
 					
-					delay(new Runnable(){
+					delay(delay, new Runnable(){
 						
 						public void run(){
 							
@@ -122,11 +126,11 @@ public class WCCommandsFixed {
 							
 						}
 						
-					}, delay);
+					});
 					
 					delay = delay + 10L;
 					
-					delay(new Runnable(){
+					delay(delay, new Runnable(){
 						
 						public void run(){
 							
@@ -138,7 +142,7 @@ public class WCCommandsFixed {
 							
 						}
 						
-					}, delay);
+					});
 					
 					delay = delay + 10L;
 					
@@ -530,13 +534,63 @@ public class WCCommandsFixed {
 			
 			break;
 			
+		case "fling":
+			
+			if (checkPerm(p, "wa.admin")){
+				
+				s(p, "Whee!");
+				
+				for (Entity e : p.getNearbyEntities(15, 15, 15)){
+					
+					e.setVelocity(e.getLocation().getDirection().multiply(-5));
+					
+				}
+				
+				for (int i = 0; i < 3; i ++){
+					
+					int delay = i * 20;
+					
+					circleEffects(p.getLocation(), i + 1, 1, true, Effect.MOBSPAWNER_FLAMES);
+					circleEffects(p.getLocation(), i + 1, 1, true, Effect.ENDER_SIGNAL);
+					
+					
+					
+				}
+				
+			}
+			
+			
 		}
 		
 	}
 	
-	private void circleEffects(Location center, int radius, int height, Effect effect){
+	public void delay(long delay, Runnable run){
 		
+		try {
+			
+			Field field = this.getClass().getDeclaredField("delay");
+			
+			changeFinalStatic(field, delay);
+			simpleDelay(run);
+			
+		} catch (Exception e){
+			
+			Bukkit.getLogger().severe("Failed to change the delay variable!");
+			e.printStackTrace();
+			
+		}
 		
+	}
+	
+	private void circleEffects(Location center, int radius, int height, boolean hollow, Effect effect){
+		
+		List<Location> circle = circle(center, radius, 1, hollow, false, height - 1);
+		
+		for (Location loc : circle){
+			
+			center.getWorld().playEffect(loc, effect, 0);
+			
+		}
 		
 	}
 	
@@ -544,11 +598,11 @@ public class WCCommandsFixed {
 		
 		if (p.hasPermission(perm)){
 			
-			s(p, "You do not have permission for that!");
-			
 			return true;
 			
 		} else {
+			
+			s(p, "You do not have permission for that!");
 			
 			return false;
 			
@@ -569,6 +623,13 @@ public class WCCommandsFixed {
 			p.setOp(false);
 			
 		}
+		
+	}
+	
+	@WCDelay(time = delay)
+	private void simpleDelay(Runnable run){
+		
+		run.run();
 		
 	}
 	
