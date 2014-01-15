@@ -1,6 +1,6 @@
 package com.github.lyokofirelyte.WC;
 
-import static com.github.lyokofirelyte.WCAPI.WCUtils.AS;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,7 +28,6 @@ import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
 import com.github.lyokofirelyte.WC.Commands.WCGcmd;
 import com.github.lyokofirelyte.WC.Commands.WCHat;
-import com.github.lyokofirelyte.WC.Commands.WCHelp;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
 import com.github.lyokofirelyte.WC.Commands.WCInvSee;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
@@ -72,6 +70,9 @@ import com.github.lyokofirelyte.WC.Staff.WCTele;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.LagUtils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
+import com.github.lyokofirelyte.WC.WCMMO.ExpEvents;
+import com.github.lyokofirelyte.WC.WCMMO.ExpSources;
+import com.github.lyokofirelyte.WC.WCMMO.WCMMO;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
 import com.github.lyokofirelyte.WCAPI.WCManager;
 import com.github.lyokofirelyte.WCAPI.WCNode;
@@ -80,6 +81,7 @@ import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 import com.github.lyokofirelyte.WCAPI.Manager.RebootManager;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 public class WCMain extends WCNode {
 	
@@ -91,7 +93,6 @@ public class WCMain extends WCNode {
   public File helpFile;
   public File file;
   public File systemFile;
-  public File pluginFile;
   
   public YamlConfiguration config;
   public YamlConfiguration datacore;
@@ -99,7 +100,6 @@ public class WCMain extends WCNode {
   public YamlConfiguration help;
   public YamlConfiguration yaml;
   public YamlConfiguration systemYaml;
-  public YamlConfiguration pluginYaml;
 
   private String url;
   private String username;
@@ -112,6 +112,7 @@ public class WCMain extends WCNode {
   public InventoryManager invManager;
   public WCPatrols wcpp;
   public FireworkShenans fw;
+  public ExpSources ss;
   public Map <String, List<Location>> links = new HashMap<>();
   public Map <String, List<Entity>> links2 = new HashMap<>();
   public Map <String, List<Player>> playerRide = new HashMap<>();
@@ -170,6 +171,7 @@ public class WCMain extends WCNode {
 	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
 	  pm.registerEvents(new WCLift(this), this);
 	  pm.registerEvents(new WCMineNDash(this), this);
+	  pm.registerEvents(new ExpEvents(this), this);
 	  
 	  vaultMgr.hookSetup();
 	    
@@ -189,6 +191,8 @@ public class WCMain extends WCNode {
 	  invManager = new InventoryManager(api);
 	  wcpp = new WCPatrols(this);
 	  fw = new FireworkShenans(this);
+	  ss = new ExpSources(this);
+	  ss.init();
 	  
 	  pm.registerEvents(wcm, this);
 	    
@@ -311,7 +315,7 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCMMO.class, WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
 	  api.reg.registerCommands(commandClasses, this);
   }
 
@@ -351,7 +355,7 @@ public class WCMain extends WCNode {
     String files = "config help games datacore mail system";
     String[] flatFiles = files.split(" ");
     
-    for (int x = 0; x <= 5; x++){
+    for (int x = 0; x <= 4; x++){
     	file = new File("./plugins/WaterCloset/" + flatFiles[x] + ".yml");
     	if (!file.exists()){
     		file.createNewFile();
@@ -378,29 +382,14 @@ public class WCMain extends WCNode {
 	    		systemYaml = yaml;
 	    		systemFile = file;
 	    		break;
-	    	case 5:
-	    		pluginYaml = yaml;
-	    		pluginFile = file;
     	}
     }
-  }
-	  
-  public static void s(Player p, String s){
-	  
-		p.sendMessage(AS(WCMail.WC + s));
-		
-  }
-	  
-  public static void s2(Player p, String s){
-	  
-	   p.sendMessage(AS(s));
-	   
   }
   
   public void sendAnnounce(){
 		
 	List<String> messages = config.getStringList("Announcements");
-	Bukkit.broadcastMessage(AS(messages.get(msg)));
+	callChat(WCMessageType.BROADCAST, AS(messages.get(msg)));
 		
 		if (msg == messages.size() - 1){
 			msg = 0;
@@ -412,20 +401,6 @@ public class WCMain extends WCNode {
   public void updateBoard(){
 	  
 	  for (Player player : Bukkit.getOnlinePlayers()){
-		  
-		  int x = 0;
-		  
-		  for (ItemStack i : player.getInventory()){
-			  if (i != null && i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().hasDisplayName()){
-				  if (i.getItemMeta().getDisplayName().toLowerCase().contains("paragon") && i.getType().equals(Material.STAINED_CLAY)){
-					  int amt = i.getAmount();
-					  player.getInventory().addItem(invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, amt));
-					  player.getInventory().setItem(x, new ItemStack(Material.AIR));
-					  s(player, "Auto-sweep has found old paragons in your inventory and converted them to tokens.");
-				  }
-			  }
-			  x++;
-		  }
 		  
 		  if (wcm.getWCPlayer(player.getName()) == null){
 			  wcm.userCreate(player);
@@ -439,7 +414,7 @@ public class WCMain extends WCNode {
 		  player.setDisplayName(AS(wcm.getFullNick(player.getName()))); 
 		  
 		  if (xp >= neededXP){
-			  Bukkit.broadcastMessage(AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));
+			  callChat(WCMessageType.BROADCAST, AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));
 			  wcp.setPatrolExp(xp - neededXP);
 			  wcp.setPatrolLevel(lvl + 1);
 			  wcm.updatePlayerMap(player.getName(), wcp);
@@ -468,7 +443,7 @@ public class WCMain extends WCNode {
 		  afkTimer.put(player.getName(), afkTimer.get(player.getName()) + 8);
 		  
 		  if (afkTimer.get(player.getName()) >= 180 && !afkers.contains(player)){
-			  Bukkit.broadcastMessage(AS("&7&o" + player.getDisplayName() + " &7&ois afk."));
+			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois afk."));
 			  
 			  if (("&7[afk] " + player.getDisplayName()).length() > 16){
 				  player.setPlayerListName(AS("&7[afk] " + player.getDisplayName()).substring(0, 16));

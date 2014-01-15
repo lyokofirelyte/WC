@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCWarps{
@@ -35,14 +36,14 @@ public class WCWarps{
 			  Player p = ((Player)sender);
 			  
 			  if (args.length == 0){
-				  WCMain.s(p, "Try /remwarp <name>.");
+				  WCUtils.s(p, "Try /remwarp <name>.");
 				  return;
 			  }
 			  
 			  File warpFile = new File(plugin.getDataFolder() + File.separator + "Warps", args[0].toLowerCase() + ".yml");
 			  
 			  if (!warpFile.exists()) {
-				  WCMain.s(p, "That warp does not exist!");
+				  WCUtils.s(p, "That warp does not exist!");
 				  return;
 			  }
 			  
@@ -52,7 +53,7 @@ public class WCWarps{
               File folder = new File(path);
               String[] fileNames = folder.list();
               
-			  WCMain.s(p, "Warp removed. There are now &6" + fileNames.length + " &dwarps.");
+			  WCUtils.s(p, "Warp removed. There are now &6" + fileNames.length + " &dwarps.");
 		  }
 		  
 	@WCCommand(aliases = {"setwarp"}, desc = "Create a new warp", help = "/setwarp <name>", max = 1, perm = "wa.mod2")
@@ -61,7 +62,7 @@ public class WCWarps{
 			  Player p = ((Player)sender);
 			  
 			  if (args.length == 0){
-				  WCMain.s(p, "Try /setwarp <name>.");
+				  WCUtils.s(p, "Try /setwarp <name>.");
 				  return;
 			  }
 			  
@@ -99,7 +100,7 @@ public class WCWarps{
               File folder = new File(path);
               String[] fileNames = folder.list();
 		      
-		      WCMain.s(p, "Set warp &6" + args[0].toLowerCase() + "&d. There are now &6" + fileNames.length + " &dwarps.");
+		      WCUtils.s(p, "Set warp &6" + args[0].toLowerCase() + "&d. There are now &6" + fileNames.length + " &dwarps.");
 
 		  }
 	
@@ -135,7 +136,7 @@ public class WCWarps{
 	                }
 	                
 	                if (Integer.parseInt(args[0]) > Math.round((double) (fileNames.length / 20))){
-	                	WCMain.s(p, "There aren't that many pages!");
+	                	WCUtils.s(p, "There aren't that many pages!");
 	                	return;
 	                }
 	                
@@ -147,7 +148,7 @@ public class WCWarps{
 				File fileToCheck = new File(plugin.getDataFolder() + File.separator + "Warps", args[0].toLowerCase() + ".yml");
 
 				    if (!fileToCheck.exists()) {
-				    	WCMain.s(p, "That warp does not exist!");
+				    	WCUtils.s(p, "That warp does not exist!");
 				    	return;
 				    }
 				    
@@ -170,7 +171,7 @@ public class WCWarps{
 			    	OfflinePlayer tpOther = Bukkit.getOfflinePlayer(args[1]);
 			    	
 			    		if (!tpOther.isOnline()){
-			    			WCMain.s(p, "That player is not online!");
+			    			WCUtils.s(p, "That player is not online!");
 			    			return;
 			    		}
 			    		
@@ -184,7 +185,7 @@ public class WCWarps{
 				    wcp.setLastLocation(other.getLocation());
 				    plugin.wcm.updatePlayerMap(other.getName(), wcp);
 					other.teleport(warpTo);
-				    WCMain.s(other, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple + " &dby " + p.getDisplayName() + "&d.");
+				    WCUtils.s(other, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple + " &dby " + p.getDisplayName() + "&d.");
 				    return;
 			    }
 			    
@@ -212,7 +213,7 @@ public class WCWarps{
 						p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
 					}
 					
-			    WCMain.s(p, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple);
+			    WCUtils.s(p, "Warped to &6" + args[0] + " &dfrom &6" + warpSimple);
 	 }
 	  
 	  
@@ -221,7 +222,7 @@ public class WCWarps{
 		  
 		  	      StringBuilder sb = new StringBuilder();
 		  	      
-			      WCMain.s2((Player)sender, "&dWarps &f// &dPage &6" + String.valueOf(page) + " &dof &6" + (((map.size() % pageLength) == 0) ? map.size() / pageLength : (map.size() / pageLength) + 1) + "&d. &f(&6" + warps + "&f)&d.");
+			      WCUtils.s2((Player)sender, "&dWarps &f// &dPage &6" + String.valueOf(page) + " &dof &6" + (((map.size() % pageLength) == 0) ? map.size() / pageLength : (map.size() / pageLength) + 1) + "&d. &f(&6" + warps + "&f)&d.");
 			      int i = 0, k = 0;
 			      page--;
 			      for (final Entry<Integer, String> e : map.entrySet()) {
@@ -234,6 +235,6 @@ public class WCWarps{
 			      
 			      String msg = sb.toString().trim();
 			      msg = msg.substring(0, msg.length() - 6) + " ";
-			      WCMain.s2((Player)sender, "&d" + msg.replace(".yml", ""));
+			      WCUtils.s2((Player)sender, "&d" + msg.replace(".yml", ""));
 			  }
 }

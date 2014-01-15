@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.WCMain;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
  public class WCInvSee implements Listener {
@@ -31,12 +32,12 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 			Player p = ((Player)sender);
 			
 			if (args.length == 0){
-				WCMain.s(p, "Try /invsee <player>");
+				WCUtils.s(p, "Try /invsee <player>");
 				return;
 			}
 			
 			if (Bukkit.getPlayer(args[0]) == null){
-				WCMain.s(p, "That player is not online!");
+				WCUtils.s(p, "That player is not online!");
 				return;
 			}
 			
@@ -56,7 +57,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 			}
 			
 			invUsers.add(p.getName());
-			WCMain.s(p, "Viewing the inventory of " + Bukkit.getPlayer(args[0]).getDisplayName());
+			WCUtils.s(p, "Viewing the inventory of " + Bukkit.getPlayer(args[0]).getDisplayName());
 		}
 	
 	@EventHandler (priority = EventPriority.NORMAL)
@@ -65,7 +66,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 			Player p = ((Player)e.getWhoClicked());
 			if(invUsers.contains(p.getName())){
 				if (!p.hasPermission("wa.mod2")){
-					WCMain.s((Player)e.getWhoClicked(), "You don't have permission to edit!");
+					WCUtils.s((Player)e.getWhoClicked(), "You don't have permission to edit!");
 					e.setCancelled(true);
 				}
 		    }

@@ -31,6 +31,7 @@ import com.github.lyokofirelyte.WCAPI.JSON.JSONChatClickEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 
 public class WCChannels implements Listener {
@@ -61,11 +62,11 @@ public class WCChannels implements Listener {
 		wca = pl.wcm.getWCAlliance(wcp.getAlliance());
 		
 		if (wcp == null){
-			p.sendMessage(WCMail.WC + "That player has never logged in before!");
+			s(p, "That player has never logged in before!");
 			return;
 		}
 					
-		p.sendMessage(new String[]{
+		s(p, new String[]{
 			AS(WCMail.WC + "Inspecting player " + message[1] + "."),
 			AS("&1| &a&oglobal rank&f: " + WCVault.chat.getPlayerPrefix("world", message[1])),
 			AS("&1| &f> > > < < <"),
@@ -79,9 +80,9 @@ public class WCChannels implements Listener {
 		});
 		
 		if (Bukkit.getPlayer(message[1]) != null){
-			p.sendMessage(AS("&1| &c&ostatus&f: &aONLINE"));
+			s(p, "&1| &c&ostatus&f: &aONLINE");
 		} else {
-			p.sendMessage(AS("&1| &c&ostatus&f: &4OFFLINE"));	
+			s(p, "&1| &c&ostatus&f: &4OFFLINE");	
 		}
 		
 	}
@@ -107,8 +108,8 @@ public class WCChannels implements Listener {
 		  wcpp.setMembers(members);
 		  wcpp.setName(e.getMessage().replaceAll("&", ""));
 		  pl.wcm.updatePatrol(e.getMessage().replaceAll("&", ""), wcpp);
-		  Bukkit.broadcastMessage(AS(p.getDisplayName() + " &dhas formed a patrol (&3" + e.getMessage().replaceAll("&", "") + "&d)."));
-		  s(p, "Talk in patrol chat with /p <message>. Your personal patrol configuration options are in /root -> patrols.");
+		  callChat(WCMessageType.BROADCAST, AS(p.getDisplayName() + " &dhas formed a patrol (&3" + e.getMessage().replaceAll("&", "") + "&d)."));
+		  s(p, "Talk in patrol chat with /p <message>. More options in /root -> patrols.");
 		  return;
 	  }
 		
@@ -277,7 +278,7 @@ public class WCChannels implements Listener {
 					} else if (colour.equalsIgnoreCase("r")){
 						
 						currentColour = "&" + wcp.getGlobalColor();
-						i++;
+						i++; ** Jesse you know this increments automatically right?
 						
 					}
 					
@@ -310,16 +311,16 @@ public class WCChannels implements Listener {
 		      	extra3.setClickEvent(JSONChatClickEventType.OPEN_URL, link);
 		      	newDispName.addExtra(extra3);
 	      	}
-	      	
-	      	newDispName.sendToPlayer(bleh);
+
+	        callChat(bleh, WCMessageType.JSON_PLAYER, newDispName);
 		}
 	  
 		lastChat = p;
 		
 		if (rawr){
-			Bukkit.getServer().getConsoleSender().sendMessage(AS("&8>> " + p.getDisplayName() + "&f: " + msg));
+			callChat(WCMessageType.CONSOLE, AS("&8>> " + p.getDisplayName() + "&f: " + msg));
 		} else {
-			Bukkit.getServer().getConsoleSender().sendMessage(AS(WCVault.chat.getPlayerSuffix(p) + " §f// " + p.getDisplayName() + "§f: " + msg));
+			callChat(WCMessageType.CONSOLE, AS(WCVault.chat.getPlayerSuffix(p) + " §f// " + p.getDisplayName() + "§f: " + msg));
 		}
   }
 
@@ -358,11 +359,11 @@ public class WCChannels implements Listener {
 	        		wcpCurrent = pl.wcm.getWCPlayer(currentPlayer.getName());
 	        		wcpCurrent.setLastChat(p.getName());
 	        		updatePlayer(wcpCurrent, currentPlayer.getName());
-	        		currentPlayer.sendMessage(AS("&" + wcpCurrent.getPMColor() + "<< " + p.getDisplayName() + " §f// &" + wcpCurrent.getPMColor() + message2));
-	        		sender.sendMessage(AS("&" + wcp.getPMColor() + ">> " + currentPlayer.getDisplayName() + " §f// &" + wcp.getPMColor() + message2));
+	        		callChat(currentPlayer, WCMessageType.PLAYER, AS("&" + wcpCurrent.getPMColor() + "<< " + p.getDisplayName() + " §f// &" + wcpCurrent.getPMColor() + message2));
+	        		callChat(p, WCMessageType.PLAYER, AS("&" + wcp.getPMColor() + ">> " + currentPlayer.getDisplayName() + " §f// &" + wcp.getPMColor() + message2));
 	        		
 	        		if (pl.afkTimer.get(currentPlayer.getName()) >= 180){
-	        			sender.sendMessage(AS("&7&oThat player is afk."));
+	        			s(p, AS("&7&oThat player is afk."));
 	        		}
 	        		break;
 	        	}
@@ -386,7 +387,7 @@ public class WCChannels implements Listener {
 	        Bukkit.getPlayer(wcp.getLastChat()).sendMessage(AS("&" + wcpCurrent.getPMColor() + "<< " + p.getDisplayName() + " §f// &" + wcpCurrent.getPMColor() + createString(args, 0)));
 	        sender.sendMessage(AS("&" + wcp.getPMColor() + ">> " + Bukkit.getPlayer(wcp.getLastChat()).getDisplayName() + " §f// &" + wcp.getPMColor() + createString(args, 0)));
     		if (pl.afkTimer.get(wcp.getLastChat()) >= 180){
-    			sender.sendMessage(AS("&7&oThat player is afk."));
+    			s(p, AS("&7&oThat player is afk."));
     		}
     }
 
@@ -430,7 +431,7 @@ public class WCChannels implements Listener {
 	    	  
 	          for (String a : chatUsers){
 	              if (Bukkit.getOfflinePlayer(a).isOnline()) {
-	                Bukkit.getPlayer(a).sendMessage(AS("§c§oOh! §4// " + p.getDisplayName() + " has joined o chat!"));
+	            	  s2(Bukkit.getPlayer(a), "§c§oOh! §4// " + p.getDisplayName() + " has joined o chat!");
 	              }
 	          }
 	    	  
@@ -450,7 +451,7 @@ public class WCChannels implements Listener {
 	    	  
 	          for (String a : chatUsers){
 	              if (Bukkit.getOfflinePlayer(a).isOnline()) {
-	            	  Bukkit.getPlayer(a).sendMessage(AS("§c§oOh! §4// " + p.getDisplayName() + " §chas left o chat!"));
+	            	  s2(Bukkit.getPlayer(a), "§c§oOh! §4// " + p.getDisplayName() + " §chas left o chat!");
 	              }
 	          }
 	    	 
@@ -460,7 +461,7 @@ public class WCChannels implements Listener {
 
       for (String a : chatUsers){
     	  if (Bukkit.getOfflinePlayer(a).isOnline()) {
-    		  Bukkit.getPlayer(a).sendMessage(AS("§c§oOh! §4// " + p.getDisplayName() + "§f: §c" + createString(args, 0)));
+    		  s2(Bukkit.getPlayer(a), "§c§oOh! §4// " + p.getDisplayName() + "§f: §c" + createString(args, 0));
           }
       }
         
@@ -482,11 +483,10 @@ public class WCChannels implements Listener {
 	
 	      for (String a : wcaCurrent.getChatUsers()) {
 	    	  if (Bukkit.getOfflinePlayer(a).isOnline()) {
-	    		  Bukkit.getPlayer(a).sendMessage(AS(pl.wcm.getCompleted(wcp.getCurrentChat(), wcaCurrent.getColor1(), wcaCurrent.getColor2()) + " &7// &8*" + 
+	    		  callChat(Bukkit.getPlayer(a), WCMessageType.PLAYER, AS(pl.wcm.getCompleted(wcp.getCurrentChat(), wcaCurrent.getColor1(), wcaCurrent.getColor2()) + " &7// &8*" + 
 	        	  wcp.getAllianceRank2() + "&8* " + p.getDisplayName() + "&f: &" + wcp.getAllianceColor() + createString(args, 0)));
 	          }
 	      }
-	
 	  }
 	  
  @WCCommand(aliases = {"p"}, desc = "WC Patrol Chat", help = "/p <msg>", min = 1)
@@ -501,7 +501,7 @@ public class WCChannels implements Listener {
 			  WCPatrol wcpp = pl.wcm.getWCPatrol(wcp.getPatrol());
 			  for (String s : wcpp.getMembers()){
 				  if (Bukkit.getPlayer(s) != null){
-					  Bukkit.getPlayer(s).sendMessage(AS("&8>> &3" + wcpp.getName() + " &8>> " + p.getDisplayName() + "&f: " + Utils.createString(args, 0)));
+					  callChat(Bukkit.getPlayer(s), WCMessageType.PLAYER, AS("&8>> &3" + wcpp.getName() + " &8>> " + p.getDisplayName() + "&f: " + Utils.createString(args, 0)));
 				  }
 			  }
 		  }

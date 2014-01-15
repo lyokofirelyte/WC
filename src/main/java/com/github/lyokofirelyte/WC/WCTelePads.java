@@ -18,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
-import static com.github.lyokofirelyte.WC.WCMain.s;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCTelePads implements Listener {
 

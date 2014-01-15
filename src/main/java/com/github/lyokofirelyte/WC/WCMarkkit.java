@@ -20,6 +20,7 @@ import com.github.lyokofirelyte.WC.Gui.GuiMarkkit;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCGui;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 
 public class WCMarkkit implements Listener {
 
@@ -53,7 +54,7 @@ public class WCMarkkit implements Listener {
 					WCGui gui = new GuiMarkkit(pl);
 					if (sign.getLine(0).equals(Utils.AS("&dWC &5Markkit")) && pl.markkitInvs.containsKey(sign.getLine(1).substring(2))){
 						if (e.getPlayer().getItemInHand() != null && e.getPlayer().getItemInHand().getType() != Material.AIR){
-							WCMain.s(e.getPlayer(), "You must use your hand to activate the sign.");
+							WCUtils.s(e.getPlayer(), "You must use your hand to activate the sign.");
 							return;
 						}
 						Inventory inv = Bukkit.createInventory(null, 54, Utils.AS("&dMarkkit"));

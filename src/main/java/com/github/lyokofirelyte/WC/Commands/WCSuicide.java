@@ -11,11 +11,12 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 public abstract class WCSuicide implements CommandExecutor {
 
 	WCMain pl;
+	
 	public WCSuicide(WCMain instance){
-	pl = instance;
+		pl = instance;
     }
 
-	  @WCCommand(aliases = {"suicide"}, help = "Goodbye cruel world...")
+	  @WCCommand(aliases = {"suicide"}, help = "/suicide", desc = "Goodbye world!")
 	  public void onSuicide(Player sender, String[] args){
 		  
 		  Player p = ((Player)sender);

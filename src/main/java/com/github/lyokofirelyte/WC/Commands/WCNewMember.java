@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
 public class WCNewMember{
@@ -23,7 +24,7 @@ public class WCNewMember{
 			
 			if (args.length != 1){
 				
-				WCMain.s(p, "/newmember <player>");
+				WCUtils.s(p, "/newmember <player>");
 				
 			} else {
 				

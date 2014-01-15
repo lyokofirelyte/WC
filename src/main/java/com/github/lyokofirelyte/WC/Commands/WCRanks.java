@@ -17,8 +17,7 @@ import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WC.WCMain;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-import static com.github.lyokofirelyte.WC.WCMain.s2;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCRanks{
 
@@ -99,7 +98,7 @@ public class WCRanks{
 			for (String r : ranks){
 						
 					if (y > ranks.size() - 1){
-						WCMain.s(p, "You are already the highest rank!");
+						s(p, "You are already the highest rank!");
 						return;
 					}
 						
@@ -118,13 +117,13 @@ public class WCRanks{
 		wcp = pl.wcm.getWCPlayer(p.getName());
 		
 		if (newGroup == null){
-			WCMain.s(p, "You are already the highest rank!");
+			s(p, "You are already the highest rank!");
 			return;
 		}
 		
 		int cost = pl.datacore.getInt("RankCosts." + newGroup);
 			if (wcp.getBalance() < cost){
-				WCMain.s(p, "You need &6" + cost + " &dshinies for that rank.");
+				s(p, "You need &6" + cost + " &dshinies for that rank.");
 				return;
 			}
 			

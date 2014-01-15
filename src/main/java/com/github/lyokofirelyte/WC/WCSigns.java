@@ -22,6 +22,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 
 public class WCSigns implements Listener {
 
@@ -239,7 +240,7 @@ public class WCSigns implements Listener {
 				String[] permSplit = s.split(",");
 				if (permSplit.length == 5){
 					if (!p.hasPermission(permSplit[4])){
-						WCMain.s(p, "You don't have permission to use this warp!");
+						WCUtils.s(p, "You don't have permission to use this warp!");
 						return false;
 					}
 				}

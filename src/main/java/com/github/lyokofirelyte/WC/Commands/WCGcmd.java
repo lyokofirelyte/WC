@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import com.github.lyokofirelyte.WC.WCMain;
 import static com.github.lyokofirelyte.WCAPI.WCUtils.createString;
 import static com.github.lyokofirelyte.WCAPI.WCUtils.AS;
+
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatClickEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatColor;
@@ -15,6 +17,7 @@ import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatFormat;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 public class WCGcmd {
 
@@ -41,7 +44,7 @@ public class WCGcmd {
 		extra.setClickEvent(JSONChatClickEventType.RUN_COMMAND, "/" + command);
 		msg.addExtra(extra);
 		for (Player pp : Bukkit.getOnlinePlayers()){
-			msg.sendToPlayer(pp);
+			WCUtils.callChat(pp, WCMessageType.JSON_PLAYER, msg);
 		}
 	}
 }

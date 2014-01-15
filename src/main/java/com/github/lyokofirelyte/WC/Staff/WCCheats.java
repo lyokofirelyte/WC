@@ -25,8 +25,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-import static com.github.lyokofirelyte.WC.WCMain.s2;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCCheats {
 
@@ -160,6 +159,7 @@ public class WCCheats {
 				
 	}
 	
+	@SuppressWarnings("deprecation")
 	@WCCommand(aliases = {"sit"}, desc = "Like a chair. Be warned: It's ghetto. :D", help = "/sit")
 	public void onSit(Player p, String[] args){
 	
@@ -371,7 +371,7 @@ public class WCCheats {
 				
 	}	
 	
-	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.more2")
+	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.mod2")
 	public void onMore(Player p, String[] args){
 
 				if (p.getInventory().getItemInHand() != null){

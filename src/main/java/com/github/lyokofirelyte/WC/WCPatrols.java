@@ -40,6 +40,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
@@ -254,7 +255,7 @@ public class WCPatrols implements Listener {
 					if (wcs.getPatrolKills() >= (wcs.getPatrolDiff()*100)){
 						Bukkit.getServer().getScheduler().cancelTask(wcs.getPatrolCheckTask());
 						wcs.setPatrolHotSpotAreas(new ArrayList<Location>());
-						Bukkit.broadcastMessage(AS(WC + "The active hotspot has been deactivated! Only the boss remains!"));
+						callChat(WCMessageType.BROADCAST, AS(WC + "The active hotspot has been deactivated! Only the boss remains!"));
 						bossTime();
 					}
 					return;
@@ -425,7 +426,7 @@ public class WCPatrols implements Listener {
 				if (current.getBlock().getType() != Material.AIR && current.getBlock().getType() != Material.WATER &&  current.getBlock().getType() != Material.STATIONARY_WATER && current.getBlock().getType() != Material.STATIONARY_LAVA && current.getBlock().getType() != Material.LAVA && current.getBlock() != null){
 					if (new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.LAVA && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_LAVA){
 						wcs.setPatrolHotSpot(new Location(Bukkit.getWorld("world"), xR, y+1, zR));
-						Bukkit.broadcastMessage(AS(WC + "A new hotspot has been found at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Difficulty &6" + wcs.getPatrolDiff() + "&d)"));
+						callChat(WCMessageType.BROADCAST, AS(WC + "A new hotspot has been found at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Difficulty &6" + wcs.getPatrolDiff() + "&d)"));
 						rawr = true;
 					}
 				}
@@ -468,7 +469,7 @@ public class WCPatrols implements Listener {
 			}
 			dropChance();
 			Bukkit.getServer().getScheduler().cancelTask(wcs.getPatrolHealthTimerTask());
-			Bukkit.broadcastMessage(AS(WC + "The hotspot boss has been defeated! All participants were awarded!"));
+			callChat(WCMessageType.BROADCAST, AS(WC + "The hotspot boss has been defeated! All participants were awarded!"));
 			WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§cINACTIVE!", "§4...", false, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
 			rewardPlayers();
         	List<Location> circleblocks = circle(wcs.getPatrolHotSpot(), 20, 1, true, false, 1);
@@ -531,7 +532,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
+			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
 		if (defenderShield == 5){
@@ -545,7 +546,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
+			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
 		if (teleportCube == 5){
@@ -559,7 +560,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
+			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
 		if (buildCharm == 5){
@@ -572,7 +573,7 @@ public class WCPatrols implements Listener {
 			im.setLore(lore);
 			i.setItemMeta(im);
 			l.getWorld().dropItemNaturally(l, i);
-			Bukkit.broadcastMessage(AS(WC + "The boss has dropped something at the hotspot origin!"));
+			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 	}
 	

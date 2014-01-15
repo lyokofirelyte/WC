@@ -1,5 +1,7 @@
 package com.github.lyokofirelyte.WC;
 
+import static com.github.lyokofirelyte.WCAPI.WCUtils.callChat;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,6 +31,7 @@ import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ParagonFindEvent;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 public class WCMobDrops implements Listener {
 
@@ -276,7 +279,7 @@ public class WCMobDrops implements Listener {
 			
 			if (paragon == 500 && event.getEntity().getKiller().getWorld().getName().equals("world")){
 	
-	            Bukkit.broadcastMessage(Utils.AS(WCMail.WC + event.getEntity().getKiller().getDisplayName() + " &dhas found a &0death &dparagon from a " + event.getEntityType().toString().toLowerCase() + "&d."));
+				callChat(WCMessageType.BROADCAST, Utils.AS(WCMail.WC + event.getEntity().getKiller().getDisplayName() + " &dhas found a &0death &dparagon from a " + event.getEntityType().toString().toLowerCase() + "&d."));
 	            ParagonFindEvent pEvent = new ParagonFindEvent(event.getEntity().getKiller(), "&0death", "DEATH PARAGON", Utils.getRandomColor(), 15, Material.STAINED_CLAY, pl.wcm.getWCPlayer(event.getEntity().getKiller().getName()).getBlocksMined());
 	            pl.getServer().getPluginManager().callEvent(pEvent);
 			}

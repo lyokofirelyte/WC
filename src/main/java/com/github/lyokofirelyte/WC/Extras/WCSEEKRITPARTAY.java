@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WC.Util.Utils;
+import static com.github.lyokofirelyte.WC.Util.Utils.*;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
 public class WCSEEKRITPARTAY implements Listener {
@@ -59,14 +59,14 @@ public class WCSEEKRITPARTAY implements Listener {
 				Location l = e.getBlock().getLocation();
 				locs.add(l.getWorld().getName() + " " + l.getX() + " " + l.getY() + " " + l.getZ());
 				pl.datacore.set("PARTYWORDS", locs);
-				WCMain.s(e.getPlayer(), "Added");
+				s(e.getPlayer(), "Added");
 			} else if (e.getPlayer().getItemInHand().getType().equals(Material.ARROW)){
 				e.setCancelled(true);
 				List<String> locs = pl.datacore.getStringList("PARTYJESSE");
 				Location l = e.getBlock().getLocation();
 				locs.add(l.getWorld().getName() + " " + l.getX() + " " + l.getY() + " " + l.getZ());
 				pl.datacore.set("PARTYJESSE", locs);
-				WCMain.s(e.getPlayer(), "Added");
+				s(e.getPlayer(), "Added");
 			}
 		}
 	}
@@ -114,7 +114,7 @@ public class WCSEEKRITPARTAY implements Listener {
 				  
 				try {
 					pl.fw.playFirework(l.getWorld(), l,
-					FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
+					FireworkEffect.builder().with(Type.BURST).withColor(getRandomColor()).build());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -138,7 +138,7 @@ public class WCSEEKRITPARTAY implements Listener {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
 		public void run() { 
 			
-			final List<Location> overview = Utils.circle(new Location(Bukkit.getWorld("creative"), -1159, 33, 331), 10, 1, true, false, 0);	
+			final List<Location> overview = circle(new Location(Bukkit.getWorld("creative"), -1159, 33, 331), 10, 1, true, false, 0);	
 			long delay = 0L;
 			
 			for (final Location l : overview){
@@ -147,7 +147,7 @@ public class WCSEEKRITPARTAY implements Listener {
 				public void run() { 
 					try {
 						pl.fw.playFirework(l.getWorld(), l,
-						FireworkEffect.builder().with(Type.BALL_LARGE).withColor(Utils.getRandomColor()).build());
+						FireworkEffect.builder().with(Type.BALL_LARGE).withColor(getRandomColor()).build());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -167,7 +167,7 @@ public class WCSEEKRITPARTAY implements Listener {
 				public void run() { 
 					try {
 						pl.fw.playFirework(l.getWorld(), l,
-						FireworkEffect.builder().with(Type.CREEPER).withColor(Utils.getRandomColor()).build());
+						FireworkEffect.builder().with(Type.CREEPER).withColor(getRandomColor()).build());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -187,7 +187,7 @@ public class WCSEEKRITPARTAY implements Listener {
 		  
 		Boolean dia = true;
 		Location origin = new Location(Bukkit.getWorld("creative"), -1159, 33, 331);
-		List<Location> fwlocs = Utils.circle(origin, 8, 1, true, false, 1);
+		List<Location> fwlocs = circle(origin, 8, 1, true, false, 1);
 		  
 		for (int x = 0; x < 10; x++){
 			Item diamonds = origin.getWorld().dropItemNaturally(origin, new ItemStack(Material.DIAMOND, 1));
@@ -207,7 +207,7 @@ public class WCSEEKRITPARTAY implements Listener {
 		for (Location l : fwlocs){
 			try {
 				pl.fw.playFirework(l.getWorld(), l,
-				FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
+				FireworkEffect.builder().with(Type.BURST).withColor(getRandomColor()).build());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -220,8 +220,8 @@ public class WCSEEKRITPARTAY implements Listener {
 		Location lowerRing = new Location(Bukkit.getWorld("creative"), -1159, 35, 331);
 		Location upperRing = new Location(Bukkit.getWorld("creative"), -1159, 40, 331);
 		Location pedestal = new Location(Bukkit.getWorld("creative"), -1159, 37, 331);
-		List<Location> all = Utils.circle(lowerRing, 5, 1, true, false, 0);
-		List<Location> urlocs = Utils.circle(upperRing, 5, 1, true, false, 0);
+		List<Location> all = circle(lowerRing, 5, 1, true, false, 0);
+		List<Location> urlocs = circle(upperRing, 5, 1, true, false, 0);
 		long delay = 0L;
 		pedestal.getBlock().setType(Material.GLASS);
 		
@@ -242,7 +242,7 @@ public class WCSEEKRITPARTAY implements Listener {
 				  
 				try {
 					pl.fw.playFirework(l.getWorld(), l,
-					FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
+					FireworkEffect.builder().with(Type.BURST).withColor(getRandomColor()).build());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -266,7 +266,7 @@ public class WCSEEKRITPARTAY implements Listener {
 				  
 				try {
 					pl.fw.playFirework(l.getWorld(), l,
-					FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
+					FireworkEffect.builder().with(Type.BURST).withColor(getRandomColor()).build());
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

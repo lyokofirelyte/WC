@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCHome{
@@ -64,7 +65,7 @@ public class WCHome{
 		
 		if (args.length == 0){
 				if (homes.size() <= 0){
-					WCMain.s(p, "You have no homes! Set one with /sethome <name>. Homes used: 0/" + homeLimit + "&d.");
+					WCUtils.s(p, "You have no homes! Set one with /sethome <name>. Homes used: 0/" + homeLimit + "&d.");
 				} else {
 					viewHomes(pName, homes, homeLimit, p);
 				}
@@ -123,21 +124,21 @@ public class WCHome{
 			p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
 		}
 		
-		WCMain.s(p, "Teleported to &6" + homeName + " &dfrom &6" + xSimple + "&f, &6" + ySimple + "&f, &6" + zSimple + "&d.");
+		WCUtils.s(p, "Teleported to &6" + homeName + " &dfrom &6" + xSimple + "&f, &6" + ySimple + "&f, &6" + zSimple + "&d.");
 		
 	}
 
 	private void viewHomes(String pName, List<String> homes, int homeLimit, Player p) {
 		
 		if (homes.size() >= homeLimit){
-			WCMain.s(p, "Viewing homes for " + p.getDisplayName() + " &c(" + homes.size() + "&c/" + homeLimit + "&c)");
+			WCUtils.s(p, "Viewing homes for " + p.getDisplayName() + " &c(" + homes.size() + "&c/" + homeLimit + "&c)");
 		} else {
-			WCMain.s(p, "Viewing homes for " + p.getDisplayName() + " &a(" + homes.size() + "&a/" + homeLimit + "&a)");
+			WCUtils.s(p, "Viewing homes for " + p.getDisplayName() + " &a(" + homes.size() + "&a/" + homeLimit + "&a)");
 		}
 		
 		for (String currentHome : homes){
 			String[] hSplit = currentHome.split(" ");
-			WCMain.s2(p, "&a| &6" + hSplit[0]);
+			WCUtils.s2(p, "&a| &6" + hSplit[0]);
 		}
 	}
 
@@ -162,7 +163,7 @@ public class WCHome{
 	public void sethome(String[] args, WCPlayer wcp, Player p, String pName, int homeLimit, List<String> homes) {
 		
 		if (args.length == 0 && homes.size() == 0){
-			WCMain.s(p, "Try /sethome <name>");
+			WCUtils.s(p, "Try /sethome <name>");
 			return;
 		} else if (args.length == 0){
 			viewHomes(pName, homes, homeLimit, p);
@@ -203,19 +204,19 @@ public class WCHome{
 		wcp.addHome(args[0] + " " + xyz);
 		updatePlayer(wcp, p.getName());
 		
-		WCMain.s(p, "Set home &6" + args[0] + " &dat &6" + Math.round(x) + "&f,&6 " + Math.round(y) + "&f,&6 " + Math.round(z) + "&d.");
+		WCUtils.s(p, "Set home &6" + args[0] + " &dat &6" + Math.round(x) + "&f,&6 " + Math.round(y) + "&f,&6 " + Math.round(z) + "&d.");
 		
 		if (homes.size() >= homeLimit){
-			WCMain.s2(p, "&cHomes remaining&f: &c0/" + homeLimit);
+			WCUtils.s2(p, "&cHomes remaining&f: &c0/" + homeLimit);
 		} else {
-			WCMain.s2(p, "&aHomes remaining&f: &a" + (homeLimit - homes.size()) + "/" + homeLimit);
+			WCUtils.s2(p, "&aHomes remaining&f: &a" + (homeLimit - homes.size()) + "/" + homeLimit);
 		}
 	} 
 	
 	public void remhome(String[] args, WCPlayer wcp, Player p, String pName, int homeLimit, List<String> homes) {
 
 		if (args.length == 0 && homes.size() == 0){
-			WCMain.s(p, "Try /remhome or /delhome <name>");
+			WCUtils.s(p, "Try /remhome or /delhome <name>");
 			return;
 		} else if (args.length == 0){
 			viewHomes(pName, homes, homeLimit, p);
@@ -238,8 +239,8 @@ public class WCHome{
 			if (a.startsWith(args[0])){
 				wcp.remHome(a);
 				updatePlayer(wcp, p.getName());
-				WCMain.s(p, "Removal successful.");
-				WCMain.s2(p, "&aHomes remaining&f: &a" + (homeLimit - homes.size()) + "/" + homeLimit);	
+				WCUtils.s(p, "Removal successful.");
+				WCUtils.s2(p, "&aHomes remaining&f: &a" + (homeLimit - homes.size()) + "/" + homeLimit);	
 				return;
 			}
 		}

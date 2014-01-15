@@ -23,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -42,6 +41,7 @@ import com.github.lyokofirelyte.WC.WCCommands;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 public class WCMiscEvents implements Listener {
@@ -127,7 +127,7 @@ public class WCMiscEvents implements Listener {
 					mult++;
 				}
 				
-				WCMain.s(e.getPlayer(), mult + "");
+				WCUtils.s(e.getPlayer(), mult + "");
 			}
 		}
 		
@@ -140,7 +140,7 @@ public class WCMiscEvents implements Listener {
 				}
 				
 				plugin.links.get(e.getPlayer().getName()).add(e.getClickedBlock().getLocation());
-				WCMain.s(e.getPlayer(), "Added!");
+				WCUtils.s(e.getPlayer(), "Added!");
 				timer = 30;
 				return;
 			}
@@ -203,7 +203,7 @@ public class WCMiscEvents implements Listener {
 			plugin.links.put(e.getPlayer().getName(), new ArrayList<Location>());
 			plugin.links2.put(e.getPlayer().getName(), new ArrayList<Entity>());
 			Bukkit.getServer().getScheduler().cancelTask(timerTask);
-			WCMain.s(e.getPlayer(), "Cleared links!");
+			WCUtils.s(e.getPlayer(), "Cleared links!");
 		}
 	}
 	
@@ -219,7 +219,7 @@ public class WCMiscEvents implements Listener {
 			p.setAllowFlight(true);
 			plugin.datacore.set("Users." + p.getName() + ".commandUsed", false);
 			plugin.datacore.set("Users." + p.getName() + ".onMob", true);
-			WCMain.s(p, "Right click = down, left click = up, hold right click w/ stick for directional controls, evac = shift");
+			WCUtils.s(p, "Right click = down, left click = up, hold right click w/ stick for directional controls, evac = shift");
 		}
 		
 		if (ent instanceof Player){
@@ -227,16 +227,16 @@ public class WCMiscEvents implements Listener {
 			wcp2 = plugin.wcm.getWCPlayer(p.getName());
 			
 			if (!wcp.getAllowPokes() || !wcp2.getAllowPokes()){
-				WCMain.s(p, "That person or yourself have disabled pokes.");
+				WCUtils.s(p, "That person or yourself have disabled pokes.");
 			} else {
-				WCMain.s2(p, "Poked " + (((Player) ent).getDisplayName()));
-				WCMain.s2((Player)ent, "You were poked by " + p.getDisplayName() + "&d!");
+				WCUtils.s2(p, "Poked " + (((Player) ent).getDisplayName()));
+				WCUtils.s2((Player)ent, "You were poked by " + p.getDisplayName() + "&d!");
 			}	
 		}
 		
 		if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".controlCarts") && e.getPlayer().getItemInHand().getType().equals(Material.IRON_SWORD)){
 			plugin.carts.add(e.getRightClicked());
-			WCMain.s(p, "Added");
+			WCUtils.s(p, "Added");
 		} else if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".controlCarts") && e.getPlayer().getItemInHand().getType().equals(Material.WOOD_SWORD)){
 			plugin.carts = new ArrayList<>();
 		}
@@ -277,7 +277,7 @@ public class WCMiscEvents implements Listener {
 				
 				if (!wcp.getPVP() || !wcp2.getPVP()){
 					e.setCancelled(true);
-					WCMain.s((Player)e.getDamager(), "That player has PVP mode turned off!");
+					WCUtils.s((Player)e.getDamager(), "That player has PVP mode turned off!");
 				}
 			}
 		}
@@ -356,7 +356,7 @@ public class WCMiscEvents implements Listener {
     	  if (p.getWorld().getName().equals("SpawnCreation") && !p.hasPermission("wa.staff")){
     		  if (p.getLocation().getY() < 2 || p.getLocation().getY() > 129){
     			 p.teleport(new Location(p.getWorld(), p.getLocation().getX(), 50, p.getLocation().getZ()));
-    			  WCMain.s(p, "Booth border reached.");
+    			  WCUtils.s(p, "Booth border reached.");
     		  }
     	  }
     	  
@@ -385,17 +385,6 @@ public class WCMiscEvents implements Listener {
 		  }
 		  
 		  plugin.afkTimer.put(p.getName(), 0);
-      }
-
-     @SuppressWarnings("deprecation")
-     @EventHandler
-     public void onBreak(BlockBreakEvent e){
-    	if (e.getPlayer().getWorld().getName().equals("SpawnCreation") && !e.getPlayer().hasPermission("wa.staff")){
-    		if (e.getBlock().getType().equals(Material.DOUBLE_STEP) && e.getBlock().getData() == 0x8){
-    			e.setCancelled(true);
-    			WCMain.s(e.getPlayer(), "Wall breaking is prohibited.");
-    		}
-    	}
       }
       
     @EventHandler (priority = EventPriority.HIGHEST)

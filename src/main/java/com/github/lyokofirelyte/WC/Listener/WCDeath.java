@@ -1,6 +1,5 @@
 package com.github.lyokofirelyte.WC.Listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,6 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.WCMobDrops;
 
@@ -60,9 +60,9 @@ public class WCDeath implements Listener{
 			plugin.wcm.updatePlayerMap(p.getName(), wcp);
 			e.setDeathMessage(null);
 			if (wcp.getAllowDeathLocation()){
-				Bukkit.broadcastMessage(Utils.AS("&6>> " + p.getDisplayName() + " &ehas died at " + Math.round(l.getX()) + "," + Math.round(l.getY()) + "," + Math.round(l.getZ()) + " &6<<"));
+				Utils.callChat(WCMessageType.BROADCAST, Utils.AS("&6>> " + p.getDisplayName() + " &ehas died at " + Math.round(l.getX()) + "," + Math.round(l.getY()) + "," + Math.round(l.getZ()) + " &6<<"));
 			} else {
-				Bukkit.broadcastMessage(Utils.AS("&6>> " + p.getDisplayName() + " &ehas died &6<<"));
+				Utils.callChat(WCMessageType.BROADCAST, Utils.AS("&6>> " + p.getDisplayName() + " &ehas died &6<<"));
 			}
 	}
 

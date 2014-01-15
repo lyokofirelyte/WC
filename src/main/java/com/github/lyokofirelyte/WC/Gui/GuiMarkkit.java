@@ -13,6 +13,7 @@ import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCGui;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 
 import static com.github.lyokofirelyte.WCAPI.Manager.InventoryManager.createItem;
 
@@ -160,7 +161,7 @@ public class GuiMarkkit extends WCGui {
 				WCPlayer wcp = main.wcm.getWCPlayer(p.getName());
 				wcp.setBalance(wcp.getBalance() + sellPrice);
 				main.wcm.updatePlayerMap(p.getName(), wcp);
-				WCMain.s(p, "Sold for " + sellPrice);
+				WCUtils.s(p, "Sold for " + sellPrice);
 				
 				break;
 				
@@ -199,7 +200,7 @@ public class GuiMarkkit extends WCGui {
 				}
 				
 				if (y < x){
-					WCMain.s(p, "You don't have enough room!");
+					WCUtils.s(p, "You don't have enough room!");
 					return;
 				}
 				
@@ -221,7 +222,7 @@ public class GuiMarkkit extends WCGui {
 						wcp.setBalance(wcp.getBalance() - totalPrice);
 						main.wcm.updatePlayerMap(p.getName(), wcp);
 					} else {
-						WCMain.s(p, "You lack the funds!");
+						WCUtils.s(p, "You lack the funds!");
 						return;
 					}
 				}

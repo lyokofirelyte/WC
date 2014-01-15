@@ -17,8 +17,6 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-
 public class WACommandEx {
 	
   WCMain plugin;
@@ -50,7 +48,7 @@ public class WACommandEx {
     	  case "help": default:
     		  
     		  if (args.length == 1){
-    			  sender.sendMessage(new String[] { 
+    			  s(p, new String[] { 
     			  WC + "Worlds Apart Alliances Help Core", 
     		      AS("&a| &3/waa help general &f// &3General help commands"), 
     		      AS("&a| &3/waa help leadership &f// &3Alliance upgrading help commands"), 
@@ -63,7 +61,7 @@ public class WACommandEx {
     		  
 	    		  case "leadership":
 	
-	    	            sender.sendMessage(new String[] { 
+	    	            s(p, new String[] { 
 	    	            WC + "Leadership Help", 
 	    	            AS("&a| &3/waa invite <player> &f// &3Invite someone to your alliance"), 
 	    	            AS("&a| &3/waa upgrade &f// &3Upgrade your alliance after inspection"), 
@@ -76,7 +74,7 @@ public class WACommandEx {
 	    	            break;
 	    		  
 	    		  case "general":
-	                    sender.sendMessage(new String[] { 
+	                    s(p, new String[] { 
 	                    WC + "General Help", 
 	                    AS("&a| &3/waa info &f// &3Displays your WAA info"), 
 	                    AS("&a| &3/waa lookup <alliance> &f// &3View info about an alliance"), 
@@ -91,7 +89,7 @@ public class WACommandEx {
 	                    
 	    		  case "chat":
 	    			  
-	    	            sender.sendMessage(new String[] { 
+	    	            s(p, new String[] { 
 	    	            WC + "Alliance Chat Help",  
 	    	            AS("&a| &3/waa chat leave &f// &3Leave your alliance chat"), 
 	    	            AS("&a| &3/waa chat join &f// &3Join your alliance chat"), 
@@ -419,7 +417,7 @@ public class WACommandEx {
 	        		  break;
 	        	  }
 	        	  
-	        	  p.sendMessage(new String[] {
+	        	  s(p, new String[] {
 	        			  
 	        		  AS("&a| &3Alliance &f// &3" + plugin.wcm.getCompleted(wcp.getAlliance(), wca.getColor1(), wca.getColor2())),
 	        		  AS("&a| &3Your Rank &f// &3" + wcp.getAllianceRank()),
@@ -944,7 +942,7 @@ public class WACommandEx {
 	        	  	
 	        	  	wcaCurrent = plugin.wcm.getWCAlliance(args[1]);
 	        	  	
-		            p.sendMessage(new String[] {
+		            s(p, new String[] {
 		        			  
 			        AS("&a| &3Alliance &f// &3" + plugin.wcm.getCompleted(args[1], wcaCurrent.getColor1(), wcaCurrent.getColor2())),
 			        AS("&a| &3Leader &f// &3" + wcaCurrent.getLeader()),
@@ -967,7 +965,7 @@ public class WACommandEx {
 		            }
 		            
 		            String msg = sb.toString().trim();
-		            p.sendMessage(AS(msg));
+		            s2(p, AS(msg));
 		            
 	          break;
    
@@ -1023,7 +1021,7 @@ public class WACommandEx {
     	} else {
     		for (Player pp : Bukkit.getOnlinePlayers()){
     			if (pp.getDisplayName().replaceAll("&", "").toLowerCase().contains(args[0].toLowerCase())){
-    				WCMain.s2(p, pp.getDisplayName() + " &f>> &7" + pp.getName());
+    				s2(p, pp.getDisplayName() + " &f>> &7" + pp.getName());
     			}
     		}
     	}

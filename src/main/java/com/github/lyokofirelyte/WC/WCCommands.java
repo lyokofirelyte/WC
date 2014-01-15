@@ -36,8 +36,6 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-
 public class WCCommands {
 	
   private HashMap<String, Long> rainoffCooldown = new HashMap<String, Long>();

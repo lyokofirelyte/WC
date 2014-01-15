@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCBlockPlace implements Listener{
@@ -35,7 +36,7 @@ public class WCBlockPlace implements Listener{
 			
 			system.addObelisk(plugin.datacore.getString("Obelisks.Latest") + " " + x + " " + y + " " + z);
 			plugin.wcm.updateSystem("system", system);
-			WCMain.s(e.getPlayer(), "Added!");
+			WCUtils.s(e.getPlayer(), "Added!");
 			return;
 		}
 		

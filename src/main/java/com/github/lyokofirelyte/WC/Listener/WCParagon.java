@@ -15,17 +15,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import static com.github.lyokofirelyte.WC.WCMain.s2;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
+
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ParagonFindEvent;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 public class WCParagon implements Listener {
 	
 	WCMain pl;
+	
 	public WCParagon(WCMain instance){
-	pl = instance;
+		pl = instance;
 	}
 	
 	WCPlayer wcp;
@@ -44,9 +47,9 @@ public class WCParagon implements Listener {
 		}
 		
 		if (e.getParagon().toLowerCase().contains("death")){
-	        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from killing mobs."));
+			callChat(WCMessageType.BROADCAST, Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from killing mobs."));
 		} else {
-	        Bukkit.broadcastMessage(Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from harvesting " + e.getMat().toString().toLowerCase() + " &6" + e.getBlocksMined() + " &dtimes."));
+			callChat(WCMessageType.BROADCAST, Utils.AS(WCMail.WC + e.getPlayer().getDisplayName() + " &dhas found a(n) " +  e.getParagon() + " &dparagon from harvesting " + e.getMat().toString().toLowerCase() + " &6" + e.getBlocksMined() + " &dtimes."));
 		}
 
 		ItemStack token = pl.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, 1);
