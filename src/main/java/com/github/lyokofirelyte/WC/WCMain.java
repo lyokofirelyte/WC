@@ -486,6 +486,15 @@ public class WCMain extends WCNode {
 			  "bbb").setIngredient('b', Material.COBBLESTONE);
 	  getServer().addRecipe(r);
 	  
+	  ItemStack i2 = new ItemStack(Material.COBBLESTONE, 9);
+	  r = new ShapedRecipe(i2).shape(
+			  "000",
+			  "0a0",
+			  "000");
+	  RecipeHandler rh = new RecipeHandler(r);
+	  rh.setIngredient('a', i);
+	  getServer().addRecipe(rh.getRecipe());
+	  
 	  i = InventoryManager.createItem("&aMajjykk Wand", new String[] {"&2It's pretty sharp!", "&7&oWCMMO Item"}, Material.STICK, 1);
 	  r = new ShapedRecipe(i).shape(
 			  "000", 
@@ -513,5 +522,7 @@ public class WCMain extends WCNode {
 			  "050", 
 			  "000").setIngredient('5', Material.LAVA_BUCKET).setIngredient('0', Material.WATER_BUCKET);
 	  getServer().addRecipe(r);
+	  
+
   }
 }
