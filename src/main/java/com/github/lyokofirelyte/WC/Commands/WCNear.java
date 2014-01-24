@@ -49,7 +49,7 @@ public class WCNear {
 			  }
 	}
 	
-	@WCCommand(aliases = {"radar"}, help = "List of monsters within 20 blocks", max = 0, perm = "wc.townsman")
+	@WCCommand(aliases = {"radar"}, help = "List of monsters within 20 blocks", max = 0, perm = "wa.townsman")
 	public void onRadar(Player p, String[] args){
 		
 			  List<String> entities = new ArrayList<String>();

@@ -5,7 +5,6 @@ import static com.github.lyokofirelyte.WCAPI.WCUtils.callChat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
@@ -47,5 +46,5 @@ public class WCAFK {
 			
 			pl.afkers.add(p);
 			Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent(p));
-		}
+	}
 }

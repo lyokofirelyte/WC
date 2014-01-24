@@ -216,7 +216,6 @@ public class WCChannels implements Listener {
 			if (lastChat != null && lastChat.equals(p)){
 				rawr = true;
 				newDispName = new JSONChatMessage(AS("&8>> "), null, null);
-				message = "&f: &" + wcp.getGlobalColor() + message;
 				
 			} else {
 				
@@ -278,7 +277,7 @@ public class WCChannels implements Listener {
 					} else if (colour.equalsIgnoreCase("r")){
 						
 						currentColour = "&" + wcp.getGlobalColor();
-						i++; ** Jesse you know this increments automatically right?
+						i++;
 						
 					}
 					

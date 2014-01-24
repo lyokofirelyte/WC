@@ -217,7 +217,7 @@ public class WCWarps{
 	 }
 	  
 	  
-	  public  void paginate(CommandSender sender, SortedMap<Integer, String> map,
+	  public void paginate(CommandSender sender, SortedMap<Integer, String> map,
 			  int page, int pageLength, int warps) {
 		  
 		  	      StringBuilder sb = new StringBuilder();

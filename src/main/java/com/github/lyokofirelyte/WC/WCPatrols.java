@@ -8,6 +8,7 @@ import java.util.Random;
 import me.confuser.barapi.BarAPI;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -29,6 +31,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -36,10 +39,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WCAPI.WCPatrol;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
+import com.github.lyokofirelyte.WCAPI.Loops.WCDelay;
 import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
@@ -112,7 +117,7 @@ public class WCPatrols implements Listener {
 			Player p = ((Player)e.getWhoClicked());
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 			
-			if (dispName(e.getCurrentItem(), "ACTIVE GEAR")){
+			if (dispName(e.getCurrentItem(), "ACTIVE GEAR") && p.getWorld().getName().equals("world")){
 				p.openInventory(wcp.getPatrolActives());
 				return;
 			}
@@ -202,6 +207,16 @@ public class WCPatrols implements Listener {
 				s(p, "Joined! Type in patrol chat with /p <message>.");
 			}
 		}	
+	}
+	
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e){
+		
+		if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK){
+			if (pl.wcm.getWCSystem("system").canPatrolAware() && e.getPlayer().isSneaking()){
+				pl.wcm.getWCPlayer(e.getPlayer().getName()).setPatrolAware(true);
+			}
+		}
 	}
 	
 	@EventHandler
@@ -467,7 +482,7 @@ public class WCPatrols implements Listener {
 			if (!wcs.getPatrolCrystal().isDead()){
 				wcs.getPatrolCrystal().remove();
 			}
-			dropChance();
+			dropChance(wcs.getPatrolDiff());
 			Bukkit.getServer().getScheduler().cancelTask(wcs.getPatrolHealthTimerTask());
 			callChat(WCMessageType.BROADCAST, AS(WC + "The hotspot boss has been defeated! All participants were awarded!"));
 			WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§cINACTIVE!", "§4...", false, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
@@ -496,10 +511,6 @@ public class WCPatrols implements Listener {
 				BarAPI.setMessage(p, "§cHOTSPOT BOSS", (float)(((Damageable)le).getHealth()/((Damageable)le).getMaxHealth())*100);
 			}
 		}
-		
-		if (wcs.getPatrolDiff() == 3){
-			lightningStorm();
-		}
 	}
 	
 	public void hearts(Location l){
@@ -512,7 +523,7 @@ public class WCPatrols implements Listener {
 		}
 	}
 	
-	public void dropChance(){
+	public void dropChance(int lv){
 		
 		WCSystem wcs = pl.wcm.getWCSystem("system");
 		Location l = wcs.getPatrolHotSpot();
@@ -522,7 +533,27 @@ public class WCPatrols implements Listener {
 		int teleportCube = rand.nextInt(20) + 1;
 		int buildCharm = rand.nextInt(10) + 1;
 		
-		if (soulSplitChance == 5){
+		switch (lv){
+			
+			case 2:
+				
+				soulSplitChance = rand.nextInt(10) + 1;
+				defenderShield = rand.nextInt(10) + 1;
+				teleportCube = rand.nextInt(15) + 1;
+				buildCharm = rand.nextInt(5) + 1;
+				break;
+				
+			case 3:
+				
+				soulSplitChance = rand.nextInt(5) + 1;
+				defenderShield = rand.nextInt(5) + 1;
+				teleportCube = rand.nextInt(10) + 1;
+				buildCharm = rand.nextInt(5) + 1;
+				break;
+		}
+
+		
+		if (soulSplitChance == 3){
 			ItemStack i = pl.invManager.makeItem("§3Soul Split", "", true, Enchantment.DURABILITY, 10, 0, Material.ARROW, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -535,7 +566,7 @@ public class WCPatrols implements Listener {
 			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
-		if (defenderShield == 5){
+		if (defenderShield == 3){
 			ItemStack i = pl.invManager.makeItem("§3Defender Shield", "", true, Enchantment.DURABILITY, 10, 0, Material.BOWL, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -549,7 +580,7 @@ public class WCPatrols implements Listener {
 			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
-		if (teleportCube == 5){
+		if (teleportCube == 3){
 			ItemStack i = pl.invManager.makeItem("§3Teleport Cube", "", true, Enchantment.DURABILITY, 10, 0, Material.GLASS, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -563,7 +594,7 @@ public class WCPatrols implements Listener {
 			callChat(WCMessageType.BROADCAST, AS(WC + "The boss has dropped something at the hotspot origin!"));
 		}
 		
-		if (buildCharm == 5){
+		if (buildCharm == 3){
 			ItemStack i = pl.invManager.makeItem("§3Build Charm", "", true, Enchantment.DURABILITY, 10, 0, Material.APPLE, 1);
 			ItemMeta im = i.getItemMeta();
 			List<String> lore = new ArrayList<String>();
@@ -583,7 +614,7 @@ public class WCPatrols implements Listener {
 		
 		for (String s : wcs.getPatrolHotSpotParticipants()){
 			WCPlayer wcp = pl.wcm.getWCPlayer(s);
-			int expGive = ((int)Math.floor(wcp.getPatrolExp()*0.05)) + 120 + (wcs.getPatrolDiff()*5) + wcs.getPatrolDiff();
+			int expGive = ((int)Math.floor(wcp.getPatrolExp()*0.06)) + 120 + (wcs.getPatrolDiff()*5) + wcs.getPatrolDiff();
 			wcp.setPatrolExp(wcp.getPatrolExp() + expGive);
 			if (Bukkit.getPlayer(s) != null){
 				s(Bukkit.getPlayer(s), "&4>> &dYou were awarded &6" + expGive + " &dpatrol exp! &4<<");
@@ -610,17 +641,18 @@ public class WCPatrols implements Listener {
 		
 			case 1:
 				le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.GIANT);
-				le.setMaxHealth(200); le.setHealth(200); 
+				le.setMaxHealth(300); le.setHealth(300); 
 				le.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999, 1));
 				le.setCustomName("§aPAPA GRUMPS"); le.setCustomNameVisible(true);
 				int healthTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 				public void run() { checkBoss(le);} }, 0L, 20L);
 				wcs.setPatrolHealthTimerTask(healthTask);
+				
 			break;
 			
 			case 2:
 				le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.PIG_ZOMBIE);
-				le.setMaxHealth(250); le.setHealth(250);
+				le.setMaxHealth(350); le.setHealth(350);
 				le.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999, 1));
 				le.setCustomName("§aPIGGLY WIGGLY"); le.setCustomNameVisible(true);	
 				le.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
@@ -629,19 +661,18 @@ public class WCPatrols implements Listener {
 				healthTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 				public void run() { checkBoss(le);} }, 0L, 20L);
 				wcs.setPatrolHealthTimerTask(healthTask);
-				firePlayers();
 				
 			break;
 			
 			case 3:
 				le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.CAVE_SPIDER);
-				le.setMaxHealth(350); le.setHealth(350);
+				le.setMaxHealth(450); le.setHealth(450);
 				le.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999, 1));
 				le.setCustomName("§aCharlotte"); le.setCustomNameVisible(true);		
 				healthTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 				public void run() { checkBoss(le);} }, 0L, 20L);
 				wcs.setPatrolHealthTimerTask(healthTask);
-				firePlayers();
+				
 			break;
 				
 		}
@@ -649,34 +680,22 @@ public class WCPatrols implements Listener {
 		pl.wcm.updateSystem("system", wcs);
 	}
 	
-	public void lightningStorm(){
+	@WCDelay(time = 60L)
+	public void awareCheck(Player p){
 		
-		WCSystem wcs = pl.wcm.getWCSystem("system");
-		List<Player> used = new ArrayList<Player>();
-		
-		for (Player p : Bukkit.getOnlinePlayers()){
-			for (Location l : wcs.getPatrolHotSpotAreas()){
-				if (!used.contains(p) && l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
-					used.add(p);
-					p.getWorld().spawnEntity(p.getLocation(), EntityType.LIGHTNING);
-				}
-			}
+		if (!pl.wcm.getWCPlayer(p.getName()).isPatrolAware()){
+			p.setVelocity(new Vector(0, 1.3, 0));
+			s(p, "You didn't save yourself!");
+		} else {
+			pl.wcm.getWCPlayer(p.getName()).setPatrolAware(false);
+			s(p, "Safe from the wave!");
 		}
+		
 	}
 	
-	public void firePlayers(){
-		
-		WCSystem wcs = pl.wcm.getWCSystem("system");
-		List<Player> used = new ArrayList<Player>();
-		
-		for (Player p : Bukkit.getOnlinePlayers()){
-			for (Location l : wcs.getPatrolHotSpotAreas()){
-				if (!used.contains(p) && l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
-					used.add(p);
-					p.setFireTicks(60);
-				}
-			}
-		}
+	@WCDelay(time = 100L)
+	public void stopAware(){
+		pl.wcm.getWCSystem("system").setCanPatrolAware(false);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -690,13 +709,22 @@ public class WCPatrols implements Listener {
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
 			for (Location l : wcs.getPatrolHotSpotAreas()){
 				if (wcp.getPatrol() != null && !used.contains(p) && l.getWorld() == p.getWorld() && Math.round(l.getX()) == Math.round(p.getLocation().getX()) && Math.round(l.getY()) == Math.round(p.getLocation().getY()) && Math.round(l.getZ()) == Math.round(p.getLocation().getZ())){
-					if (p.getNearbyEntities(30D, 30D, 30D).size() <= 70){
-						for (int x = 0; x < wcs.getPatrolDiff(); x++){
+					try {
+						Damageable dmg = p;
+						dmg.setHealth(dmg.getHealth()+2);
+					} catch (Exception e){}
+					pl.api.ls.callDelay(pl, this, "awareCheck", p);
+					used.add(p);
+					s(p, "&4>> &aA wave is coming! Shift-left click to be safe! &4<<");
+					if (p.getNearbyEntities(25D, 30D, 25D).size() <= 120){
+						for (int x = 0; x <= wcs.getPatrolDiff(); x++){
 							LivingEntity le = (LivingEntity) wcs.getPatrolHotSpot().getWorld().spawnEntity(wcs.getPatrolHotSpot(), EntityType.ZOMBIE);
 							le.setMaxHealth(30); le.setHealth(30);
 							ents.add(le);
 							le.setCustomName(AS(getRandomChatColor() + "Hotspot Guardian")); le.setCustomNameVisible(true);
-							le = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), getRandomEntity());
+							Location ploc = p.getLocation();
+							le = (LivingEntity) p.getWorld().spawnEntity(new Location(p.getWorld(), ploc.getX()+5, ploc.getY()+2, ploc.getZ()-3), getRandomEntity());
+							p.getWorld().playEffect(le.getLocation(), Effect.STEP_SOUND, Material.EMERALD_BLOCK.getId());
 							le.getEquipment().setItemInHand(wcs.getPatrolItems().get(wcs.getPatrolDiff()-1));
 							if (wcs.getPatrolDiff() == 3){
 								ItemStack i = wcs.getPatrolItems().get(wcs.getPatrolDiff()-1);
@@ -705,13 +733,12 @@ public class WCPatrols implements Listener {
 								i.setItemMeta(im);
 								le.getEquipment().setItemInHand(i);
 							}
-							le.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+							le.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
 							le.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 							le.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-							ents.add(le);
 							le.setCustomName(AS(getRandomChatColor() + "Hotspot Minion")); le.setCustomNameVisible(true);
+							ents.add(le);
 						}
-						used.add(p);
 						if (!wcs.getPatrolHotSpotParticipants().contains(p.getName())){
 							List<String> pr = wcs.getPatrolHotSpotParticipants();
 							pr.add(p.getName());
@@ -733,8 +760,11 @@ public class WCPatrols implements Listener {
 					le.remove();
 				}
 			}
+		} else {
+			wcs.setCanPatrolAware(true);
 		}
 		
 		pl.wcm.updateSystem("system", wcs);
+		pl.api.ls.callDelay(pl, this, "stopAware");
 	}
 }

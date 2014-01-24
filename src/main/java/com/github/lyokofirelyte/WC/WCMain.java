@@ -22,8 +22,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+
 import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
 import com.github.lyokofirelyte.WC.Commands.WCGcmd;
@@ -70,15 +72,13 @@ import com.github.lyokofirelyte.WC.Staff.WCTele;
 import com.github.lyokofirelyte.WC.Util.FireworkShenans;
 import com.github.lyokofirelyte.WC.Util.LagUtils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
-import com.github.lyokofirelyte.WC.WCMMO.ExpEvents;
-import com.github.lyokofirelyte.WC.WCMMO.ExpSources;
-import com.github.lyokofirelyte.WC.WCMMO.WCMMO;
 import com.github.lyokofirelyte.WCAPI.WCAPI;
 import com.github.lyokofirelyte.WCAPI.WCManager;
 import com.github.lyokofirelyte.WCAPI.WCNode;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+import com.github.lyokofirelyte.WCAPI.Loops.WCDelay;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 import com.github.lyokofirelyte.WCAPI.Manager.RebootManager;
 import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
@@ -112,7 +112,6 @@ public class WCMain extends WCNode {
   public InventoryManager invManager;
   public WCPatrols wcpp;
   public FireworkShenans fw;
-  public ExpSources ss;
   public Map <String, List<Location>> links = new HashMap<>();
   public Map <String, List<Entity>> links2 = new HashMap<>();
   public Map <String, List<Player>> playerRide = new HashMap<>();
@@ -171,7 +170,8 @@ public class WCMain extends WCNode {
 	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
 	  pm.registerEvents(new WCLift(this), this);
 	  pm.registerEvents(new WCMineNDash(this), this);
-	  pm.registerEvents(new ExpEvents(this), this);
+	  
+	  newCrafting();
 	  
 	  vaultMgr.hookSetup();
 	    
@@ -191,8 +191,6 @@ public class WCMain extends WCNode {
 	  invManager = new InventoryManager(api);
 	  wcpp = new WCPatrols(this);
 	  fw = new FireworkShenans(this);
-	  ss = new ExpSources(this);
-	  ss.init();
 	  
 	  pm.registerEvents(wcm, this);
 	    
@@ -272,7 +270,7 @@ public class WCMain extends WCNode {
 			try {
 				wcm.savePlayer(user);
 			} catch (IOException e) {
-				e.printStackTrace();
+				getLogger().log(Level.WARNING, "Could not save " + user + "!");
 			}
 		}
 		
@@ -280,7 +278,7 @@ public class WCMain extends WCNode {
 			wcm.saveAlliances();
 			wcm.saveSystem(systemYaml, systemFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			getLogger().log(Level.WARNING, "Could not save an alliance!");
 		}
 
   }
@@ -299,6 +297,7 @@ public class WCMain extends WCNode {
 	  saveMarkkitInvs();
 	  saveYamls();
 	  
+	  getServer().clearRecipes();
 	  getServer().getScheduler().cancelTasks(this);
 
 	    try{
@@ -315,7 +314,7 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCMMO.class, WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
 	  api.reg.registerCommands(commandClasses, this);
   }
 
@@ -352,7 +351,7 @@ public class WCMain extends WCNode {
 
   private void firstRun() throws Exception {
 	 
-    String files = "config help games datacore mail system";
+    String files = "config help games datacore system";
     String[] flatFiles = files.split(" ");
     
     for (int x = 0; x <= 4; x++){
@@ -442,7 +441,8 @@ public class WCMain extends WCNode {
 		  
 		  afkTimer.put(player.getName(), afkTimer.get(player.getName()) + 8);
 		  
-		  if (afkTimer.get(player.getName()) >= 180 && !afkers.contains(player)){
+		  if (afkTimer.get(player.getName()) >= 180 && afkTimer.get(player.getName()) <= 900 && !afkers.contains(player)){
+			  
 			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois afk."));
 			  
 			  if (("&7[afk] " + player.getDisplayName()).length() > 16){
@@ -452,7 +452,66 @@ public class WCMain extends WCNode {
 			  }
 			  
 			  afkers.add(player);
+			  
+		  } else if (afkTimer.get(player.getName()) >= 900 && afkers.contains(player) && !wcp.isSuperAfk()){
+			  
+			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois super afk."));
+			  
+			  if (("&7[afk+] " + player.getDisplayName()).length() > 16){
+				  player.setPlayerListName(AS("&7[afk+] " + player.getDisplayName()).substring(0, 16));
+			  } else {
+				  player.setPlayerListName(AS("&7[afk+] " + player.getDisplayName()));
+			  }
+			  
+			  wcp.setAfkFreeze(true);
+			  wcp.setSuperAfk(true);
+			  wcp.setAfkSpot(player.getLocation());
+			  player.performCommand("spawn");
+			  api.ls.callDelay(this, this, "afkUnFreeze", player);
 		  }
 	  }
+  }
+  
+  @WCDelay(time = 40L)
+  public void afkUnFreeze(Player p){
+	  wcm.getWCPlayer(p.getName()).setAfkFreeze(false);
+  }
+  
+  public void newCrafting(){
+	  
+	  ItemStack i = InventoryManager.createItem("&dSUPERCOBBLE", new String[] {"&aSo shiny..."}, Material.COBBLESTONE, 1);
+	  ShapedRecipe r = new ShapedRecipe(i).shape(
+			  "bbb", 
+			  "bbb", 
+			  "bbb").setIngredient('b', Material.COBBLESTONE);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&aMajjykk Wand", new String[] {"&2It's pretty sharp!", "&7&oWCMMO Item"}, Material.STICK, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "0b0", 
+			  "000").setIngredient('0', Material.BLAZE_POWDER).setIngredient('b', Material.STICK);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&bSlayer Box", new String[] {"&3View & obtain slayer tasks", "&7&oWCMMO Item"}, Material.MOB_SPAWNER, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "0b0", 
+			  "000").setIngredient('0', Material.LAPIS_ORE).setIngredient('b', Material.CHEST);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&eTHE HARVESTER", new String[] {"&3It's a &oreally good axe.", "&7&oWCMMO Item"}, Material.DIAMOND_AXE, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "121", 
+			  "000").setIngredient('0', Material.WOOD_AXE).setIngredient('1', Material.IRON_AXE).setIngredient('2', Material.DIAMOND_AXE);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&4ROD OF DISCORD (ZOMBIE)", new String[] {"&cSummon minions to do your bidding!", "&8Right-click to change pet", "&8Left-click to summon", "&7&oWCMMO Item"}, Material.BLAZE_ROD, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "050", 
+			  "000").setIngredient('5', Material.LAVA_BUCKET).setIngredient('0', Material.WATER_BUCKET);
+	  getServer().addRecipe(r);
   }
 }

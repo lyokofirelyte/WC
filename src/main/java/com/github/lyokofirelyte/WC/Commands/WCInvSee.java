@@ -19,20 +19,32 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
  public class WCInvSee implements Listener {
 
-	WCMain plugin;
-	public WCInvSee(WCMain instance){
-	plugin = instance;
+	WCMain pl;
+	
+	public WCInvSee(WCMain i){
+		pl = i;
 	}
 	
 	public List<String> invUsers = new ArrayList<String>();
 	
-	@WCCommand(aliases = {"invsee"}, help = "/invee <player>", min = 1, max = 1, perm = "wa.mod")
+	@WCCommand(aliases = {"invsee"}, help = "/invsee <player>", min = 1, max = 2, perm = "wa.mod")
 	public void onInvSee(Player sender, String[] args){
 
 			Player p = ((Player)sender);
 			
 			if (args.length == 0){
-				WCUtils.s(p, "Try /invsee <player>");
+				WCUtils.s(p, "Try /invsee <player>. You can add -f for frozen, or -o for offline inventory.");
+				return;
+			}
+			
+			if (args.length == 2 && args[1].equals("-o")){
+				if (pl.wcm.getWCPlayer(args[0]) != null){
+					p.openInventory(pl.wcm.getWCPlayer(args[0]).getOfflineInventory());
+					WCUtils.s(p, "Viewing the offline inventory of " + pl.wcm.getFullNick(args[0]) + ". &c&oDo not edit this!");
+					invUsers.add(p.getName());
+				} else {
+					WCUtils.s(p, "That player can't be located in the API!");
+				}
 				return;
 			}
 			
@@ -40,7 +52,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 				WCUtils.s(p, "That player is not online!");
 				return;
 			}
-			
+
 			final Inventory inv = Bukkit.getPlayer(args[0]).getInventory();
 			final Inventory cinv = Bukkit.createInventory(null, 36, "§b(" + Bukkit.getPlayer(args[0]).getDisplayName() + "§b)");
 			int x = 0;
@@ -50,7 +62,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 				x++;
 			}
 			
-			if (args.length == 2){
+			if (args.length == 2 && args[1].equals("-f")){
 				p.openInventory(cinv);
 			} else {
 				p.openInventory(inv);
@@ -79,6 +91,4 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 			invUsers.remove(e.getPlayer().getName());
 		}
 	}
-	
-	
  }

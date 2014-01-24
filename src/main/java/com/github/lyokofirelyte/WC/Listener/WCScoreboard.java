@@ -80,7 +80,7 @@ public class WCScoreboard implements Listener {
 		 if (o1 != null && wcp.getScoreboard()){
 			 
 			if (pl.afkers.contains(p)){
-				o1.setDisplayName(Utils.AS("&7[afk]"));
+				o1.setDisplayName(Utils.AS("&7[afk " + Math.round(pl.afkTimer.get(p.getName()) / 60)) + "]");
 			}
 			 
 			if (!wcp.getScoreboardCoords() && !pl.afkers.contains(p)){
@@ -97,6 +97,7 @@ public class WCScoreboard implements Listener {
 			Score online = o1.getScore(Bukkit.getOfflinePlayer("§9Online:"));
 			Score rank = o1.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
 			Score options = o1.getScore(Bukkit.getOfflinePlayer("§5/root"));
+			Score exp = o1.getScore(Bukkit.getOfflinePlayer("§3Exp: "));
 
 			if (wcp.getInAlliance()){
 				
@@ -117,6 +118,7 @@ public class WCScoreboard implements Listener {
 			rank.setScore(1);
 			online.setScore(Bukkit.getOnlinePlayers().length);
 			options.setScore(0);
+			exp.setScore(wcp.getExp());
 				
 		 } else if (wcp.getScoreboard()){
 			 
@@ -144,6 +146,7 @@ public class WCScoreboard implements Listener {
 			Score online = o2.getScore(Bukkit.getOfflinePlayer("§9Online:"));
 			Score rank = o2.getScore(Bukkit.getOfflinePlayer("§3Rank: " + Utils.AS(WCVault.chat.getPlayerPrefix(p))));
 			Score options = o2.getScore(Bukkit.getOfflinePlayer("§5/root"));
+			Score exp = o2.getScore(Bukkit.getOfflinePlayer("§3Exp: "));
 						
 			if (wcp.getInAlliance()){
 				
@@ -164,6 +167,7 @@ public class WCScoreboard implements Listener {
 			rank.setScore(1);
 			online.setScore(Bukkit.getOnlinePlayers().length);
 			options.setScore(0);
+			exp.setScore(wcp.getExp());
 			p.setScoreboard(board);
 		 } else {
 			p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());

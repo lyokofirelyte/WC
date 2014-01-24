@@ -12,14 +12,23 @@ public class WCSpawn{
 	this.plugin = instance;
 	}
 	
-	@WCCommand(aliases = {"spawn"}, help = "Teleport back to the server spawn point", max = 0)
+	@WCCommand(aliases = {"spawn", "s"}, help = "Teleport back to the server spawn point", max = 0)
 	public void onSpawn(Player sender, String[] args){
 		  
 			Player p = ((Player)sender);
+			Boolean a = false;
+			
+			if (!p.isOp()){
+				p.setOp(true);
+				a = true;
+			}
 			
 			p.performCommand("warp spawn");
+			
+			if (a){
+				p.setOp(false);
+			}
 		
 		return;
 	}
-
 }

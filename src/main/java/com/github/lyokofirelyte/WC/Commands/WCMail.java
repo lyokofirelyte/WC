@@ -152,7 +152,7 @@ String message;
 			  default:
 				  
 				  if (args[1].equalsIgnoreCase(p.getName())){
-					  sender.sendMessage(Utils.AS(WC + "I'm schizophrenic, and so am I. Together, I can solve this."));
+					  s(p, Utils.AS(WC + "I'm schizophrenic, and so am I. Together, I can solve this."));
 					  break;
 				  }
 				  
@@ -262,14 +262,14 @@ String message;
     	mail = mailReceiver.getMail();
 		
 		if (mail.size() == 0){
-			p.sendMessage(Utils.AS(WC + "You have no mail!"));
+			s2(p, Utils.AS(WC + "You have no mail!"));
 			return;
 		}
 		
     	s(p, "Viewing Mail &6(" + mail.size() + "&6)");
     	
     	for (String singleMail : mail){
-    		p.sendMessage(Utils.AS("&5| " + singleMail));
+    		s2(p, Utils.AS("&5| " + singleMail));
     	}
 	}
 	
@@ -278,10 +278,10 @@ String message;
 		WCPlayer mailReceiver = plugin.wcm.getWCPlayer(p.getName());
 	
 		if (mailReceiver.getMail().size() > 0){
-			p.sendMessage(Utils.AS(WC + "You have " + mailReceiver.getMail().size() + " &dnew messages. Type /mail read or /mail quick."));
+			s2(p, Utils.AS(WC + "You have " + mailReceiver.getMail().size() + " &dnew messages. Type /mail read or /mail quick."));
 			mailCheck(p, mailReceiver);
 		} else {
-			p.sendMessage(Utils.AS(WC + "You have no new messages."));
+			s2(p, Utils.AS(WC + "You have no new messages."));
 		}
 		
 	}
@@ -296,7 +296,7 @@ String message;
 		plugin.wcm.updatePlayerMap(player, mailReceiver);
 			  
 		if (Bukkit.getPlayer(player) != null){
-			Bukkit.getPlayer(player).sendMessage(Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
+			s2(Bukkit.getPlayer(player), Utils.AS(WC + "You've recieved a new mail! Check it with /mail read."));
 		}
 	}
 	

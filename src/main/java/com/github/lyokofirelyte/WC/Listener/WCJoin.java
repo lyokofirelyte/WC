@@ -18,6 +18,7 @@ import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatFormat;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 import com.github.lyokofirelyte.WC.WCMain;
 
 public class WCJoin implements Listener {
@@ -31,8 +32,8 @@ WCAlliance wca;
 		plugin = instance;
 	}
 
-	@EventHandler(priority=EventPriority.NORMAL)
- 	public boolean onPlayerJoin(final PlayerJoinEvent event) {
+	@EventHandler(priority = EventPriority.NORMAL)
+ 	public void onPlayerJoin(final PlayerJoinEvent event) {
 	  
 		final Player p = event.getPlayer();
 		event.setJoinMessage(null);
@@ -71,18 +72,21 @@ WCAlliance wca;
 			completed = "&7" + wcp.getNick();
 		}
 	
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
-		{ public void run(){
-			p.setDisplayName(completed);
-			if (completed.length() > 16){
-				p.setPlayerListName(Utils.AS(completed).substring(0, 16));
-			} else {
-				p.setPlayerListName(Utils.AS(completed));
-			}
-			Bukkit.broadcastMessage(Utils.AS("&2+ " + p.getDisplayName() + " &f(&e" + wcp.getJoinMessage().replace("%p", p.getDisplayName() + "&e") + "&f)"));
-		}
-		}
-		, 20L);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){ 
+			
+			public void run(){
+				
+				p.setDisplayName(completed);
+				
+				if (completed.length() > 16){
+					p.setPlayerListName(Utils.AS(completed).substring(0, 16));
+				} else {
+					p.setPlayerListName(Utils.AS(completed));
+				}
+				
+				Utils.blankB(Utils.AS("&2+ " + p.getDisplayName() + " &f(&e" + wcp.getJoinMessage().replace("%p", p.getDisplayName() + "&e") + "&f)"));
+			
+			}}, 20L);
 
 		updatePlayer(wcp, p.getName());
 	
@@ -90,8 +94,7 @@ WCAlliance wca;
         JSONChatExtra extra = new JSONChatExtra("WaterCloset v5.1", JSONChatColor.DARK_PURPLE, Arrays.asList(JSONChatFormat.BOLD));
         extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, Utils.AS("&6NOW WITH CHAT INTERACTION! (Results vary)"));
         message.addExtra(extra);
-        message.sendToPlayer(event.getPlayer());
-		return true;
+        Utils.callChat(p, WCMessageType.JSON_PLAYER, message);
   	}
 
 	 public void updatePlayer(WCPlayer wcp, String name){

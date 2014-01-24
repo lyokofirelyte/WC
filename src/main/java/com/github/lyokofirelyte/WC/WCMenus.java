@@ -238,7 +238,6 @@ public class WCMenus implements Listener{
 		menu.add("CHAT TIMESTAMPS");
 		menu.add("STATS");
 		menu.add("STAT VIEWER");
-		menu.add("TOGGLES");
 		menu.add("*CHOOSE BAN TYPE");
 		menu.add("*CHOOSE REASON");
 		menu.add("*SELECT PROOF");
@@ -285,7 +284,6 @@ public class WCMenus implements Listener{
 		openInvs.put("CHAT", "chatMenu");
 		openInvs.put("STATS", "statsMenu");
 		openInvs.put("TIME CODES", "timeCodeMenu");
-		openInvs.put("TOGGLES", "toggleMenu");
 		openInvs.put("ALLIANCE COLOR", "colorMenu");
 		openInvs.put("GLOBAL COLOR", "colorMenu");
 		openInvs.put("PM COLOR", "colorMenu");
@@ -619,19 +617,6 @@ public class WCMenus implements Listener{
 		inv = addToInv(Material.INK_SACK, "§aAdd a command...", 7, "§2/qc add <command>", 7, inv);
 		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v5", 8, "§b< < <", 1, inv);
 		invs.put("quickCommandsMenu", inv);
-		
-		inv = Bukkit.createInventory(null, 18, "§4TOGGLES");
-		inv = addToInv(Material.WORKBENCH, "§aHOME SOUNDS", 0, "§2/home sounds", 2, inv);
-		inv = addToInv(Material.GLOWSTONE, "§eSIDEBOARD", 2, "§6The scoreboard", 8, inv);
-		inv = addToInv(Material.STICK, "§bPOKES", 3, "§9Allowing pokes", 12, inv);
-		inv = addToInv(Material.DIAMOND_SWORD, "§4PVP", 4, "§cToggle PVP Mode", 9, inv);
-		inv = addToInv(Material.FIREWORK, "§dFIREWORKS", 5, "§8Toggle paragon fireworks", 11, inv);
-		inv = addToInv(Material.CAKE, "§3EMOTES", 6, "§aToggle auto-emotes on chat", 1, inv);
-		inv = addToInv(Material.ANVIL, "§2ROOT SHORTCUT", 7, "§3Shift+left click root menu", 1, inv);
-		inv = addToInv(Material.NAME_TAG, "§cNAME PLATE", 8, "§bToggle alliance nameplate", 1, inv);
-		inv = addToInv(Material.REDSTONE, "§eSIDEBOARD COORDS", 1, "§9Toggle name/coords on sideboard", 1, inv);
-		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v5", 13, "§b< < <", 1, inv);
-		invs.put("toggleMenu", inv);
 		
 		inv = Bukkit.createInventory(null, 54, "§dWATERCLOSET CORE v5");
 		inv = addToInv(Material.STAINED_GLASS, "§aWCV5", 1, "§3WCV5", 2, inv);

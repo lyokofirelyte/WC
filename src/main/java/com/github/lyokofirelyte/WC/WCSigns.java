@@ -27,8 +27,9 @@ import com.github.lyokofirelyte.WCAPI.WCUtils;
 public class WCSigns implements Listener {
 
 	WCMain plugin;
+	
 	public WCSigns(WCMain instance){
-	plugin = instance;
+		plugin = instance;
 	}
 	  
 	@EventHandler (priority = EventPriority.NORMAL)

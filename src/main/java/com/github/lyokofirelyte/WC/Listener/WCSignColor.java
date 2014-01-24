@@ -14,8 +14,9 @@ import com.github.lyokofirelyte.WC.WCMain;
 public class WCSignColor implements Listener {
 	
 	WCMain pl;
+	
 	public WCSignColor(WCMain instance){
-	pl = instance;
+		pl = instance;
     }
 
 	@EventHandler
