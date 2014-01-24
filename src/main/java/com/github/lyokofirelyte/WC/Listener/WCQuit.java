@@ -38,6 +38,7 @@ public class WCQuit implements Listener {
 	}
 	
 	wcp.setPatrol(null);
+	wcp.setOfflineInventory(e.getPlayer().getInventory());
 	pl.wcm.updatePlayerMap(e.getPlayer().getName(), wcp);
 	
 	if (pl.afkers.contains(e.getPlayer())){
@@ -53,7 +54,7 @@ public class WCQuit implements Listener {
     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable()
     { public void run() {
         Player p = e.getPlayer();
-		Bukkit.broadcastMessage(Utils.AS(("&4- " + p.getDisplayName() + " &f(&e" + pl.wcm.getWCPlayer(p.getName()).getQuitMessage() + "&f)").replace("%p", p.getDisplayName() + "&e")));
+		Utils.blankB(Utils.AS(("&4- " + p.getDisplayName() + " &f(&e" + pl.wcm.getWCPlayer(p.getName()).getQuitMessage() + "&f)").replace("%p", p.getDisplayName() + "&e")));
     } } , 5L);
 
     return true;

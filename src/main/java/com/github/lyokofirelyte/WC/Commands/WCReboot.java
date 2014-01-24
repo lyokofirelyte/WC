@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 
 public class WCReboot{
@@ -20,7 +21,7 @@ public class WCReboot{
 	public void onReboot(Player sender, String[] args){
 		  
 			if (!sender.hasPermission("wa.admin")){
-				WCMain.s(((Player)sender), "You don't have permission!");
+				WCUtils.s(((Player)sender), "You don't have permission!");
 			} else {
 				pl.rm.wcReboot();
 				WCSystem wcs = pl.wcm.getWCSystem("system");

@@ -35,8 +35,7 @@ import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
-
-import static com.github.lyokofirelyte.WC.WCMain.s;
+import com.github.lyokofirelyte.WCAPI.Manager.SkillType;
 
 public class WCCommands {
 	
@@ -103,6 +102,16 @@ public class WCCommands {
     	  
       break;
       
+      case "wcmmodebug":
+    	  
+    	  if (p.getName().equals("Hugh_Jasses")){
+    		  for (SkillType s : SkillType.values()){
+    			  plugin.wcm.getWCPlayer(p.getName()).skills().put(s.name(), 99);
+    		  }
+    	  }
+    	  
+      break;
+      
       case "setexp":
     	  
     	  if (p.hasPermission("wa.mod2")){
@@ -113,6 +122,20 @@ public class WCCommands {
     			  s(p, "Updated!");
     		  }
     	  }
+    	  
+      break;
+      
+      case "chatbar":
+    	  
+    	  if (wcp.useChatBar()){
+    		  wcp.setChatBar(false);
+    		  s(p, "You are no longer using the chat bar.");
+    	  } else {
+    		  wcp.setChatBar(true);
+    		  s(p, "You are now using the chat bar.");
+    	  }
+    	  
+    	  plugin.wcm.updatePlayerMap(p.getName(), wcp);
     	  
       break;
       

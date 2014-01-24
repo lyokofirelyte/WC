@@ -1,6 +1,6 @@
 package com.github.lyokofirelyte.WC;
 
-import static com.github.lyokofirelyte.WCAPI.WCUtils.AS;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,19 +17,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+
 import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
 import com.github.lyokofirelyte.WC.Commands.WCGcmd;
 import com.github.lyokofirelyte.WC.Commands.WCHat;
-import com.github.lyokofirelyte.WC.Commands.WCHelp;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
 import com.github.lyokofirelyte.WC.Commands.WCInvSee;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
@@ -78,8 +78,10 @@ import com.github.lyokofirelyte.WCAPI.WCNode;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+import com.github.lyokofirelyte.WCAPI.Loops.WCDelay;
 import com.github.lyokofirelyte.WCAPI.Manager.InventoryManager;
 import com.github.lyokofirelyte.WCAPI.Manager.RebootManager;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 
 public class WCMain extends WCNode {
 	
@@ -91,7 +93,6 @@ public class WCMain extends WCNode {
   public File helpFile;
   public File file;
   public File systemFile;
-  public File pluginFile;
   
   public YamlConfiguration config;
   public YamlConfiguration datacore;
@@ -99,7 +100,6 @@ public class WCMain extends WCNode {
   public YamlConfiguration help;
   public YamlConfiguration yaml;
   public YamlConfiguration systemYaml;
-  public YamlConfiguration pluginYaml;
 
   private String url;
   private String username;
@@ -170,6 +170,8 @@ public class WCMain extends WCNode {
 	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
 	  pm.registerEvents(new WCLift(this), this);
 	  pm.registerEvents(new WCMineNDash(this), this);
+	  
+	  newCrafting();
 	  
 	  vaultMgr.hookSetup();
 	    
@@ -268,7 +270,7 @@ public class WCMain extends WCNode {
 			try {
 				wcm.savePlayer(user);
 			} catch (IOException e) {
-				e.printStackTrace();
+				getLogger().log(Level.WARNING, "Could not save " + user + "!");
 			}
 		}
 		
@@ -276,7 +278,7 @@ public class WCMain extends WCNode {
 			wcm.saveAlliances();
 			wcm.saveSystem(systemYaml, systemFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			getLogger().log(Level.WARNING, "Could not save an alliance!");
 		}
 
   }
@@ -295,6 +297,7 @@ public class WCMain extends WCNode {
 	  saveMarkkitInvs();
 	  saveYamls();
 	  
+	  getServer().clearRecipes();
 	  getServer().getScheduler().cancelTasks(this);
 
 	    try{
@@ -311,7 +314,7 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHelp.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
 	  api.reg.registerCommands(commandClasses, this);
   }
 
@@ -348,10 +351,10 @@ public class WCMain extends WCNode {
 
   private void firstRun() throws Exception {
 	 
-    String files = "config help games datacore mail system";
+    String files = "config help games datacore system";
     String[] flatFiles = files.split(" ");
     
-    for (int x = 0; x <= 5; x++){
+    for (int x = 0; x <= 4; x++){
     	file = new File("./plugins/WaterCloset/" + flatFiles[x] + ".yml");
     	if (!file.exists()){
     		file.createNewFile();
@@ -378,29 +381,14 @@ public class WCMain extends WCNode {
 	    		systemYaml = yaml;
 	    		systemFile = file;
 	    		break;
-	    	case 5:
-	    		pluginYaml = yaml;
-	    		pluginFile = file;
     	}
     }
-  }
-	  
-  public static void s(Player p, String s){
-	  
-		p.sendMessage(AS(WCMail.WC + s));
-		
-  }
-	  
-  public static void s2(Player p, String s){
-	  
-	   p.sendMessage(AS(s));
-	   
   }
   
   public void sendAnnounce(){
 		
 	List<String> messages = config.getStringList("Announcements");
-	Bukkit.broadcastMessage(AS(messages.get(msg)));
+	callChat(WCMessageType.BROADCAST, AS(messages.get(msg)));
 		
 		if (msg == messages.size() - 1){
 			msg = 0;
@@ -412,20 +400,6 @@ public class WCMain extends WCNode {
   public void updateBoard(){
 	  
 	  for (Player player : Bukkit.getOnlinePlayers()){
-		  
-		  int x = 0;
-		  
-		  for (ItemStack i : player.getInventory()){
-			  if (i != null && i.hasItemMeta() && i.getItemMeta().hasLore() && i.getItemMeta().hasDisplayName()){
-				  if (i.getItemMeta().getDisplayName().toLowerCase().contains("paragon") && i.getType().equals(Material.STAINED_CLAY)){
-					  int amt = i.getAmount();
-					  player.getInventory().addItem(invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, amt));
-					  player.getInventory().setItem(x, new ItemStack(Material.AIR));
-					  s(player, "Auto-sweep has found old paragons in your inventory and converted them to tokens.");
-				  }
-			  }
-			  x++;
-		  }
 		  
 		  if (wcm.getWCPlayer(player.getName()) == null){
 			  wcm.userCreate(player);
@@ -439,7 +413,7 @@ public class WCMain extends WCNode {
 		  player.setDisplayName(AS(wcm.getFullNick(player.getName()))); 
 		  
 		  if (xp >= neededXP){
-			  Bukkit.broadcastMessage(AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));
+			  callChat(WCMessageType.BROADCAST, AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));
 			  wcp.setPatrolExp(xp - neededXP);
 			  wcp.setPatrolLevel(lvl + 1);
 			  wcm.updatePlayerMap(player.getName(), wcp);
@@ -467,8 +441,9 @@ public class WCMain extends WCNode {
 		  
 		  afkTimer.put(player.getName(), afkTimer.get(player.getName()) + 8);
 		  
-		  if (afkTimer.get(player.getName()) >= 180 && !afkers.contains(player)){
-			  Bukkit.broadcastMessage(AS("&7&o" + player.getDisplayName() + " &7&ois afk."));
+		  if (afkTimer.get(player.getName()) >= 180 && afkTimer.get(player.getName()) <= 900 && !afkers.contains(player)){
+			  
+			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois afk."));
 			  
 			  if (("&7[afk] " + player.getDisplayName()).length() > 16){
 				  player.setPlayerListName(AS("&7[afk] " + player.getDisplayName()).substring(0, 16));
@@ -477,7 +452,66 @@ public class WCMain extends WCNode {
 			  }
 			  
 			  afkers.add(player);
+			  
+		  } else if (afkTimer.get(player.getName()) >= 900 && afkers.contains(player) && !wcp.isSuperAfk()){
+			  
+			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois super afk."));
+			  
+			  if (("&7[afk+] " + player.getDisplayName()).length() > 16){
+				  player.setPlayerListName(AS("&7[afk+] " + player.getDisplayName()).substring(0, 16));
+			  } else {
+				  player.setPlayerListName(AS("&7[afk+] " + player.getDisplayName()));
+			  }
+			  
+			  wcp.setAfkFreeze(true);
+			  wcp.setSuperAfk(true);
+			  wcp.setAfkSpot(player.getLocation());
+			  player.performCommand("spawn");
+			  api.ls.callDelay(this, this, "afkUnFreeze", player);
 		  }
 	  }
+  }
+  
+  @WCDelay(time = 40L)
+  public void afkUnFreeze(Player p){
+	  wcm.getWCPlayer(p.getName()).setAfkFreeze(false);
+  }
+  
+  public void newCrafting(){
+	  
+	  ItemStack i = InventoryManager.createItem("&dSUPERCOBBLE", new String[] {"&aSo shiny..."}, Material.COBBLESTONE, 1);
+	  ShapedRecipe r = new ShapedRecipe(i).shape(
+			  "bbb", 
+			  "bbb", 
+			  "bbb").setIngredient('b', Material.COBBLESTONE);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&aMajjykk Wand", new String[] {"&2It's pretty sharp!", "&7&oWCMMO Item"}, Material.STICK, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "0b0", 
+			  "000").setIngredient('0', Material.BLAZE_POWDER).setIngredient('b', Material.STICK);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&bSlayer Box", new String[] {"&3View & obtain slayer tasks", "&7&oWCMMO Item"}, Material.MOB_SPAWNER, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "0b0", 
+			  "000").setIngredient('0', Material.LAPIS_ORE).setIngredient('b', Material.CHEST);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&eTHE HARVESTER", new String[] {"&3It's a &oreally good axe.", "&7&oWCMMO Item"}, Material.DIAMOND_AXE, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "121", 
+			  "000").setIngredient('0', Material.WOOD_AXE).setIngredient('1', Material.IRON_AXE).setIngredient('2', Material.DIAMOND_AXE);
+	  getServer().addRecipe(r);
+	  
+	  i = InventoryManager.createItem("&4ROD OF DISCORD (ZOMBIE)", new String[] {"&cSummon minions to do your bidding!", "&8Right-click to change pet", "&8Left-click to summon", "&7&oWCMMO Item"}, Material.BLAZE_ROD, 1);
+	  r = new ShapedRecipe(i).shape(
+			  "000", 
+			  "050", 
+			  "000").setIngredient('5', Material.LAVA_BUCKET).setIngredient('0', Material.WATER_BUCKET);
+	  getServer().addRecipe(r);
   }
 }

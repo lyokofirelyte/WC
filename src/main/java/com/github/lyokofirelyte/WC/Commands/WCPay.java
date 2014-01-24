@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;

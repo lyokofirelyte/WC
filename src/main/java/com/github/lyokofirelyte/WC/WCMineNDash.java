@@ -3,24 +3,18 @@ package com.github.lyokofirelyte.WC;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 import com.github.lyokofirelyte.WCAPI.WCUtils;
-import com.github.lyokofirelyte.WCAPI.Events.ParagonFindEvent;
 import com.github.lyokofirelyte.WCAPI.Loops.WCDelay;
 import com.github.lyokofirelyte.WCAPI.Loops.WCLoop;
 
@@ -35,20 +29,6 @@ public class WCMineNDash implements Listener {
 		pl = i;
 	}
 	
-	@EventHandler (priority = EventPriority.HIGH)
-	public void onParagon(ParagonFindEvent e){
-		
-		if (pl.wcm.getWCSystem("system").getElevatorUser().equals(e.getPlayer())){
-			ItemStack token = pl.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, 1);
-			if (e.getPlayer().getInventory().firstEmpty() == -1){
-				e.getPlayer().getWorld().dropItemNaturally(e.getPlayer().getLocation(), token);
-			} else {
-				e.getPlayer().getInventory().addItem(token);
-			}
-			Bukkit.broadcastMessage(AS("&d>> &6An extra token was awarded for finding it during MineNDash! &d<<"));
-		}
-	}
-
 	@EventHandler
 	public void onBuild(BlockBreakEvent e){
 		

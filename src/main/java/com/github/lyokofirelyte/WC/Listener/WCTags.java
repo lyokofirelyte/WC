@@ -11,27 +11,27 @@ import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
 public class WCTags implements Listener {
 
-	WCMain plugin;
+	WCMain pl;
 	WCPlayer wcp;
 	WCAlliance wca;
 	
 	String completed;
 	
-    public WCTags(WCMain instance){
-    plugin = instance;
+    public WCTags(WCMain i){
+    	pl = i;
 	}
     
     @EventHandler (priority = EventPriority.NORMAL)
     public void onTag(PlayerReceiveNameTagEvent e){
-    	wcp = plugin.wcm.getWCPlayer(e.getNamedPlayer().getName());
-    	wca = plugin.wcm.getWCAlliance(wcp.getAlliance());
+    	wcp = pl.wcm.getWCPlayer(e.getNamedPlayer().getName());
+    	wca = pl.wcm.getWCAlliance(wcp.getAlliance());
     	
     	if (wcp.getNamePlate()){
     	
 	    	if (wca.equals("ForeverAlone")){
 	    		completed = "§7" + wcp.getNick();
 	    	} else {
-	    		completed = plugin.wcm.getCompleted2(e.getNamedPlayer().getName(), wca.getColor1(), wca.getColor2());
+	    		completed = pl.wcm.getCompleted2(e.getNamedPlayer().getName(), wca.getColor1(), wca.getColor2());
 	    	}
 	    	
 	    	e.setTag(completed);

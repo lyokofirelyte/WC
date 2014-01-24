@@ -11,9 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.github.lyokofirelyte.WC.WCMain;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-
-import com.github.lyokofirelyte.WC.Util.Utils;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
@@ -57,7 +55,7 @@ public class WCPowerTool implements Listener {
 						}
 					}
 				}			
-				pts.add(name + "%%%%%%" + Utils.createString(args, 0));
+				pts.add(name + "%%%%%%" + createString(args, 0));
 				s(p, "Powertool added. Type &6/pt &dto remove it, or &6/pt :a &dto remove all of your powertools.");
 				pl.wcm.updatePlayerMap(p.getName(), wcp);
 			}

@@ -8,7 +8,7 @@ import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
 
 public class WCTele {
 

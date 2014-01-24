@@ -19,9 +19,7 @@ import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.WCMenus;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-import static com.github.lyokofirelyte.WC.WCMain.s2;
-import static com.github.lyokofirelyte.WC.Util.Utils.bc;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCSell{
 
@@ -39,12 +37,12 @@ public class WCSell{
 			Player p = ((Player)sender);
 			
 			if (p.getWorld().getName().equals("creative") || p.getWorld().getName().equals("world2")){
-				WCMain.s(p, "You can't sell items from this world.");
+				s(p, "You can't sell items from this world.");
 				return;
 			}
 			
 			if (p.getItemInHand().getItemMeta().hasLore()){
-				WCMain.s(p, "You can't sell that.");
+				s(p, "You can't sell that.");
 				return;
 			}
 			
@@ -96,7 +94,7 @@ public class WCSell{
 			  
 				for (HumanEntity a : WCMenus.invs.get("closetStore").getViewers()){
 					WCMenus.openCloset((Player)a);
-					WCMain.s((Player)a, "Store refreshed because of sell addition.");
+					s((Player)a, "Store refreshed because of sell addition.");
 				}
 			}
 		

@@ -54,7 +54,7 @@
     </repository>
     <repository>
       <id>WCAPI</id>
-      <url>https://github.com/lyokofirelyte/WCAPI/tree/mvn-repo/</url>
+      <url>https://github.com/lyokofirelyte/WCAPI/blob/mvn-repo/</url>
     </repository>
     <repository>
       <id>bukkit-repo</id>
@@ -99,6 +99,7 @@
                 </includes>
                 <excludes>
                   <exclude>org.bukkit:bukkit</exclude>
+				  <exclude>org.bukkit:craftbukkit</exclude>
                 </excludes>
               </artifactSet>
             </configuration>

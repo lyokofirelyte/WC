@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 
 public class WCObelisk implements Listener {
 	
@@ -92,7 +93,7 @@ public class WCObelisk implements Listener {
 					p.setFlying(true);
 					coolDown.put(p.getName(), 0);
 				
-					WCMain.s(p, "We're off! Let's hope this damn thing can figure out where ever the hell " + e.getCurrentItem().getItemMeta().getDisplayName() + " &dis...");
+					WCUtils.s(p, "We're off! Let's hope this damn thing can figure out where ever the hell " + e.getCurrentItem().getItemMeta().getDisplayName() + " &dis...");
 					
 				final int groove = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 				public void run(){
@@ -241,7 +242,7 @@ public class WCObelisk implements Listener {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 360, 10)); // Ehh, this should absorb the fall.. right?
 		p.setFoodLevel(0);
 		Bukkit.getScheduler().cancelTask(plugin.datacore.getInt("Users." + p.getName() + ".TAZK"));
-		WCMain.s(p, "Reached destination! (Or close to... :3)");
+		WCUtils.s(p, "Reached destination! (Or close to... :3)");
 	}
 	
 	public void altCheck(Player p){

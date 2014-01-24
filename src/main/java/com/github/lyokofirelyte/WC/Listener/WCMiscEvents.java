@@ -9,10 +9,12 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
@@ -23,7 +25,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -32,6 +33,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.vehicle.VehicleUpdateEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -42,7 +44,9 @@ import com.github.lyokofirelyte.WC.WCCommands;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
+import com.github.lyokofirelyte.WCAPI.Loops.WCDelay;
 
 public class WCMiscEvents implements Listener {
 	
@@ -70,8 +74,6 @@ public class WCMiscEvents implements Listener {
 			}
 			return;
 		}
-		
-		
 		
 		if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".onMob")){
 			
@@ -127,7 +129,7 @@ public class WCMiscEvents implements Listener {
 					mult++;
 				}
 				
-				WCMain.s(e.getPlayer(), mult + "");
+				WCUtils.s(e.getPlayer(), mult + "");
 			}
 		}
 		
@@ -140,7 +142,7 @@ public class WCMiscEvents implements Listener {
 				}
 				
 				plugin.links.get(e.getPlayer().getName()).add(e.getClickedBlock().getLocation());
-				WCMain.s(e.getPlayer(), "Added!");
+				WCUtils.s(e.getPlayer(), "Added!");
 				timer = 30;
 				return;
 			}
@@ -203,7 +205,7 @@ public class WCMiscEvents implements Listener {
 			plugin.links.put(e.getPlayer().getName(), new ArrayList<Location>());
 			plugin.links2.put(e.getPlayer().getName(), new ArrayList<Entity>());
 			Bukkit.getServer().getScheduler().cancelTask(timerTask);
-			WCMain.s(e.getPlayer(), "Cleared links!");
+			WCUtils.s(e.getPlayer(), "Cleared links!");
 		}
 	}
 	
@@ -219,7 +221,7 @@ public class WCMiscEvents implements Listener {
 			p.setAllowFlight(true);
 			plugin.datacore.set("Users." + p.getName() + ".commandUsed", false);
 			plugin.datacore.set("Users." + p.getName() + ".onMob", true);
-			WCMain.s(p, "Right click = down, left click = up, hold right click w/ stick for directional controls, evac = shift");
+			WCUtils.s(p, "Right click = down, left click = up, hold right click w/ stick for directional controls, evac = shift");
 		}
 		
 		if (ent instanceof Player){
@@ -227,16 +229,16 @@ public class WCMiscEvents implements Listener {
 			wcp2 = plugin.wcm.getWCPlayer(p.getName());
 			
 			if (!wcp.getAllowPokes() || !wcp2.getAllowPokes()){
-				WCMain.s(p, "That person or yourself have disabled pokes.");
+				WCUtils.s(p, "That person or yourself have disabled pokes.");
 			} else {
-				WCMain.s2(p, "Poked " + (((Player) ent).getDisplayName()));
-				WCMain.s2((Player)ent, "You were poked by " + p.getDisplayName() + "&d!");
+				WCUtils.s2(p, "Poked " + (((Player) ent).getDisplayName()));
+				WCUtils.s2((Player)ent, "You were poked by " + p.getDisplayName() + "&d!");
 			}	
 		}
 		
 		if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".controlCarts") && e.getPlayer().getItemInHand().getType().equals(Material.IRON_SWORD)){
 			plugin.carts.add(e.getRightClicked());
-			WCMain.s(p, "Added");
+			WCUtils.s(p, "Added");
 		} else if (plugin.datacore.getBoolean("Users." + e.getPlayer().getName() + ".controlCarts") && e.getPlayer().getItemInHand().getType().equals(Material.WOOD_SWORD)){
 			plugin.carts = new ArrayList<>();
 		}
@@ -277,7 +279,7 @@ public class WCMiscEvents implements Listener {
 				
 				if (!wcp.getPVP() || !wcp2.getPVP()){
 					e.setCancelled(true);
-					WCMain.s((Player)e.getDamager(), "That player has PVP mode turned off!");
+					WCUtils.s((Player)e.getDamager(), "That player has PVP mode turned off!");
 				}
 			}
 		}
@@ -334,11 +336,45 @@ public class WCMiscEvents implements Listener {
                       }
               }
       }
+  	
+  	@EventHandler
+  	public void onFlyAttempt(PlayerToggleFlightEvent e){
+  		
+  		Player p = e.getPlayer();
+  		
+  		if (p.getGameMode() != GameMode.CREATIVE && plugin.wcm.getWCPlayer(p.getName()).isDoubleJumping()){
+  			plugin.wcm.getWCPlayer(p.getName()).setDoubleJumping(false);
+  			plugin.wcm.getWCPlayer(p.getName()).setDoubleJumpTimer(System.currentTimeMillis() + 5000);
+  			p.setAllowFlight(false);
+  			p.setFlying(false);
+  			p.setVelocity(p.getLocation().getDirection().multiply(1.2D).setY(1.0D));
+  			WCUtils.lowerEffects(p.getLocation());
+  		}
+  	}
+  	
+	@WCDelay(time = 20L)
+	public void jumpEvac(Player p){
+		p.setAllowFlight(false);
+		p.setFlying(false);
+	}
       
       @EventHandler
       public void onMove(PlayerMoveEvent e){
     	  
     	  Player p = e.getPlayer();
+    	  WCPlayer wcp = plugin.wcm.getWCPlayer(e.getPlayer().getName());
+    	  
+    		if (p.getGameMode() != GameMode.CREATIVE && e.getFrom().getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR){
+    			if (plugin.wcm.getWCPlayer(p.getName()).getDoubleJumpTimer() <= System.currentTimeMillis()){
+    				p.setAllowFlight(true);
+    				plugin.wcm.getWCPlayer(p.getName()).setDoubleJumping(true);
+    				plugin.api.ls.callDelay(plugin, this, "jumpEvac", p);
+    			}
+    		}
+    		
+    		if (plugin.wcm.getWCPlayer(p.getName()).isUsingInstaKill()){
+    			WCUtils.lowerEffects(p.getLocation());
+    		}
     	  
     	  if (p.getWalkSpeed() != 0.4 && plugin.wcm.getWCPlayer(p.getName()).getPatrol() != null){
     		  Boolean found = false;
@@ -350,13 +386,6 @@ public class WCMiscEvents implements Listener {
     		  }
     		  if (!found && p.getWalkSpeed() != 0.2 && p.getWalkSpeed() != 0){
     			  p.setWalkSpeed((float)0.2);
-    		  }
-    	  }
-    	  
-    	  if (p.getWorld().getName().equals("SpawnCreation") && !p.hasPermission("wa.staff")){
-    		  if (p.getLocation().getY() < 2 || p.getLocation().getY() > 129){
-    			 p.teleport(new Location(p.getWorld(), p.getLocation().getX(), 50, p.getLocation().getZ()));
-    			  WCMain.s(p, "Booth border reached.");
     		  }
     	  }
     	  
@@ -373,8 +402,8 @@ public class WCMiscEvents implements Listener {
     		  plugin.afkTimer.put(p.getName(), 0);
     	  }
     	  
-		  if (plugin.afkers.contains(p)){
-			  Bukkit.broadcastMessage(AS("&7&o" + p.getDisplayName() + " &7&ois no longer afk. They were afk for " + Math.round(plugin.afkTimer.get(p.getName()) / 60) + " &7&ominutes."));
+		  if (plugin.afkers.contains(p) && !wcp.getAfkFreeze()){
+			  WCUtils.blankB(AS("&7&o" + p.getDisplayName() + " &7&ois no longer afk. (" + Math.round(plugin.afkTimer.get(p.getName()) / 60) + " &7&ominutes)"));
 			  if ((p.getDisplayName()).length() > 16){
 				  p.setPlayerListName(AS(p.getDisplayName()).substring(0, 16));
 			  } else {
@@ -382,20 +411,17 @@ public class WCMiscEvents implements Listener {
 			  }
 			  plugin.afkers.remove(p);
 			  Bukkit.getServer().getPluginManager().callEvent(new ScoreboardUpdateEvent(p));
+		  } 
+		  
+		  if (wcp.isSuperAfk() && !wcp.getAfkFreeze()){
+			  wcp.setSuperAfk(false);
+			  p.teleport(wcp.getAfkSpot());
+			  WCUtils.effects(p);
 		  }
 		  
-		  plugin.afkTimer.put(p.getName(), 0);
-      }
-
-     @SuppressWarnings("deprecation")
-     @EventHandler
-     public void onBreak(BlockBreakEvent e){
-    	if (e.getPlayer().getWorld().getName().equals("SpawnCreation") && !e.getPlayer().hasPermission("wa.staff")){
-    		if (e.getBlock().getType().equals(Material.DOUBLE_STEP) && e.getBlock().getData() == 0x8){
-    			e.setCancelled(true);
-    			WCMain.s(e.getPlayer(), "Wall breaking is prohibited.");
-    		}
-    	}
+		  if (!wcp.getAfkFreeze()){
+			  plugin.afkTimer.put(p.getName(), 0);
+		  }
       }
       
     @EventHandler (priority = EventPriority.HIGHEST)

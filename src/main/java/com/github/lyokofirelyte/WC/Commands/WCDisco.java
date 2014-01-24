@@ -14,9 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
+import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 
 public class WCDisco {
 
@@ -28,11 +29,11 @@ public class WCDisco {
 	@WCCommand(aliases = {"ds"}, help = "WC Disco!")
 	public void disco(Player sender, String[] args) {
 		
-			Bukkit.broadcastMessage(Utils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));
+			WCUtils.callChat(WCMessageType.BROADCAST, WCUtils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));
 			
 			for (final Player p : Bukkit.getOnlinePlayers()){
 				
-				List<Location> locs = Utils.circle(p.getLocation(), 10, 1, false, false, 0);
+				List<Location> locs = WCUtils.circle(p.getLocation(), 10, 1, false, false, 0);
 				List<Location> finalLocs = new ArrayList<Location>();
 				final List<LivingEntity> ents = new ArrayList<LivingEntity>();
 				
@@ -54,7 +55,7 @@ public class WCDisco {
 				wcs.setSheepTasks(tasks);
 				pl.wcm.updateSystem("system", wcs);
 				
-						List<Location> circleblocks = Utils.circle(p.getLocation(), 5, 1, true, false, 1);
+						List<Location> circleblocks = WCUtils.circle(p.getLocation(), 5, 1, true, false, 1);
 						long delay =	0L;
 							for (final Location l : circleblocks){
 								delay = delay + 2L;
@@ -62,7 +63,7 @@ public class WCDisco {
 										public void run() {
 												try {
 									pl.fw.playFirework(p.getWorld(), l,
-									FireworkEffect.builder().with(Type.BURST).withColor(Utils.getRandomColor()).build());
+									FireworkEffect.builder().with(Type.BURST).withColor(WCUtils.getRandomColor()).build());
 								} catch (IllegalArgumentException e) {
 									e.printStackTrace();
 								} catch (Exception e) {
@@ -82,7 +83,7 @@ public class WCDisco {
 		
 		if ((pl.wcm.getWCSystem("system").getSheepStart()+10L) <= System.currentTimeMillis()/1000){
 			for (LivingEntity e : ents){
-				Utils.effects(e.getLocation());
+				WCUtils.effects(e.getLocation());
 				e.remove();
 			}
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
@@ -90,9 +91,9 @@ public class WCDisco {
 		} else {
 			for (LivingEntity e : ents){
 				Sheep sheep = (Sheep)e;
-				sheep.setColor(Utils.getRandomDyeColor());
-				e.setCustomName(Utils.AS(Utils.getRandomChatColor() + "FESTIVE DISCO!")); e.setCustomNameVisible(true);
-				e.getWorld().playSound(e.getLocation(), Utils.getRandomNote(), 0.5F, 3F);
+				sheep.setColor(WCUtils.getRandomDyeColor());
+				e.setCustomName(WCUtils.AS(WCUtils.getRandomChatColor() + "FESTIVE DISCO!")); e.setCustomNameVisible(true);
+				e.getWorld().playSound(e.getLocation(), WCUtils.getRandomNote(), 0.5F, 3F);
 				e.setNoDamageTicks(3000);
 			}
 		}		

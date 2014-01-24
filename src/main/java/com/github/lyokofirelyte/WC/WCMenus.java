@@ -1,6 +1,6 @@
 package com.github.lyokofirelyte.WC;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -135,11 +135,8 @@ public class WCMenus implements Listener{
 				setup = true;
 				setUp();
 			}
-
-			p.openInventory(invs.get("rootIntroMenu"));
 			
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
-			public void run() {	pl.wcm.displayGui((Player) sender, new GuiRoot(pl)); } }, 20L);
+			pl.wcm.displayGui((Player) sender, new GuiRoot(pl));
 	}
 	
 	@WCCommand(aliases = {"qc"}, help = "Fast access to the Quick Commands")
@@ -241,7 +238,6 @@ public class WCMenus implements Listener{
 		menu.add("CHAT TIMESTAMPS");
 		menu.add("STATS");
 		menu.add("STAT VIEWER");
-		menu.add("TOGGLES");
 		menu.add("*CHOOSE BAN TYPE");
 		menu.add("*CHOOSE REASON");
 		menu.add("*SELECT PROOF");
@@ -288,7 +284,6 @@ public class WCMenus implements Listener{
 		openInvs.put("CHAT", "chatMenu");
 		openInvs.put("STATS", "statsMenu");
 		openInvs.put("TIME CODES", "timeCodeMenu");
-		openInvs.put("TOGGLES", "toggleMenu");
 		openInvs.put("ALLIANCE COLOR", "colorMenu");
 		openInvs.put("GLOBAL COLOR", "colorMenu");
 		openInvs.put("PM COLOR", "colorMenu");
@@ -623,19 +618,6 @@ public class WCMenus implements Listener{
 		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v5", 8, "§b< < <", 1, inv);
 		invs.put("quickCommandsMenu", inv);
 		
-		inv = Bukkit.createInventory(null, 18, "§4TOGGLES");
-		inv = addToInv(Material.WORKBENCH, "§aHOME SOUNDS", 0, "§2/home sounds", 2, inv);
-		inv = addToInv(Material.GLOWSTONE, "§eSIDEBOARD", 2, "§6The scoreboard", 8, inv);
-		inv = addToInv(Material.STICK, "§bPOKES", 3, "§9Allowing pokes", 12, inv);
-		inv = addToInv(Material.DIAMOND_SWORD, "§4PVP", 4, "§cToggle PVP Mode", 9, inv);
-		inv = addToInv(Material.FIREWORK, "§dFIREWORKS", 5, "§8Toggle paragon fireworks", 11, inv);
-		inv = addToInv(Material.CAKE, "§3EMOTES", 6, "§aToggle auto-emotes on chat", 1, inv);
-		inv = addToInv(Material.ANVIL, "§2ROOT SHORTCUT", 7, "§3Shift+left click root menu", 1, inv);
-		inv = addToInv(Material.NAME_TAG, "§cNAME PLATE", 8, "§bToggle alliance nameplate", 1, inv);
-		inv = addToInv(Material.REDSTONE, "§eSIDEBOARD COORDS", 1, "§9Toggle name/coords on sideboard", 1, inv);
-		inv = addToInv(Material.FLINT, "§bWATERCLOSET CORE v5", 13, "§b< < <", 1, inv);
-		invs.put("toggleMenu", inv);
-		
 		inv = Bukkit.createInventory(null, 54, "§dWATERCLOSET CORE v5");
 		inv = addToInv(Material.STAINED_GLASS, "§aWCV5", 1, "§3WCV5", 2, inv);
 		inv = addToInv(Material.STAINED_GLASS, "§aWCV5", 3, "§3WCV5", 2, inv);
@@ -920,7 +902,7 @@ public class WCMenus implements Listener{
 					if (n.equals("STAFF OPTIONS")){
 						playerSelection.put(p.getName(), d);
 						updateTools(p);
-						WCMain.s(p, "Selected " + Bukkit.getPlayer(d).getDisplayName() + "&d. Choose an action from the utility bar!");
+						s(p, "Selected " + Bukkit.getPlayer(d).getDisplayName() + "&d. Choose an action from the utility bar!");
 					}
 							
 					if (allianceMenu.contains(playerSelection.get(p.getName()))){
@@ -932,7 +914,7 @@ public class WCMenus implements Listener{
 			} else if (staffTools.containsKey(e.getCurrentItem().getType().toString()) && n.equals("STAFF OPTIONS")){
 							
 				if (playerSelection.get(p.getName()) == null){
-					WCMain.s(p, "Make a player selection first!");
+					s(p, "Make a player selection first!");
 					return;
 				}
 			
@@ -983,7 +965,7 @@ public class WCMenus implements Listener{
 		int x = 0;
 		
 		if (Bukkit.getPlayer(seller) == null){
-			WCMain.s(p, "That player is not online to return the item to.");
+			s(p, "That player is not online to return the item to.");
 			return;
 		}
 		
@@ -1008,7 +990,7 @@ public class WCMenus implements Listener{
 		 
 		 for (HumanEntity a : invs.get("closetStore").getViewers()){
 			 openCloset((Player)a);
-			 WCMain.s((Player)a, "Store refreshed because of purchase.");
+			 s((Player)a, "Store refreshed because of purchase.");
 		 }	
 	}
 
@@ -1024,7 +1006,7 @@ public class WCMenus implements Listener{
 		String seller = lore.get(1);
 		
 		if (wcp.getBalance() < price){
-			WCMain.s(p, "You don't have enough money! D:");
+			s(p, "You don't have enough money! D:");
 			return;
 		}
 		
@@ -1033,7 +1015,7 @@ public class WCMenus implements Listener{
 		wcpSeller.setBalance(wcpSeller.getBalance() + price);
 		wcp.setBalance(wcp.getBalance() - price);
 	
-		WCMain.s(p, "Purchased for " + price + "&d!");
+		s(p, "Purchased for " + price + "&d!");
 		
 		chest.getInventory().remove(i);
 			
@@ -1056,7 +1038,7 @@ public class WCMenus implements Listener{
 	  	
 		for (HumanEntity a : invs.get("closetStore").getViewers()){
 			openCloset((Player)a);
-			WCMain.s((Player)a, "Store refreshed because of purchase.");
+			s((Player)a, "Store refreshed because of purchase.");
 		}
 	}
 

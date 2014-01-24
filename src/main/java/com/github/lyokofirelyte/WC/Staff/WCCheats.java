@@ -16,6 +16,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -25,8 +26,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
 
-import static com.github.lyokofirelyte.WC.WCMain.s;
-import static com.github.lyokofirelyte.WC.WCMain.s2;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCCheats {
 
@@ -34,6 +34,16 @@ public class WCCheats {
 	
 	public WCCheats(WCMain instance){
 		pl = instance;
+	}
+	
+	@WCCommand(aliases = {"skull"}, min = 1, max = 1)
+	public void bleh(Player p, String[] args){
+		
+		ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		SkullMeta sm = (SkullMeta) is.getItemMeta();
+		sm.setOwner(args[0]);
+		is.setItemMeta(sm);
+		p.setItemInHand(is);
 	}
 	
 	@WCCommand(aliases = {"top"}, desc = "Teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2")
@@ -160,6 +170,7 @@ public class WCCheats {
 				
 	}
 	
+	@SuppressWarnings("deprecation")
 	@WCCommand(aliases = {"sit"}, desc = "Like a chair. Be warned: It's ghetto. :D", help = "/sit")
 	public void onSit(Player p, String[] args){
 	
@@ -371,7 +382,7 @@ public class WCCheats {
 				
 	}	
 	
-	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.more2")
+	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.mod2")
 	public void onMore(Player p, String[] args){
 
 				if (p.getInventory().getItemInHand() != null){

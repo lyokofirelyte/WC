@@ -41,7 +41,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "google" }, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
+	@WCCommand(aliases = { "member" }, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
 	public void onTheMember(Player p, String[] args){
 		
 		if (args.length > 0){
