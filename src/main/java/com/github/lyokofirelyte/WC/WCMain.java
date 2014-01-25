@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -481,7 +480,27 @@ public class WCMain extends WCNode {
   
   public void newCrafting(){
 	  
-
+	  ItemStack i = InventoryManager.createItem("&dSUPERCOBBLE", new String[] {"&aSo shiny..."}, Material.COBBLESTONE, 1);
+	  ShapedRecipe r = new ShapedRecipe(i).shape(
+			  "bbb", 
+			  "bbb", 
+			  "bbb").setIngredient('b', Material.COBBLESTONE);
+	  getServer().addRecipe(r);
+	 
+	  /*ItemStack i2 = new ItemStack(Material.COBBLESTONE, 9);
+	  ShapelessRecipe r2 = new ShapelessRecipe(i2);
+	  RecipeHandler rh = new RecipeHandler(r2);
+	  rh.addIngredient(i);
+	  getServer().addRecipe(rh.getShapelessRecipe());*/
+	  
+	 i = new ItemStack(Material.DOUBLE_STEP, 1, (byte) 8);
+	 r = new ShapedRecipe(i).shape(
+			 "000",
+			 "00x",
+			 "00x");
+	 RecipeHandler rh = new RecipeHandler(r);
+	 rh.setIngredient('x', new ItemStack(Material.STEP));
+	 getServer().addRecipe(rh.getShapedRecipe());
 	  
 	  i = InventoryManager.createItem("&aMajjykk Wand", new String[] {"&2It's pretty sharp!", "&7&oWCMMO Item"}, Material.STICK, 1);
 	  r = new ShapedRecipe(i).shape(
@@ -510,11 +529,5 @@ public class WCMain extends WCNode {
 			  "050", 
 			  "000").setIngredient('5', Material.LAVA_BUCKET).setIngredient('0', Material.WATER_BUCKET);
 	  getServer().addRecipe(r);
-<<<<<<< HEAD
-=======
-	  
-	  
-
->>>>>>> FETCH_HEAD
   }
 }

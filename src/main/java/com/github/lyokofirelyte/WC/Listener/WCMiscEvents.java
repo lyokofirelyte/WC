@@ -28,7 +28,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -62,17 +61,6 @@ public class WCMiscEvents implements Listener {
 	
 	public WCMiscEvents(WCMain plugin){
 		this.plugin = plugin;
-	}
-	
-	@EventHandler
-	public void onCraft(CraftItemEvent e){
-		
-		if (plugin.wcRecipies.containsKey(e.getRecipe())){
-			if(!e.getInventory().contains(plugin.wcRecipies.get(e.getRecipe()))){
-				e.setResult(null);
-				e.setCancelled(true);
-			}
-		}
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -338,9 +326,9 @@ public class WCMiscEvents implements Listener {
 	 }
 	  
       @EventHandler
-      public void onVehicleUpdate(VehicleUpdateEvent event) {
-              if (event.getVehicle() instanceof Minecart) {
-                      Minecart minecart = ((Minecart)event.getVehicle());
+      public void onVehicleUpdate(VehicleUpdateEvent e) {
+              if (e.getVehicle() instanceof Minecart) {
+                      Minecart minecart = ((Minecart)e.getVehicle());
                       if (!(minecart instanceof RideableMinecart && minecart.getPassenger() == null)) {
                     	  if (plugin.datacore.getBoolean("cartSpeed")){
                               minecart.setMaxSpeed(mult);
