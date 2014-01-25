@@ -68,10 +68,9 @@ public class WCMiscEvents implements Listener {
 	public void onCraft(CraftItemEvent e){
 		
 		if (plugin.wcRecipies.containsKey(e.getRecipe())){
-			for (ItemStack i : plugin.wcRecipies.get(e.getRecipe())){
-				if(!e.getInventory().contains(i)){
-					e.setResult(null);
-				}
+			if(!e.getInventory().contains(plugin.wcRecipies.get(e.getRecipe()))){
+				e.setResult(null);
+				e.setCancelled(true);
 			}
 		}
 	}

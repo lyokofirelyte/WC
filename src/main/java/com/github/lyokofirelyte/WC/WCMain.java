@@ -122,7 +122,7 @@ public class WCMain extends WCNode {
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
   public Map <String, WCLiftFloor> elevatorMap = new HashMap<>();
-  public Map <ShapedRecipe, List<ItemStack>> wcRecipies = new HashMap<>();
+  public Map <ShapedRecipe, ItemStack> wcRecipies = new HashMap<>();
   
   private int id = 0;
   
@@ -486,16 +486,6 @@ public class WCMain extends WCNode {
 			  "bbb", 
 			  "bbb").setIngredient('b', Material.COBBLESTONE);
 	  getServer().addRecipe(r);
-	  
-	  ItemStack i2 = new ItemStack(Material.COBBLESTONE, 9);
-	  r = new ShapedRecipe(i2).shape(
-			  "000",
-			  "0a0",
-			  "000");
-	  RecipeHandler rh = new RecipeHandler(r);
-	  rh.setIngredient('a', i);
-	  getServer().addRecipe(rh.getRecipe());
-	  wcRecipies.put(rh.getRecipe(), new ArrayList<ItemStack>(Arrays.asList(i)));
 	  
 	  i = InventoryManager.createItem("&aMajjykk Wand", new String[] {"&2It's pretty sharp!", "&7&oWCMMO Item"}, Material.STICK, 1);
 	  r = new ShapedRecipe(i).shape(
