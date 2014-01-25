@@ -28,6 +28,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -61,6 +62,18 @@ public class WCMiscEvents implements Listener {
 	
 	public WCMiscEvents(WCMain plugin){
 		this.plugin = plugin;
+	}
+	
+	@EventHandler
+	public void onCraft(CraftItemEvent e){
+		
+		if (plugin.wcRecipies.containsKey(e.getRecipe())){
+			for (ItemStack i : plugin.wcRecipies.get(e.getRecipe())){
+				if(!e.getInventory().contains(i)){
+					e.setResult(null);
+				}
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
