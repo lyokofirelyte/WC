@@ -19,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.event.EventHandler;
@@ -432,4 +433,36 @@ public class WCMiscEvents implements Listener {
   			return;
   		}
   	}
+    
+    @EventHandler
+    public void onTheItemFrameDamage(EntityDamageByEntityEvent e){
+    	
+    	if (e.getDamager() instanceof Player){
+    		
+    		Player p = (Player) e.getDamager();
+    		Location s = new Location(p.getWorld(), -186, 63, 234);
+    		
+    		if (p.getLocation().distance(s) < 150 && !(p.hasPermission("wa.staff"))){
+    			
+    			e.setCancelled(true);
+    			
+    		}
+    		
+    	}
+    	
+    	if (e.getDamager() instanceof Projectile){
+    		
+    		Projectile p = (Projectile) e.getDamager();
+    		Location s = new Location(p.getWorld(), -186, 63, 234);
+    		
+    		if (p.getLocation().distance(s) < 150){
+    			
+    			e.setCancelled(true);
+    			
+    		}
+    		
+    	}
+    	
+    }
+    
 }

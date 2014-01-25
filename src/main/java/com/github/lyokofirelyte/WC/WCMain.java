@@ -32,6 +32,7 @@ import com.github.lyokofirelyte.WC.Commands.WCGcmd;
 import com.github.lyokofirelyte.WC.Commands.WCHat;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
 import com.github.lyokofirelyte.WC.Commands.WCInvSee;
+import com.github.lyokofirelyte.WC.Commands.WCKill;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 import com.github.lyokofirelyte.WC.Commands.WCNear;
 import com.github.lyokofirelyte.WC.Commands.WCNewMember;
@@ -213,8 +214,6 @@ public class WCMain extends WCNode {
 
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { wcpp.startPatrol();} }, 100L, 144000L);
-
-	  getLogger().log(Level.INFO, "WaterCloset is ready! Hooked with WCAPI!");
 	  
 	  for (Player p : Bukkit.getOnlinePlayers()){
 		  if (p.getDisplayName().length() > 16){
@@ -230,6 +229,9 @@ public class WCMain extends WCNode {
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
 	  loadMarkkitInvs();
+	  
+	  getLogger().log(Level.INFO, "WaterCloset is ready and has poked with WCAPI!");
+	  
   }
   
   public void saveMarkkitInvs(){
@@ -315,7 +317,7 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class));
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class, WCKill.class));
 	  api.reg.registerCommands(commandClasses, this);
   }
 
