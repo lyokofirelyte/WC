@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -480,12 +481,7 @@ public class WCMain extends WCNode {
   
   public void newCrafting(){
 	  
-	  ItemStack i = InventoryManager.createItem("&dSUPERCOBBLE", new String[] {"&aSo shiny..."}, Material.COBBLESTONE, 1);
-	  ShapedRecipe r = new ShapedRecipe(i).shape(
-			  "bbb", 
-			  "bbb", 
-			  "bbb").setIngredient('b', Material.COBBLESTONE);
-	  getServer().addRecipe(r);
+
 	  
 	  i = InventoryManager.createItem("&aMajjykk Wand", new String[] {"&2It's pretty sharp!", "&7&oWCMMO Item"}, Material.STICK, 1);
 	  r = new ShapedRecipe(i).shape(
@@ -514,5 +510,11 @@ public class WCMain extends WCNode {
 			  "050", 
 			  "000").setIngredient('5', Material.LAVA_BUCKET).setIngredient('0', Material.WATER_BUCKET);
 	  getServer().addRecipe(r);
+<<<<<<< HEAD
+=======
+	  
+	  
+
+>>>>>>> FETCH_HEAD
   }
 }
