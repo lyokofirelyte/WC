@@ -31,10 +31,30 @@ public class WCEmotes implements Listener {
 		wcs = plugin.wcm.getWCSystem("system");
 		emotes = wcs.getEmotes();
 		emoteActions = wcs.getEmoteActions();
-
-		e.setSentence(e.getPlayer().getDisplayName() + " &d" + emoteActions.get(emotes.indexOf(e.getEmote())));
 		
-  		WCUtils.callChat(WCMessageType.BROADCAST, WCUtils.AS(e.getSentence()));
+		e.setSentence(e.getSentence().replaceFirst("@" + e.getEmote(), "").replaceFirst(" ", ""));
+		System.out.println("'" + e.getSentence() + "'");
+		String[] args = e.getSentence().split(" ");
+		
+		String[] emoteAction = emoteActions.get(emotes.indexOf(e.getEmote())).split(" %s% ");
+		String action = emoteAction[0];
+		
+		if (args[0].equalsIgnoreCase("") || emoteAction.length == 1){
+			
+			e.setSentence(e.getPlayer().getDisplayName() + " &d" + action);
+	  		WCUtils.callChat(WCMessageType.BROADCAST, WCUtils.AS(e.getSentence()));
+			
+		} else {
+			
+			String message = WCUtils.createString(args, 0);
+			action = emoteAction[1];
+			
+			e.setSentence(e.getPlayer().getDisplayName() + " &d" + action.replace("%a", "&7" + message + "&d"));
+			WCUtils.callChat(WCMessageType.BROADCAST, WCUtils.AS(e.getSentence()));
+			
+		}
+		
+		
 	}
 
 }
