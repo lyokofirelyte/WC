@@ -135,7 +135,7 @@ public class WCMain extends WCNode {
 	  elevatorMap = a;
   }
   
-  private int msg = 0;
+  //private int msg = 0;
 
   public void onEnable() {
 
@@ -206,8 +206,8 @@ public class WCMain extends WCNode {
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { updateBoard();} }, 2L, 160L);
 	  
-	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-	  public void run() { sendAnnounce();} }, 2L, 12000L);
+	  /*Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+	  public void run() { sendAnnounce();} }, 2L, 12000L);*/
 	  
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { autoSave();} }, 144000L, 144000L);
@@ -230,7 +230,7 @@ public class WCMain extends WCNode {
 	  WCMenus.invs.put("patrolLocationMenu", inv);
 	  loadMarkkitInvs();
 	  
-	  getLogger().log(Level.INFO, "WaterCloset is ready and has poked with WCAPI!");
+	  getLogger().log(Level.INFO, "WaterCloset is ready and has hooked with WCAPI!");
 	  
   }
   
@@ -388,7 +388,7 @@ public class WCMain extends WCNode {
     }
   }
   
-  public void sendAnnounce(){
+  /*public void sendAnnounce(){
 		
 	List<String> messages = config.getStringList("Announcements");
 	callChat(WCMessageType.BROADCAST, AS(messages.get(msg)));
@@ -398,7 +398,7 @@ public class WCMain extends WCNode {
 		} else {
 			msg = msg + 1;
 		}
-  }
+  }*/
   
   public void updateBoard(){
 	  
