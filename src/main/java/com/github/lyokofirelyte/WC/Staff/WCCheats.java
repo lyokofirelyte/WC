@@ -274,7 +274,7 @@ public class WCCheats {
 			
 	}
 	
-	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]")
+	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]", perm = "wa.staff")
 	public void onGM(Player p, String[] args){
 
 				if (args.length == 0){

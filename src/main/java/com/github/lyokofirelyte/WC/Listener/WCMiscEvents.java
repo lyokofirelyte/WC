@@ -3,6 +3,7 @@ package com.github.lyokofirelyte.WC.Listener;
 import static com.github.lyokofirelyte.WC.Util.Utils.AS;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -456,6 +458,24 @@ public class WCMiscEvents implements Listener {
     		Location s = new Location(p.getWorld(), -186, 63, 234);
     		
     		if (p.getLocation().distance(s) < 150){
+    			
+    			e.setCancelled(true);
+    			
+    		}
+    		
+    	}
+    	
+    }
+    
+    @EventHandler
+    public void onThePotionSplash(PotionSplashEvent e){
+    	
+    	if (e.getPotion().getShooter() instanceof Player){
+    		
+    		Player p = (Player) e.getPotion().getShooter();
+    		List<String> worlds = Arrays.asList("Syracuse", "Keopi", "WACP", "Tripolis", "not_cylum");
+    		
+    		if (worlds.contains(p.getWorld().getName()) && !(p.hasPermission("wa.staff"))){
     			
     			e.setCancelled(true);
     			
