@@ -441,7 +441,7 @@ public class WCPatrols implements Listener {
 				if (current.getBlock().getType() != Material.AIR && current.getBlock().getType() != Material.WATER &&  current.getBlock().getType() != Material.STATIONARY_WATER && current.getBlock().getType() != Material.STATIONARY_LAVA && current.getBlock().getType() != Material.LAVA && current.getBlock() != null){
 					if (new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.LAVA && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_LAVA){
 						wcs.setPatrolHotSpot(new Location(Bukkit.getWorld("world"), xR, y+1, zR));
-						callChat(WCMessageType.BROADCAST, AS(WC + "A new hotspot has been found at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Difficulty &6" + wcs.getPatrolDiff() + "&d)"));
+						callChat(WCMessageType.BROADCAST, AS(WC + "New hotspot at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Diff &6" + wcs.getPatrolDiff() + "&d)"));
 						rawr = true;
 					}
 				}

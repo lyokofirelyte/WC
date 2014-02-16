@@ -28,6 +28,7 @@ import org.bukkit.plugin.PluginManager;
 
 import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
+import com.github.lyokofirelyte.WC.Commands.WCExp;
 import com.github.lyokofirelyte.WC.Commands.WCGcmd;
 import com.github.lyokofirelyte.WC.Commands.WCHat;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
@@ -208,12 +209,9 @@ public class WCMain extends WCNode {
 	  
 	  /*Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { sendAnnounce();} }, 2L, 12000L);*/
-	  
-	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-	  public void run() { autoSave();} }, 144000L, 144000L);
 
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-	  public void run() { wcpp.startPatrol();} }, 100L, 144000L);
+	  public void run() { wcpp.startPatrol();} }, 100L, 216000L);
 	  
 	  for (Player p : Bukkit.getOnlinePlayers()){
 		  if (p.getDisplayName().length() > 16){
@@ -261,30 +259,6 @@ public class WCMain extends WCNode {
 		  markkitInvs.put(s, inv);
 	  }
   }
-  
-  public void autoSave(){
-	 
-		saveMarkkitInvs();
-		saveYamls();
-		
-		List<String> users = systemYaml.getStringList("TotalUsers");
-		
-		for (String user : users){
-			try {
-				wcm.savePlayer(user);
-			} catch (IOException e) {
-				getLogger().log(Level.WARNING, "Could not save " + user + "!");
-			}
-		}
-		
-		try {
-			wcm.saveAlliances();
-			wcm.saveSystem(systemYaml, systemFile);
-		} catch (IOException e) {
-			getLogger().log(Level.WARNING, "Could not save an alliance!");
-		}
-
-  }
 
   public void onDisable() {
 	  
@@ -317,7 +291,7 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class, WCKill.class));
+	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCExp.class, WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class, WCKill.class));
 	  api.reg.registerCommands(commandClasses, this);
   }
 

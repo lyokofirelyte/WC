@@ -39,13 +39,11 @@
       <artifactId>Vault</artifactId>
       <version>1.2.27</version>
     </dependency>
-    <dependency>
-      <groupId>com.confuserr.BarAPI</groupId>
-      <systemPath>${project.basedir}\src\lib\BarAPI.jar</systemPath>
-      <artifactId>BarAPI</artifactId>
-      <scope>system</scope>
-      <version>2.0</version>
-    </dependency>
+	<dependency>
+		<groupId>me.confuser</groupId>
+		<artifactId>BarAPI</artifactId>
+		<version>3.0</version>
+	</dependency>
   </dependencies>
   <repositories>
     <repository>
@@ -56,6 +54,10 @@
       <id>WCAPI</id>
       <url>https://github.com/lyokofirelyte/WCAPI/blob/mvn-repo/</url>
     </repository>
+      <repository>
+	  <id>confuser-repo</id>
+	  <url>http://ci.frostcast.net/plugin/repository/everything</url>
+	</repository>
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
