@@ -1,5 +1,8 @@
 package com.github.lyokofirelyte.WC;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,15 +26,22 @@ public class WCExpSystem implements Listener {
 		  Player p = e.getPlayer();
 		  wcp = plugin.wcm.getWCPlayer(p.getName());
 		  
-		  if (!wcp.getExpDeposit()){
+		  List<String> worlds = Arrays.asList("Syracuse", "Keopi", "WACP", "Tripolis", "not_cylum");
+  		
+  			if (!(worlds.contains(p.getWorld().getName()))){
+  			
+  				if (!wcp.getExpDeposit()){
 
-		  int expAmount = e.getAmount();
-		  int storedAmount = wcp.getExp();
-		  wcp.setExp(storedAmount + expAmount);
-		  updatePlayer(wcp, p.getName());
-		  e.setAmount(0);
+  				  int expAmount = e.getAmount();
+  				  int storedAmount = wcp.getExp();
+  				  wcp.setExp(storedAmount + expAmount);
+  				  updatePlayer(wcp, p.getName());
+  				  e.setAmount(0);
+  				  
+  				  }
+  				
+  			}
 		  
-		  }
 	  }
 	  
 	  public void updatePlayer(WCPlayer wcp, String name){
