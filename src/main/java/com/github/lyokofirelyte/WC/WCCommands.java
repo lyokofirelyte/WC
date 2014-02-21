@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Bukkit;
@@ -32,6 +35,7 @@ import com.github.lyokofirelyte.WC.Util.WCVault;
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
 
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
@@ -98,6 +102,46 @@ public class WCCommands {
     	    		  
     	    		  delay = delay + 10L;
     	    	}
+    	  }
+    	  
+      break;
+      
+      case "websitereset":
+    	  
+    	  if (p.getName().equals("Hugh_Jasses")){
+    		  plugin.wcm.getWCPlayer(args[1]).setWebsiteRegistered(false);
+    	  }
+    	  
+      break;
+      
+      case "website":
+    	  
+    	  if (!wcp.websiteRegistered()){
+    		  
+    		String code = WCUtils.encrypt(p.getName(), "MD5").substring(0, 5);
+    		  
+    		try {
+    		  
+	    		Connection conn = DriverManager.getConnection("jdbc:mysql://99.63.17.88:3306/website", "david", "coltonishot");
+	  	        PreparedStatement pst = conn.prepareStatement("INSERT INTO users_code(username, code) VALUES(?, ?)");
+	  	        pst.setString(1, p.getName());
+	  	        pst.setString(2, code);
+	  	        pst.executeUpdate();
+	  	        pst.close();
+	  	        conn.close();
+	  	        
+    			s(p, "New code created. Your code is &6" + code);
+    			wcp.setWebsiteCode(code);
+    			wcp.setWebsiteRegistered(true);
+    			updatePlayer(wcp, p.getName());
+	  	        
+    		} catch (Exception e){
+    			e.printStackTrace();
+    			s(p, "An error occured. See console.");
+    		}
+    		
+    	  } else {
+    		  s(p, "Your code is &6" + wcp.getWebsiteCode());
     	  }
     	  
       break;

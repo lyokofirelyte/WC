@@ -219,7 +219,7 @@ public class WCMain extends WCNode {
 		  } else {
 			  p.setPlayerListName(AS(p.getDisplayName()));
 		  }
-	  } 
+	  }
 	  
 	  id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new LagUtils(), 100L, 1L);
 	  
