@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,11 +35,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
-import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
+import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
 import com.github.lyokofirelyte.WCAPI.Manager.SkillType;
 
@@ -105,6 +108,46 @@ public class WCCommands {
     	  
       break;
       
+      case "websitereset":
+    	  
+    	  if (p.getName().equals("Hugh_Jasses")){
+    		  plugin.wcm.getWCPlayer(args[1]).setWebsiteRegistered(false);
+    	  }
+    	  
+      break;
+      
+      case "website":
+    	  
+    	  if (!wcp.websiteRegistered()){
+    		  
+    		String code = WCUtils.encrypt(p.getName(), "MD5").substring(0, 5);
+    		  
+    		try {
+    		  
+	    		Connection conn = DriverManager.getConnection("jdbc:mysql://99.63.17.88:3306/website", "david", "coltonishot");
+	  	        PreparedStatement pst = conn.prepareStatement("INSERT INTO users_code(username, code) VALUES(?, ?)");
+	  	        pst.setString(1, p.getName());
+	  	        pst.setString(2, code);
+	  	        pst.executeUpdate();
+	  	        pst.close();
+	  	        conn.close();
+	  	        
+    			s(p, "New code created. Your code is &6" + code);
+    			wcp.setWebsiteCode(code);
+    			wcp.setWebsiteRegistered(true);
+    			updatePlayer(wcp, p.getName());
+	  	        
+    		} catch (Exception e){
+    			e.printStackTrace();
+    			s(p, "An error occured. See console.");
+    		}
+    		
+    	  } else {
+    		  s(p, "Your code is &6" + wcp.getWebsiteCode());
+    	  }
+    	  
+      break;
+      
       case "wcmmodebug":
     	  
     	  if (p.getName().equals("Hugh_Jasses")){
@@ -118,7 +161,7 @@ public class WCCommands {
       case "setexp":
     	  
     	  if (p.hasPermission("wa.mod2")){
-    		  if (args.length != 3 || !Utils.isInteger(args[2]) || plugin.wcm.getWCPlayer(args[1]) == null){
+    		  if (args.length != 3 || !WCUtils.isInteger(args[2]) || plugin.wcm.getWCPlayer(args[1]) == null){
     			  s(p, "/wc setexp <player> <amount>. You either didn't type a number or the player was not found.");
     		  } else {
     			  plugin.wcm.getWCPlayer(args[1]).setExp(Integer.parseInt(args[2]));
@@ -151,7 +194,7 @@ public class WCCommands {
     		  if (giveRank == null){
     			  s(p, "That player was not found in the API!");
     		  } else {
-    			  giveRank.setCreativeRank(Utils.createString(args, 2));
+    			  giveRank.setCreativeRank(WCUtils.createString(args, 2));
     			  s(p, "Updated!");
     		  }
     	  } else {
@@ -174,7 +217,7 @@ public class WCCommands {
       
       case "price":
     	  
-    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && WCUtils.isInteger(args[1]) && WCUtils.isInteger(args[2])){
     		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
     			  ItemMeta im = p.getItemInHand().getItemMeta();
     			  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), args[1], AS("&aSell"), args[2])));
@@ -190,7 +233,7 @@ public class WCCommands {
       
       case "fullprice":
     	  
-    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && WCUtils.isInteger(args[1]) && WCUtils.isInteger(args[2])){
     		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
     			  int amt = 64;
     			  int buyPrice = Integer.parseInt(args[1]);
@@ -785,7 +828,7 @@ public class WCCommands {
     		  break;
     	  }
     	  
-    	  wcp.setJoinMessage(Utils.createString(args, 1));
+    	  wcp.setJoinMessage(WCUtils.createString(args, 1));
     	  wcp.setMessageCount(wcp.getMessageCount() - 1);
     	  updatePlayer(wcp, p.getName());
     	  s(p, "Your join message has been changed! You have " + wcp.getMessageCount() + " &dchanges left.");
@@ -804,7 +847,7 @@ public class WCCommands {
     		  break;
     	  }
     	  
-    	  wcp.setQuitMessage(Utils.createString(args, 1));
+    	  wcp.setQuitMessage(WCUtils.createString(args, 1));
     	  wcp.setMessageCount(wcp.getMessageCount() - 1);
     	  updatePlayer(wcp, p.getName());
     	  s(p, "Your quit message has been changed! You have " + wcp.getMessageCount() + " &dchanges left.");

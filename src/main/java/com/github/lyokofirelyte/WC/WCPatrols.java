@@ -52,8 +52,9 @@ import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 public class WCPatrols implements Listener {
 
 	WCMain pl;
+	
 	public WCPatrols(WCMain instance){
-	this.pl = instance;
+		this.pl = instance;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -401,69 +402,75 @@ public class WCPatrols implements Listener {
 	}
 	  
 	public void startPatrol(){
-
-		WCSystem wcs = pl.wcm.getWCSystem("system");
 		
-		if (wcs.getPatrolCrystal() != null && !wcs.getPatrolCrystal().isDead()){
-			for (LivingEntity e : wcs.getPatrolEnts()){
-				e.remove();
-			}
-			wcs.getPatrolCrystal().remove();
-		}
-		
-		Random rand = new Random();
-		int xDir = rand.nextInt(2);
-		int zDir = rand.nextInt(2);
-		double xR = rand.nextInt(2500);
-		double zR = rand.nextInt(2500);
-		Boolean rawr = false;
-		wcs.setPatrolKills(0);
-		wcs.setPatrolDiff((rand.nextInt(3)+1));
-		wcs.setPatrolEnts(new ArrayList<LivingEntity>());
-		wcs.setPatrolParticipants(new ArrayList<String>());
-		List<ItemStack> items = new ArrayList<ItemStack>();
-		items.add(new ItemStack(Material.WOOD_SWORD));
-		items.add(new ItemStack(Material.STONE_SWORD));
-		items.add(new ItemStack(Material.IRON_SWORD));
-		wcs.setPatrolItems(items);
-		  
-		if (xDir == 0){
-			xR = xR - (xR*2);
-		}
-		  
-		if (zDir == 0){
-			zR = zR - (zR*2);
-		}
+		new Thread(new Runnable(){
 
-		for (int y = 255; y > 0; y--){
-			if (!rawr){
-				Location current = new Location(Bukkit.getWorld("world"), xR, y, zR);
-				if (current.getBlock().getType() != Material.AIR && current.getBlock().getType() != Material.WATER &&  current.getBlock().getType() != Material.STATIONARY_WATER && current.getBlock().getType() != Material.STATIONARY_LAVA && current.getBlock().getType() != Material.LAVA && current.getBlock() != null){
-					if (new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.LAVA && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_LAVA){
-						wcs.setPatrolHotSpot(new Location(Bukkit.getWorld("world"), xR, y+1, zR));
-						callChat(WCMessageType.BROADCAST, AS(WC + "New hotspot at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Diff &6" + wcs.getPatrolDiff() + "&d)"));
-						rawr = true;
+			@Override
+			public void run() {
+				
+				WCSystem wcs = pl.wcm.getWCSystem("system");
+				
+				if (wcs.getPatrolCrystal() != null && !wcs.getPatrolCrystal().isDead()){
+					for (LivingEntity e : wcs.getPatrolEnts()){
+						e.remove();
+					}
+					wcs.getPatrolCrystal().remove();
+				}
+				
+				Random rand = new Random();
+				int xDir = rand.nextInt(2);
+				int zDir = rand.nextInt(2);
+				double xR = rand.nextInt(2500);
+				double zR = rand.nextInt(2500);
+				Boolean rawr = false;
+				wcs.setPatrolKills(0);
+				wcs.setPatrolDiff((rand.nextInt(3)+1));
+				wcs.setPatrolEnts(new ArrayList<LivingEntity>());
+				wcs.setPatrolParticipants(new ArrayList<String>());
+				List<ItemStack> items = new ArrayList<ItemStack>();
+				items.add(new ItemStack(Material.WOOD_SWORD));
+				items.add(new ItemStack(Material.STONE_SWORD));
+				items.add(new ItemStack(Material.IRON_SWORD));
+				wcs.setPatrolItems(items);
+				  
+				if (xDir == 0){
+					xR = xR - (xR*2);
+				}
+				  
+				if (zDir == 0){
+					zR = zR - (zR*2);
+				}
+		
+				for (int y = 255; y > 0; y--){
+					if (!rawr){
+						Location current = new Location(Bukkit.getWorld("world"), xR, y, zR);
+						if (current.getBlock().getType() != Material.AIR && current.getBlock().getType() != Material.WATER &&  current.getBlock().getType() != Material.STATIONARY_WATER && current.getBlock().getType() != Material.STATIONARY_LAVA && current.getBlock().getType() != Material.LAVA && current.getBlock() != null){
+							if (new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.LAVA && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_WATER && new Location(current.getWorld(), current.getX(), current.getY()+1, current.getZ()).getBlock().getType() != Material.STATIONARY_LAVA){
+								wcs.setPatrolHotSpot(new Location(Bukkit.getWorld("world"), xR, y+1, zR));
+								callChat(WCMessageType.BROADCAST, AS(WC + "New hotspot at &6" + xR + "&f, &6" + (y+1) + "&f, &6" + zR + "&d! (Diff &6" + wcs.getPatrolDiff() + "&d)"));
+								rawr = true;
+							}
+						}
 					}
 				}
-			}
-		}
-		
-		if (!rawr){
-			startPatrol();
-			return;
-		}
 				
-    	wcs.setPatrolHotSpotAreas(circle(wcs.getPatrolHotSpot(), 50, 50, false, true, 0));
-    	wcs.setPatrolCrystal(Bukkit.getWorld("world").spawnEntity(wcs.getPatrolHotSpot(), EntityType.ENDER_CRYSTAL));
-
-		int checkTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
-		public void run() { checkPlayers();} }, 0L, 400L);
+				if (!rawr){
+					startPatrol();
+					return;
+				}
+						
+		    	wcs.setPatrolHotSpotAreas(circle(wcs.getPatrolHotSpot(), 50, 50, false, true, 0));
+		    	wcs.setPatrolCrystal(Bukkit.getWorld("world").spawnEntity(wcs.getPatrolHotSpot(), EntityType.ENDER_CRYSTAL));
 		
-		wcs.setPatrolCheckTask(checkTask);
-		pl.wcm.updateSystem("system", wcs);
-		
-		WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§3ACTIVE! LVL " + wcs.getPatrolDiff(), "§6" + xR + "§6, " + wcs.getPatrolHotSpot().getY() + "§6, " + zR, true, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
-
+				int checkTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
+				public void run() { checkPlayers();} }, 0L, 400L);
+				
+				wcs.setPatrolCheckTask(checkTask);
+				pl.wcm.updateSystem("system", wcs);
+				
+				WCMenus.invs.get("patrolLocationMenu").setItem(0, pl.invManager.makeItem("§3ACTIVE! LVL " + wcs.getPatrolDiff(), "§6" + xR + "§6, " + wcs.getPatrolHotSpot().getY() + "§6, " + zR, true, Enchantment.DURABILITY, 10, 0, Material.BOW, 1));
+				
+			}}).start();
 	}
 	
 	public void checkBoss(LivingEntity le){
