@@ -249,7 +249,6 @@ public class WCMiscEvents implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPVP(EntityDamageByEntityEvent e){
-		
 		if (e.getEntity() instanceof Player){
 			if (e.getDamager() instanceof Snowball){
 				final Player p = ((Player)e.getEntity());
