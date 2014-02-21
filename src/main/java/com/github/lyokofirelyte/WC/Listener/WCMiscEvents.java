@@ -328,9 +328,9 @@ public class WCMiscEvents implements Listener {
 	 }
 	  
       @EventHandler
-      public void onVehicleUpdate(VehicleUpdateEvent event) {
-              if (event.getVehicle() instanceof Minecart) {
-                      Minecart minecart = ((Minecart)event.getVehicle());
+      public void onVehicleUpdate(VehicleUpdateEvent e) {
+              if (e.getVehicle() instanceof Minecart) {
+                      Minecart minecart = ((Minecart)e.getVehicle());
                       if (!(minecart instanceof RideableMinecart && minecart.getPassenger() == null)) {
                     	  if (plugin.datacore.getBoolean("cartSpeed")){
                               minecart.setMaxSpeed(mult);

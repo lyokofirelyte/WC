@@ -1120,9 +1120,21 @@ public class WCCommands {
     	   }
 
     	   wcp.setParagonTps(wcp.getParagonTps() - 1);
-    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + p.getName() + " " + args[1]);
+    	   
+    	   if (!p.isOp()){
+    		   p.setOp(true);
+    		   wcp.setWCOP(true);
+    	   }
+    	   
+    	   p.performCommand("tp " + args[1]);
+    	   
+    	   if (wcp.isWCOp()){
+    		   p.setOp(false);
+    		   wcp.setWCOP(false);
+    	   }
+    	   
       break;
-			
+      
       case "market":
 
     	    Boolean market = wcp.getParagonMarket();
@@ -1859,8 +1871,10 @@ public class WCCommands {
 		 return false;
 	 }
 	 
-	 public void returnItem(Player p, int amount){
+	@SuppressWarnings("deprecation")
+	public void returnItem(Player p, int amount){
 		 p.getInventory().addItem(plugin.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, amount));
+		 p.updateInventory();
 	 }
 
 } 
