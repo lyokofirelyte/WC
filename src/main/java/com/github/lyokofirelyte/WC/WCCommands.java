@@ -1,17 +1,26 @@
 package com.github.lyokofirelyte.WC;
 
+import static com.github.lyokofirelyte.WCAPI.WCUtils.AS;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.bc;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.circle;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.isInteger;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,12 +35,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WC.Util.WCVault;
-
-import static com.github.lyokofirelyte.WC.Util.Utils.*;
-
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.Events.ScoreboardUpdateEvent;
@@ -102,6 +108,46 @@ public class WCCommands {
     	  
       break;
       
+      case "websitereset":
+    	  
+    	  if (p.getName().equals("Hugh_Jasses")){
+    		  plugin.wcm.getWCPlayer(args[1]).setWebsiteRegistered(false);
+    	  }
+    	  
+      break;
+      
+      case "website":
+    	  
+    	  if (!wcp.websiteRegistered()){
+    		  
+    		String code = WCUtils.encrypt(p.getName(), "MD5").substring(0, 5);
+    		  
+    		try {
+    		  
+	    		Connection conn = DriverManager.getConnection("jdbc:mysql://99.63.17.88:3306/website", "david", "coltonishot");
+	  	        PreparedStatement pst = conn.prepareStatement("INSERT INTO users_code(username, code) VALUES(?, ?)");
+	  	        pst.setString(1, p.getName());
+	  	        pst.setString(2, code);
+	  	        pst.executeUpdate();
+	  	        pst.close();
+	  	        conn.close();
+	  	        
+    			s(p, "New code created. Your code is &6" + code);
+    			wcp.setWebsiteCode(code);
+    			wcp.setWebsiteRegistered(true);
+    			updatePlayer(wcp, p.getName());
+	  	        
+    		} catch (Exception e){
+    			e.printStackTrace();
+    			s(p, "An error occured. See console.");
+    		}
+    		
+    	  } else {
+    		  s(p, "Your code is &6" + wcp.getWebsiteCode());
+    	  }
+    	  
+      break;
+      
       case "wcmmodebug":
     	  
     	  if (p.getName().equals("Hugh_Jasses")){
@@ -115,7 +161,7 @@ public class WCCommands {
       case "setexp":
     	  
     	  if (p.hasPermission("wa.mod2")){
-    		  if (args.length != 3 || !Utils.isInteger(args[2]) || plugin.wcm.getWCPlayer(args[1]) == null){
+    		  if (args.length != 3 || !WCUtils.isInteger(args[2]) || plugin.wcm.getWCPlayer(args[1]) == null){
     			  s(p, "/wc setexp <player> <amount>. You either didn't type a number or the player was not found.");
     		  } else {
     			  plugin.wcm.getWCPlayer(args[1]).setExp(Integer.parseInt(args[2]));
@@ -148,7 +194,7 @@ public class WCCommands {
     		  if (giveRank == null){
     			  s(p, "That player was not found in the API!");
     		  } else {
-    			  giveRank.setCreativeRank(Utils.createString(args, 2));
+    			  giveRank.setCreativeRank(WCUtils.createString(args, 2));
     			  s(p, "Updated!");
     		  }
     	  } else {
@@ -171,7 +217,7 @@ public class WCCommands {
       
       case "price":
     	  
-    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && WCUtils.isInteger(args[1]) && WCUtils.isInteger(args[2])){
     		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
     			  ItemMeta im = p.getItemInHand().getItemMeta();
     			  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), args[1], AS("&aSell"), args[2])));
@@ -187,7 +233,7 @@ public class WCCommands {
       
       case "fullprice":
     	  
-    	  if (p.hasPermission("wa.staff") && args.length == 3 && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+    	  if (p.hasPermission("wa.staff") && args.length == 3 && WCUtils.isInteger(args[1]) && WCUtils.isInteger(args[2])){
     		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
     			  int amt = 64;
     			  int buyPrice = Integer.parseInt(args[1]);
@@ -782,7 +828,7 @@ public class WCCommands {
     		  break;
     	  }
     	  
-    	  wcp.setJoinMessage(Utils.createString(args, 1));
+    	  wcp.setJoinMessage(WCUtils.createString(args, 1));
     	  wcp.setMessageCount(wcp.getMessageCount() - 1);
     	  updatePlayer(wcp, p.getName());
     	  s(p, "Your join message has been changed! You have " + wcp.getMessageCount() + " &dchanges left.");
@@ -801,7 +847,7 @@ public class WCCommands {
     		  break;
     	  }
     	  
-    	  wcp.setQuitMessage(Utils.createString(args, 1));
+    	  wcp.setQuitMessage(WCUtils.createString(args, 1));
     	  wcp.setMessageCount(wcp.getMessageCount() - 1);
     	  updatePlayer(wcp, p.getName());
     	  s(p, "Your quit message has been changed! You have " + wcp.getMessageCount() + " &dchanges left.");
@@ -1013,10 +1059,69 @@ public class WCCommands {
     	  }
     	  
     	  if (args[1].equalsIgnoreCase("store")){
-    		  
-    		  s(p, "Sorry, you can't put the xp back because of a Bukkit bug I can't do anything about.");
+    		  if(isInteger(args[2])){
+    			  int amount = Integer.parseInt(args[2]);
+    			  if(amount > 0){
+    				  if(amount <= p.getTotalExperience()){
+    					  if(p.getTotalExperience() - amount >= 0){
+			    		  int exp = p.getTotalExperience() - amount;
+			    		  p.setTotalExperience(0);
+			    		  p.setExp(0);
+			    		  p.setLevel(0);
+			    		  p.giveExp(exp);
+			    		  wcp.setExp(wcp.getExp() + amount);
+			    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+			    		  s(p, "You stored " + ChatColor.GOLD + amount + ChatColor.LIGHT_PURPLE + " exp");
+	//		    		  s(p, "Sorry, you can't put the xp back because of a Bukkit bug I can't do anything about.");
+    					  }else{
+        					  s(p, "You don't have enough experience");
+        				  }
+    					  }else{
+    					  s(p, "You don't have enough experience");
+    				  }
+    				}else{
+					  s(p, "The number must be higher than 0");
+    			  }
+    		  }else{
+				  s(p, "That is not a number!");
+    		  }
     	  }	
+    	  if(args[1].equalsIgnoreCase("send")){
+    		  if(args[2] != null){
+    			  if(args[3] != null){
+    				  if(isInteger(args[3])){
+    					  int amount = Integer.parseInt(args[3]);
+    					  if(amount > 0){
+    						  if(Bukkit.getServer().getPlayer(args[2]) !=null && plugin.wcm.getWCPlayer(args[2]) != null){
+    							  WCPlayer wcPlayer = plugin.wcm.getWCPlayer(args[2]);
+				    			  Player player = Bukkit.getServer().getPlayer(args[2]);
+				    			  if(wcp.getExp() >= amount){
+					    			  wcp.setExp(wcp.getExp() - amount);
+					    			  wcPlayer.setExp(wcPlayer.getExp() + amount);
+					    			  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+					    			  plugin.wcm.updatePlayerMap(player.getName(), wcPlayer);
 
+					    			  s(p, "You sent " + ChatColor.GOLD + amount + ChatColor.LIGHT_PURPLE + " exp to " + ChatColor.GOLD + player.getName());
+					    			  s(player, "You received " + ChatColor.GOLD + amount + ChatColor.LIGHT_PURPLE + " exp from " + ChatColor.GOLD + p.getName());
+				    			  }else{
+				    				  s(p, "Did you really think you have THAT much exp?!");
+				    			  }
+			    			  }else{
+							  s(p, "Can't find player " + args[2]);
+    						  }
+    					  }else{
+    						  s(p, "The number must be higher than 0");
+    					  }
+    				  }else{
+    					  s(p, "That is not a number!");
+    				  }
+    			  }else{
+    				  s(p, "Correct usage: /wc exp send <player> <amount>");
+    			  }
+    		  }else{
+				  s(p, "Correct usage: /wc exp send <player> <amount>");
+    		  }
+    	  }
        break;  
        
        case "paragons": case "paragon":
@@ -1058,9 +1163,21 @@ public class WCCommands {
     	   }
 
     	   wcp.setParagonTps(wcp.getParagonTps() - 1);
-    	   Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "tp " + p.getName() + " " + args[1]);
+    	   
+    	   if (!p.isOp()){
+    		   p.setOp(true);
+    		   wcp.setWCOP(true);
+    	   }
+    	   
+    	   p.performCommand("tp " + args[1]);
+    	   
+    	   if (wcp.isWCOp()){
+    		   p.setOp(false);
+    		   wcp.setWCOP(false);
+    	   }
+    	   
       break;
-			
+      
       case "market":
 
     	    Boolean market = wcp.getParagonMarket();
@@ -1797,8 +1914,10 @@ public class WCCommands {
 		 return false;
 	 }
 	 
-	 public void returnItem(Player p, int amount){
+	@SuppressWarnings("deprecation")
+	public void returnItem(Player p, int amount){
 		 p.getInventory().addItem(plugin.invManager.makeItem("§e§o§lPARAGON TOKEN", "§7§oIt's currency!", true, Enchantment.DURABILITY, 10, 11, Material.INK_SACK, amount));
+		 p.updateInventory();
 	 }
 
 } 

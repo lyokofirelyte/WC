@@ -23,12 +23,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.github.lyokofirelyte.WC.Commands.WCAFK;
 import com.github.lyokofirelyte.WC.Commands.WCDisco;
+import com.github.lyokofirelyte.WC.Commands.WCExp;
 import com.github.lyokofirelyte.WC.Commands.WCGcmd;
 import com.github.lyokofirelyte.WC.Commands.WCHat;
 import com.github.lyokofirelyte.WC.Commands.WCHome;
@@ -124,6 +124,7 @@ public class WCMain extends WCNode {
   public List<Entity> carts = new ArrayList<>();
   public List<Player> afkers = new ArrayList<>();
   public Map <String, WCLiftFloor> elevatorMap = new HashMap<>();
+  public Map <ShapedRecipe, ItemStack> wcRecipies = new HashMap<>();
   
   private int id = 0;
   
@@ -135,7 +136,7 @@ public class WCMain extends WCNode {
 	  elevatorMap = a;
   }
   
-  private int msg = 0;
+  //private int msg = 0;
 
   public void onEnable() {
 
@@ -206,14 +207,11 @@ public class WCMain extends WCNode {
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
 	  public void run() { updateBoard();} }, 2L, 160L);
 	  
-	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-	  public void run() { sendAnnounce();} }, 2L, 12000L);
-	  
-	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-	  public void run() { autoSave();} }, 144000L, 144000L);
+	  /*Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+	  public void run() { sendAnnounce();} }, 2L, 12000L);*/
 
 	  Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
-	  public void run() { wcpp.startPatrol();} }, 100L, 144000L);
+	  public void run() { wcpp.startPatrol();} }, 100L, 216000L);
 	  
 	  for (Player p : Bukkit.getOnlinePlayers()){
 		  if (p.getDisplayName().length() > 16){
@@ -221,7 +219,7 @@ public class WCMain extends WCNode {
 		  } else {
 			  p.setPlayerListName(AS(p.getDisplayName()));
 		  }
-	  } 
+	  }
 	  
 	  id = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new LagUtils(), 100L, 1L);
 	  
@@ -230,7 +228,7 @@ public class WCMain extends WCNode {
 	  WCMenus.invs.put("patrolLocationMenu", inv);
 	  loadMarkkitInvs();
 	  
-	  getLogger().log(Level.INFO, "WaterCloset is ready and has poked with WCAPI!");
+	  getLogger().log(Level.INFO, "WaterCloset is ready and has hooked with WCAPI!");
 	  
   }
   
@@ -260,30 +258,6 @@ public class WCMain extends WCNode {
 		  inv.setContents(contents);
 		  markkitInvs.put(s, inv);
 	  }
-  }
-  
-  public void autoSave(){
-	 
-		saveMarkkitInvs();
-		saveYamls();
-		
-		List<String> users = systemYaml.getStringList("TotalUsers");
-		
-		for (String user : users){
-			try {
-				wcm.savePlayer(user);
-			} catch (IOException e) {
-				getLogger().log(Level.WARNING, "Could not save " + user + "!");
-			}
-		}
-		
-		try {
-			wcm.saveAlliances();
-			wcm.saveSystem(systemYaml, systemFile);
-		} catch (IOException e) {
-			getLogger().log(Level.WARNING, "Could not save an alliance!");
-		}
-
   }
 
   public void onDisable() {
@@ -317,8 +291,8 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class, WCKill.class));
-	  api.reg.registerCommands(commandClasses, this);
+	  List<Object> commandClasses = new ArrayList<Object>(Arrays.asList(new WCExp(this), new WCCommandsFixed(this), new TimeStampEX(this), new TraceFW(this), new StaticField(this), new WACommandEx(this), new WCAFK(this), new WCBal(this), new WCChannels(this), new WCCheats(this), new WCCommands(this), new WCDisco(this), new WCHat(this), new WCHome(this), new WCInvSee(this), new WCMail(this), new WCMenus(this), new WCNear(this), new WCNewMember(this), new WCPay(this), new WCPowerTool(this), new WCPTP(this), new WCRanks(this), new WCReport(this), new WCSEEKRITPARTAY(this), new WCSeen(this), new WCSell(this), new WCSoar(this), new WCSudo(this), new WCSuicide(this), new WCSpawn(this), new WCTele(this), new WCWarps(this), new WCWB(this), new WCThis(this), new WCGcmd(this), new WCKill(this)));
+	  api.reg.registerCommands(commandClasses);
   }
 
   public void saveYamls() {
@@ -388,7 +362,7 @@ public class WCMain extends WCNode {
     }
   }
   
-  public void sendAnnounce(){
+  /*public void sendAnnounce(){
 		
 	List<String> messages = config.getStringList("Announcements");
 	callChat(WCMessageType.BROADCAST, AS(messages.get(msg)));
@@ -398,7 +372,7 @@ public class WCMain extends WCNode {
 		} else {
 			msg = msg + 1;
 		}
-  }
+  }*/
   
   public void updateBoard(){
 	  
@@ -414,6 +388,10 @@ public class WCMain extends WCNode {
 		  int neededXP = (int) (100 + (Math.pow(wcp.getPatrolLevel(), 2) + wcp.getPatrolLevel()));  
 		  
 		  player.setDisplayName(AS(wcm.getFullNick(player.getName()))); 
+		  
+		  wcp.setPrefix(WCVault.chat.getPlayerPrefix("world", player.getName()));
+		  wcp.setSuffix(WCVault.chat.getPlayerSuffix("world", player.getName()));
+		  wcm.updatePlayerMap(player.getName(), wcp);
 		  
 		  if (xp >= neededXP){
 			  callChat(WCMessageType.BROADCAST, AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));
@@ -488,22 +466,19 @@ public class WCMain extends WCNode {
 			  "bbb", 
 			  "bbb").setIngredient('b', Material.COBBLESTONE);
 	  getServer().addRecipe(r);
-	  
-	  ItemStack i2 = new ItemStack(Material.COBBLESTONE, 9);
+	 
+	  /*ItemStack i2 = new ItemStack(Material.COBBLESTONE, 9);
 	  ShapelessRecipe r2 = new ShapelessRecipe(i2);
 	  RecipeHandler rh = new RecipeHandler(r2);
 	  rh.addIngredient(i);
-	  getServer().addRecipe(rh.getShapelessRecipe());
+	  getServer().addRecipe(rh.getShapelessRecipe());*/
 	  
 	 i = new ItemStack(Material.DOUBLE_STEP, 1, (byte) 8);
 	 r = new ShapedRecipe(i).shape(
 			 "000",
 			 "00x",
-			 "00x").shape(
-					 "000",
-					 "0x0",
-					 "0x0");
-	 rh = new RecipeHandler(r);
+			 "00x");
+	 RecipeHandler rh = new RecipeHandler(r);
 	 rh.setIngredient('x', new ItemStack(Material.STEP));
 	 getServer().addRecipe(rh.getShapedRecipe());
 	  
@@ -534,8 +509,5 @@ public class WCMain extends WCNode {
 			  "050", 
 			  "000").setIngredient('5', Material.LAVA_BUCKET).setIngredient('0', Material.WATER_BUCKET);
 	  getServer().addRecipe(r);
-	  
-	  
-
   }
 }

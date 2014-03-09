@@ -25,7 +25,6 @@ import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
-
 import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCCheats {
@@ -274,7 +273,7 @@ public class WCCheats {
 			
 	}
 	
-	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]", perm = "wa.staff")
+	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]", perm = "wa.mod2")
 	public void onGM(Player p, String[] args){
 
 				if (args.length == 0){

@@ -394,6 +394,11 @@ public class WACommandEx {
     	  			  break;
     	  		  }
     	  		  
+    	  		  if (!isInteger(args[2]) || args[2].startsWith("-")){
+    	  			  s(p, "That's not a number.");
+    	  			  break;
+    	  		  }
+    	  		  
     	  		  if (wcp.getBalance() < Integer.parseInt(args[2])){ 
     	  			  s(p, "You don't have enough money! D:");
     	  			  break;
@@ -407,6 +412,19 @@ public class WACommandEx {
     	  		  updateAlliance(wcaCurrent, args[1]);
     	  		  
     	  		  s(p, "Success!");
+    	  		  
+    	  	  break;
+    	  	  
+    	  	  case "take":
+    	  		  
+    	  		  if (!p.hasPermission("wa.mod2")){
+    	  			  s(p, "No permission!");
+    	  		  } else if (isInteger(args[2]) && plugin.wcm.getWCAlliance(args[1]) != null) {
+    	  			  plugin.wcm.getWCAlliance(args[1]).setBank(plugin.wcm.getWCAlliance(args[1]).getBank() - Integer.parseInt(args[2]));
+    	  			  s(p, "Updated.");
+    	  		  } else {
+    	  			  s(p, "/waa take <alliance> <money>");
+    	  		  }
     	  		  
     	  	  break;
     		  
@@ -869,7 +887,7 @@ public class WACommandEx {
 	        	    p.performCommand("pex user " + args[1] + " group remove " + args[2]);
 	        	    p.performCommand("pex user " + args[1] + " group add " + args[3]);
 	        	    
-	        	    wcpCurrent = plugin.wcm.getWCPlayer(Bukkit.getPlayer(args[1]).getName());
+	        	    wcpCurrent = plugin.wcm.getWCPlayer(args[1]);
 	        	    
 	        	    if (!wcpCurrent.getInAlliance()){
 	        	    	s(p, "They're not in an alliance!");
@@ -878,7 +896,7 @@ public class WACommandEx {
 	        	    
 	        	    String rawr = wcpCurrent.getAlliance();
 	        	    
-	        	    wcaCurrent = plugin.wcm.getWCAlliance(wcp.getAlliance());
+	        	    wcaCurrent = plugin.wcm.getWCAlliance(wcpCurrent.getAlliance());
 	        	    wcaCurrent.remMember(args[1]);
 	        	    wcpCurrent.setAlliance("ForeverAlone");
 	        	    wcpCurrent.setInAlliance(false);
@@ -1013,7 +1031,7 @@ public class WACommandEx {
   	}
   }
 
-    @WCCommand(aliases = {"rn"}, desc = "Learn the real name of a player", help = "/rn <nickname>", min = 1)
+    @WCCommand(aliases = {"rn", "realname"}, desc = "Learn the real name of a player", help = "/rn <nickname>", min = 1)
     public void onRealName(Player p, String[] args){
     	
     	if (args.length != 1){

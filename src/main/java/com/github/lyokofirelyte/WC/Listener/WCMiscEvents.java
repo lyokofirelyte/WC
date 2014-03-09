@@ -249,7 +249,6 @@ public class WCMiscEvents implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPVP(EntityDamageByEntityEvent e){
-		
 		if (e.getEntity() instanceof Player){
 			if (e.getDamager() instanceof Snowball){
 				final Player p = ((Player)e.getEntity());
@@ -329,9 +328,9 @@ public class WCMiscEvents implements Listener {
 	 }
 	  
       @EventHandler
-      public void onVehicleUpdate(VehicleUpdateEvent event) {
-              if (event.getVehicle() instanceof Minecart) {
-                      Minecart minecart = ((Minecart)event.getVehicle());
+      public void onVehicleUpdate(VehicleUpdateEvent e) {
+              if (e.getVehicle() instanceof Minecart) {
+                      Minecart minecart = ((Minecart)e.getVehicle());
                       if (!(minecart instanceof RideableMinecart && minecart.getPassenger() == null)) {
                     	  if (plugin.datacore.getBoolean("cartSpeed")){
                               minecart.setMaxSpeed(mult);
