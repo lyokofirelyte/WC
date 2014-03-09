@@ -291,8 +291,7 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Object> commandClasses = new ArrayList<Object>(Arrays.asList(new WCExp(this), new WCCommandsFixed(this), new TimeStampEX(this), new TraceFW(this), new StaticField(this), new WACommandEx(this), new WCAFK(this), new WCBal(this), new WCChannels(this), new WCCheats(this), new WCCommands(this), new WCDisco(this), new WCHat(this), new WCHome(this), new WCInvSee(this), new WCMail(this), new WCMenus(this), new WCNear(this), new WCNewMember(this), new WCPay(this), new WCPowerTool(this), new WCPTP(this), new WCRanks(this), new WCReport(this), new WCSEEKRITPARTAY(this), new WCSeen(this), new WCSell(this), new WCSoar(this), new WCSudo(this), new WCSuicide(this), new WCSpawn(this), new WCTele(this), new WCWarps(this), new WCWB(this), new WCThis(this), new WCGcmd(this), new WCKill(this)));
-	  api.reg.registerCommands(commandClasses);
+	  api.reg.registerCommands(new WCExp(this), new WCCommandsFixed(this), new TimeStampEX(this), new TraceFW(this), new StaticField(this), new WACommandEx(this), new WCAFK(this), new WCBal(this), new WCChannels(this), new WCCheats(this), new WCCommands(this), new WCDisco(this), new WCHat(this), new WCHome(this), new WCInvSee(this), new WCMail(this), new WCMenus(this), new WCNear(this), new WCNewMember(this), new WCPay(this), new WCPowerTool(this), new WCPTP(this), new WCRanks(this), new WCReport(this), new WCSEEKRITPARTAY(this), new WCSeen(this), new WCSell(this), new WCSoar(this), new WCSudo(this), new WCSuicide(this), new WCSpawn(this), new WCTele(this), new WCWarps(this), new WCWB(this), new WCThis(this), new WCGcmd(this), new WCKill(this));
   }
 
   public void saveYamls() {
