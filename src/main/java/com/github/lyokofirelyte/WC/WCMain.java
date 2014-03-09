@@ -291,8 +291,8 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  List<Class<?>> commandClasses = new ArrayList<Class<?>>(Arrays.asList(WCExp.class, WCCommandsFixed.class, TimeStampEX.class, TraceFW.class, StaticField.class, WACommandEx.class, WCAFK.class, WCBal.class, WCChannels.class, WCCheats.class, WCCommands.class, WCDisco.class, WCHat.class, WCHome.class, WCInvSee.class, WCMail.class, WCMenus.class, WCNear.class, WCNewMember.class, WCPay.class, WCPowerTool.class, WCPTP.class, WCRanks.class, WCReport.class, WCSEEKRITPARTAY.class, WCSeen.class, WCSell.class, WCSoar.class, WCSudo.class, WCSuicide.class, WCSpawn.class, WCTele.class, WCWarps.class, WCWB.class, WCThis.class, WCGcmd.class, WCKill.class));
-	  api.reg.registerCommands(commandClasses, this);
+	  List<Object> commandClasses = new ArrayList<Object>(Arrays.asList(new WCExp(this), new WCCommandsFixed(this), new TimeStampEX(this), new TraceFW(this), new StaticField(this), new WACommandEx(this), new WCAFK(this), new WCBal(this), new WCChannels(this), new WCCheats(this), new WCCommands(this), new WCDisco(this), new WCHat(this), new WCHome(this), new WCInvSee(this), new WCMail(this), new WCMenus(this), new WCNear(this), new WCNewMember(this), new WCPay(this), new WCPowerTool(this), new WCPTP(this), new WCRanks(this), new WCReport(this), new WCSEEKRITPARTAY(this), new WCSeen(this), new WCSell(this), new WCSoar(this), new WCSudo(this), new WCSuicide(this), new WCSpawn(this), new WCTele(this), new WCWarps(this), new WCWB(this), new WCThis(this), new WCGcmd(this), new WCKill(this)));
+	  api.reg.registerCommands(commandClasses);
   }
 
   public void saveYamls() {
@@ -388,6 +388,10 @@ public class WCMain extends WCNode {
 		  int neededXP = (int) (100 + (Math.pow(wcp.getPatrolLevel(), 2) + wcp.getPatrolLevel()));  
 		  
 		  player.setDisplayName(AS(wcm.getFullNick(player.getName()))); 
+		  
+		  wcp.setPrefix(WCVault.chat.getPlayerPrefix("world", player.getName()));
+		  wcp.setSuffix(WCVault.chat.getPlayerSuffix("world", player.getName()));
+		  wcm.updatePlayerMap(player.getName(), wcp);
 		  
 		  if (xp >= neededXP){
 			  callChat(WCMessageType.BROADCAST, AS("&4>> " + player.getDisplayName() + " &dhas reached Patrol Level " + (lvl+1) + "&d! &4<<"));

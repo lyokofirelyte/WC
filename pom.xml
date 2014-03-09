@@ -54,10 +54,6 @@
       <id>WCAPI</id>
       <url>https://github.com/lyokofirelyte/WCAPI/blob/mvn-repo/</url>
     </repository>
-      <repository>
-	  <id>confuser-repo</id>
-	  <url>http://ci.frostcast.net/plugin/repository/everything</url>
-	</repository>
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/repositories/snapshots/</url>
