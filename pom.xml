@@ -60,9 +60,10 @@
 		</repository> 
 	</repositories>
 	<build>
+    <sourceDirectory>common</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>resources</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
