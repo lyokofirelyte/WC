@@ -17,7 +17,7 @@ public class WCNewMember{
 		
 	}
 	
-	@WCCommand(aliases={"newmember", "nm"}, help = "Initiate a new member", min = 1, max = 1, perm = "wa.staff")
+	@WCCommand(aliases={"newmember", "nm"}, help = "Initiate a new member", min = 1, max = 1, perm = "wa.staff", player = true)
 	public void onNewMember(Player sender, String[] args){
 			
 			Player p = (Player) sender;

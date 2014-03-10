@@ -44,7 +44,7 @@ public class StaticField extends JavaPlugin
     return this.taskID;
   }
 
-  @WCCommand(aliases = {"forcefield", "ff"}, help = "Generate a forcefield around you", perm = "ff.use")
+  @WCCommand(aliases = {"forcefield", "ff"}, help = "Generate a forcefield around you", perm = "ff.use", player = true)
   public void onForcefield(final Player sender, String[] args){
 
         List<String> forceUsers = this.plugin.datacore.getStringList("ForceField.Users");

@@ -20,7 +20,7 @@ public class WCPTP{
 	pl = instance;
     }
 	
-	@WCCommand(aliases = {"ptp", "wcptp"}, help = "WC Patrol TP command")
+	@WCCommand(aliases = {"ptp", "wcptp"}, help = "WC Patrol TP command", player = true)
 	public void onPTP(Player p, String[] args){
 
 			WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());

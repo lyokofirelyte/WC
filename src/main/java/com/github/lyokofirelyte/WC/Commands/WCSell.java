@@ -31,7 +31,7 @@ public class WCSell{
 	 Chest chest;
 	 Inventory inv;
 	 
-	 @WCCommand(aliases = {"sell"}, help = "Sell your stuff", max = 1)
+	 @WCCommand(aliases = {"sell"}, help = "Sell your stuff", max = 1, player = true)
 	 public void onSell(Player sender, String[] args){
 			
 			Player p = ((Player)sender);

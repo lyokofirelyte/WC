@@ -12,7 +12,7 @@ public class WCWB{
 	pl = instance;
     }
 
-	@WCCommand(aliases = {"wb", "workbench"}, help = "Open a crafting table", max = 0, perm = "wa.statesman")
+	@WCCommand(aliases = {"wb", "workbench"}, help = "Open a crafting table", max = 0, perm = "wa.statesman", player = true)
 	  public void WB(Player sender, String[] args){
 		  ((Player)sender).openWorkbench(null, true);
 		  return;

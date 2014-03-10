@@ -71,7 +71,7 @@ public class WCSEEKRITPARTAY implements Listener {
 		}
 	}
 	
-	@WCCommand(aliases = {"partyfw"}, desc = "nope.jpeg", help = "nope.png", perm = "wa.admin")
+	@WCCommand(aliases = {"partyfw"}, desc = "nope.jpeg", help = "nope.png", perm = "wa.admin", player = true)
 	public void onPartyFW(Player sender, String[] args){
 		  
 		if (sender.getName().equals("Hugh_Jasses")){
@@ -214,7 +214,7 @@ public class WCSEEKRITPARTAY implements Listener {
 		}
 	}
 	
-	@WCCommand(aliases = {"jesse"}, desc = "nope.gif", help = "nope.json", perm = "wa.admin")
+	@WCCommand(aliases = {"jesse"}, desc = "nope.gif", help = "nope.json", perm = "wa.admin", player = true)
 	public void jesse(){
 		
 		Location lowerRing = new Location(Bukkit.getWorld("creative"), -1159, 35, 331);

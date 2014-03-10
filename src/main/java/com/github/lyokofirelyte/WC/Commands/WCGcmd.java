@@ -27,7 +27,7 @@ public class WCGcmd {
 		pl = i;
 	}
 	
-	@WCCommand(aliases = {"gcmd", "globalcommand"}, help = "/gcmd <command>", desc = "Post a command in chat!")
+	@WCCommand(aliases = {"gcmd", "globalcommand"}, help = "/gcmd <command>", desc = "Post a command in chat!", player = true)
 	public void onGlobalCommand(Player p, String[] args){
 		
 		if (args.length == 0){

@@ -20,7 +20,7 @@ public class WCThis {
 		pl = i;
 	}
 
-	@WCCommand(aliases = {"this"}, help = "/this", desc = "Link your held item!")
+	@WCCommand(aliases = {"this"}, help = "/this", desc = "Link your held item!", player = true)
 	public void onThis(Player p, String[] args){
 		
 		JSONChatMessage msg = new JSONChatMessage(Utils.AS("&8>> " + p.getDisplayName() + " "), null, null);

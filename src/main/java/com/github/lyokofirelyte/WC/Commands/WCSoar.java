@@ -16,7 +16,7 @@ public class WCSoar{
 	pl = instance;
 	}
 	
-	@WCCommand(aliases = {"soar"}, help = "Soar for a short period of time", max = 0, perm = "wa.elysian")
+	@WCCommand(aliases = {"soar"}, help = "Soar for a short period of time", max = 0, perm = "wa.elysian", player = true)
 	public void onSoar(Player sender, String[] args){
 			
 			Player p = ((Player)sender);

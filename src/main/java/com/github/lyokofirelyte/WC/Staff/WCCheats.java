@@ -35,7 +35,7 @@ public class WCCheats {
 		pl = instance;
 	}
 	
-	@WCCommand(aliases = {"skull"}, min = 1, max = 1)
+	@WCCommand(aliases = {"skull"}, min = 1, max = 1, player = true)
 	public void bleh(Player p, String[] args){
 		
 		ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
@@ -45,7 +45,7 @@ public class WCCheats {
 		p.setItemInHand(is);
 	}
 	
-	@WCCommand(aliases = {"top"}, desc = "Teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2")
+	@WCCommand(aliases = {"top"}, desc = "Teleport to the highest block above", help = "/top", max = 0, perm = "wa.mod2", player = true)
 	public void onTop(Player p, String[] args){
 
 				if (p.getWorld().getHighestBlockYAt(p.getLocation()) != -1){
@@ -57,7 +57,7 @@ public class WCCheats {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@WCCommand(aliases = {"sm"}, desc = "Spawn Mob", help = "/sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>", max = 9, perm = "wa.mod2")
+	@WCCommand(aliases = {"sm"}, desc = "Spawn Mob", help = "/sm <type> <health> <nameTag> <armorType> <weapon> <potionEffect> <location> <passenger(s)> <amount>", max = 9, perm = "wa.mod2", player = true)
 	public void onSM(Player p, String[] args){
 
 				String armors = "diamond iron chain gold leather";
@@ -170,7 +170,7 @@ public class WCCheats {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@WCCommand(aliases = {"sit"}, desc = "Like a chair. Be warned: It's ghetto. :D", help = "/sit")
+	@WCCommand(aliases = {"sit"}, desc = "Like a chair. Be warned: It's ghetto. :D", help = "/sit", player = true)
 	public void onSit(Player p, String[] args){
 	
 				if (p.isInsideVehicle()){
@@ -185,7 +185,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"dis"}, desc = "Disguise", help = "/dis <something>", perm = "wa.staff")
+	@WCCommand(aliases = {"dis"}, desc = "Disguise", help = "/dis <something>", perm = "wa.staff", player = true)
 	public void onDis(Player p, String[] args){
 				if (args.length == 0){
 					p.setCustomName(p.getName());
@@ -197,7 +197,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"wlist"}, desc = "World List", help = "/wlist")
+	@WCCommand(aliases = {"wlist"}, desc = "World List", help = "/wlist", player = true)
 	public void onWList(Player p, String[] args){
 
 				for (World w : Bukkit.getWorlds()){
@@ -214,7 +214,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"vanish", "v"}, desc = "AN ELABORATE VANISH HOAX", help = "/vanish", perm = "wa.staff")
+	@WCCommand(aliases = {"vanish", "v"}, desc = "AN ELABORATE VANISH HOAX", help = "/vanish", perm = "wa.staff", player = true)
 	public void onVanish(Player p, String[] args){
 
 				WCSystem wcs = pl.wcm.getWCSystem("system");
@@ -243,7 +243,7 @@ public class WCCheats {
 	
 	}
 	
-	@WCCommand(aliases = {"world"}, desc = "Warp to specified world", help = "/world <world>", max = 1, perm = "wa.mod2")
+	@WCCommand(aliases = {"world"}, desc = "Warp to specified world", help = "/world <world>", max = 1, perm = "wa.mod2", player = true)
 	public void onWorld(Player p, String[] args){
 
 				if (args.length != 1){
@@ -259,7 +259,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"feed"}, desc = "Om Nom Nom", help = "/feed", perm = "wa.emperor")
+	@WCCommand(aliases = {"feed"}, desc = "Om Nom Nom", help = "/feed", perm = "wa.emperor", player = true)
 	public void onWorld1(Player p, String[] args){
 
 				if (args.length == 0){
@@ -273,7 +273,7 @@ public class WCCheats {
 			
 	}
 	
-	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]", perm = "wa.mod2")
+	@WCCommand(aliases = {"gm"}, desc = "Change game mode", help = "/gm <s || c || a> [playername]", perm = "wa.mod2", player = true)
 	public void onGM(Player p, String[] args){
 
 				if (args.length == 0){
@@ -315,7 +315,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = "fly", desc = "It's all in the name", help = "/fly", perm = "wa.mod2")
+	@WCCommand(aliases = "fly", desc = "It's all in the name", help = "/fly", perm = "wa.mod2", player = true)
 	public void onFly(Player p, String[] args){
 				Player q;
 				
@@ -344,7 +344,7 @@ public class WCCheats {
 	}
 	
 	@SuppressWarnings("deprecation")
-	@WCCommand(aliases = {"i"}, desc = "Give an item to yourself", help = "i <item>", max = 1, perm = "wa.mod2")
+	@WCCommand(aliases = {"i"}, desc = "Give an item to yourself", help = "i <item>", max = 1, perm = "wa.mod2", player = true)
 	public void onI(Player p, String[] args){
 
 				if (args.length == 0 || p.getInventory().firstEmpty() == -1){
@@ -363,7 +363,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"ci"}, desc = "Clear Inventory (or restor inventory. Results may vary. TM)", help = "/ci [u]")
+	@WCCommand(aliases = {"ci"}, desc = "Clear Inventory (or restor inventory. Results may vary. TM)", help = "/ci [u]", player = true)
 	public void onCI(Player p, String[] args){
 
 				if (args.length == 0){
@@ -381,7 +381,7 @@ public class WCCheats {
 				
 	}	
 	
-	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.mod2")
+	@WCCommand(aliases = {"more"}, desc = "Give yourself 64 of the item in your hand", help = "/more", perm = "wa.mod2", player = true)
 	public void onMore(Player p, String[] args){
 
 				if (p.getInventory().getItemInHand() != null){
@@ -390,7 +390,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"back"}, desc = "Teleport you to your last location", help = "/back", perm = "wa.mod2")
+	@WCCommand(aliases = {"back"}, desc = "Teleport you to your last location", help = "/back", perm = "wa.mod2", player = true)
 	public void onBack(Player p, String[] args){
 
 				WCPlayer wcp = pl.wcm.getWCPlayer(p.getName());
@@ -406,7 +406,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"tppos"}, desc = "Teleport yourself to a specified coordinates", help = "/tppos <x> <y> <z>", min = 3 , max = 3, perm = "wa.mod2")
+	@WCCommand(aliases = {"tppos"}, desc = "Teleport yourself to a specified coordinates", help = "/tppos <x> <y> <z>", min = 3 , max = 3, perm = "wa.mod2", player = true)
 	public void onTPPos(Player p, String[] args){
 				
 				if (args.length != 3){
@@ -419,7 +419,7 @@ public class WCCheats {
 			
 	}
 	
-	@WCCommand(aliases = {"speed"}, desc = "Adjust your fly/walk speed", help = "/speed <1-10>", min = 1, max = 1, perm = "wa.mod2")
+	@WCCommand(aliases = {"speed"}, desc = "Adjust your fly/walk speed", help = "/speed <1-10>", min = 1, max = 1, perm = "wa.mod2", player = true)
 	public void onSpeed(Player p, String[] args){
 
 				if (args.length != 1 || !Utils.isInteger(args[0]) || Integer.parseInt(args[0]) > 10 || Integer.parseInt(args[0]) < 0){
@@ -435,7 +435,7 @@ public class WCCheats {
 				
 	}
 	
-	@WCCommand(aliases = {"killall"}, desc = "Kill all mobs in a 1000 block radius", help = "/killall", perm = "wa.mod")
+	@WCCommand(aliases = {"killall"}, desc = "Kill all mobs in a 1000 block radius", help = "/killall", perm = "wa.mod", player = true)
 	public void onKillAll(Player p, String[] args){
 	
 				int radius = 1000;

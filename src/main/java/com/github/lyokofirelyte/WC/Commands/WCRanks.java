@@ -28,7 +28,7 @@ public class WCRanks{
 	
 	WCPlayer wcp;
 	
-	@WCCommand(aliases = {"rankup"}, help = "Upgrade your rank!", max = 0)
+	@WCCommand(aliases = {"rankup"}, help = "Upgrade your rank!", max = 0, player = true)
 	public void onRankup(Player sender, String[] args){
 			
 			Player p = ((Player)sender);

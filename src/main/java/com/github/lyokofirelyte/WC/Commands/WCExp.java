@@ -18,7 +18,7 @@ public class WCExp {
 		pl = i;
     }
 	
-	@WCCommand(aliases = {"exp", "wcexp"}, help = "/exp", desc = "Displays the exp chart")
+	@WCCommand(aliases = {"exp", "wcexp"}, help = "/exp", desc = "Displays the exp chart", player = true)
 	public void expView(Player p, String[] args){
 		
 		s(p, "Default EXP Chart");
@@ -43,7 +43,7 @@ public class WCExp {
 		callChat(p, WCMessageType.JSON_PLAYER, msg);
 	}
 	
-	@WCCommand(aliases = {"colors", "colorcodes", "wccolors"}, help = "/colors", desc = "Displays the color chart")
+	@WCCommand(aliases = {"colors", "colorcodes", "wccolors"}, help = "/colors", desc = "Displays the color chart", player = true)
 	public void colorView(Player p, String[] args){
 		
 		String colors = "&aa &bb &cc &dd &ee &ff &11 &22 &33 &44 &55 &66 &77 &88 &99 &00 &7[&ll &7&oo &7&mm &7r(eset)]";

@@ -37,7 +37,7 @@ String message;
 
 	List<String> WCHelpMail;
 	
-	@WCCommand(aliases = {"mail"}, help = "Send mail to another player", min = 1)
+	@WCCommand(aliases = {"mail"}, help = "Send mail to another player", min = 1, player = true)
 	public void onMail(Player sender, String[] args){
 	
 		

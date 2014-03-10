@@ -22,7 +22,7 @@ public class WCKill {
 		
 	}
 	
-	@WCCommand(aliases = { "kill" }, desc = "Kill a player, any player!", help = "/kill <player>", min = 1, max = 1, perm = "wa.staff")
+	@WCCommand(aliases = { "kill" }, desc = "Kill a player, any player!", help = "/kill <player>", min = 1, max = 1, perm = "wa.staff", player = true)
 	public void onTheKill(Player p, String[] args){
 		
 		Player pp = Bukkit.getPlayer(args[0]);

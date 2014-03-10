@@ -24,7 +24,7 @@ public class WCBal{
 	 
 	 WCPlayer wcpCurrent;
 	 
-	 @WCCommand(aliases = {"balance", "bal"}, desc = "WC Bal Command", help = "/balance <set, take, give, top> [player] [amount]")
+	 @WCCommand(aliases = {"balance", "bal"}, desc = "WC Bal Command", help = "/balance <set, take, give, top> [player] [amount]", player = true)
 	 public void onBal(Player sender, String[] args){
 			  			
 			Player p = ((Player)sender);

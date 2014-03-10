@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -32,7 +31,6 @@ import com.github.lyokofirelyte.WCAPI.JSON.JSONChatExtra;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatHoverEventType;
 import com.github.lyokofirelyte.WCAPI.JSON.JSONChatMessage;
 import com.github.lyokofirelyte.WCAPI.Manager.WCMessageType;
-
 
 public class WCChannels implements Listener {
 	
@@ -289,14 +287,14 @@ public class WCChannels implements Listener {
 		  }
 	  }).start();}
   
-  @WCCommand(aliases = {"wcstats"}, desc = "Pull stats on any player", help = "!stats <playername>", max = 1)
+  @WCCommand(aliases = {"wcstats"}, desc = "Pull stats on any player", help = "!stats <playername>", max = 1, player = true)
   public void onStats(Player sender, String[] args){
     		
     		stats("!stats" + createString(args, 0), ((Player)sender));
 
   }
     	
- @WCCommand(aliases = {"msg", "tell", "t"}, desc = "Private message a player", help = "/tell <playername> <msg>", min = 2)
+ @WCCommand(aliases = {"msg", "tell", "t"}, desc = "Private message a player", help = "/tell <playername> <msg>", min = 2, player = true)
  public void onMSG(Player sender, String[] args){
     		
 	    	p = ((Player)sender);
@@ -335,7 +333,7 @@ public class WCChannels implements Listener {
 	        }
  }
 
- @WCCommand(aliases = {"r", "replay"}, desc = "Quickly reply to a private message", help = "/r <msg>", min = 1)
+ @WCCommand(aliases = {"r", "replay"}, desc = "Quickly reply to a private message", help = "/r <msg>", min = 1, player = true)
  public void onReply(Player sender, String[] args){
 	
 	    	p = ((Player)sender);
@@ -356,7 +354,7 @@ public class WCChannels implements Listener {
     		}
     }
 
- @WCCommand(aliases = {"o"}, desc = "Chat in StaffChat. Soup or Seekrit", help = "/o <msg>", min = 1, perm = "wa.staff")
+ @WCCommand(aliases = {"o"}, desc = "Chat in StaffChat. Soup or Seekrit", help = "/o <msg>", min = 1, perm = "wa.staff", player = true)
  public void onO(Player sender, String[] args){
     	
     	chatUsers = pl.datacore.getStringList("StaffChat.Users");
@@ -433,7 +431,7 @@ public class WCChannels implements Listener {
     return;
   }
 
- @WCCommand(aliases = {"l"}, desc = "Alliance Chat", help = "/l <msg>", min = 1)
+ @WCCommand(aliases = {"l"}, desc = "Alliance Chat", help = "/l <msg>", min = 1, player = true)
  public void onL(Player sender, String[] args){
 		  
 	      Player p = (Player)sender;
@@ -454,7 +452,7 @@ public class WCChannels implements Listener {
 	      }
 	  }
 	  
- @WCCommand(aliases = {"p"}, desc = "WC Patrol Chat", help = "/p <msg>", min = 1)
+ @WCCommand(aliases = {"p"}, desc = "WC Patrol Chat", help = "/p <msg>", min = 1, player = true)
  public void onP(Player sender, String[] args){
  
 		  Player p = (Player)sender;

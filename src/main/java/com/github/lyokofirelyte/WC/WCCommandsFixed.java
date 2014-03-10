@@ -26,7 +26,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "google" }, desc = "Google anything! Anything!", help = "/google <search>", min = 1)
+	@WCCommand(aliases = { "google" }, desc = "Google anything! Anything!", help = "/google <search>", min = 1, player = true)
 	public void onTheGoogle(Player p, String[] args){
 		
 		blankB(new String[] {
@@ -38,7 +38,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "member" }, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff")
+	@WCCommand(aliases = { "member" }, desc = "Rage to become a member. They can't miss it!", help = "/member", perm = "wa.staff", player = true)
 	public void onTheMember(Player p, String[] args){
 		
 		if (args.length > 0){
@@ -57,7 +57,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "ping" }, desc = "Ping the server. Just to check. The results may shock you.", help = "/ping")
+	@WCCommand(aliases = { "ping" }, desc = "Ping the server. Just to check. The results may shock you.", help = "/ping", player = true)
 	public void onThePing(Player p, String[] args){
 		
 		if (args.length == 0){
@@ -72,7 +72,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	@WCCommand(aliases = { "serverinfo", "si" }, desc = "Server info in a nutshell!", help = "/si")
+	@WCCommand(aliases = { "serverinfo", "si" }, desc = "Server info in a nutshell!", help = "/si", player = true)
 	public void onTheServerInfo(Player p, String[] args){
 		
 		s(p, new String[] {
@@ -96,7 +96,7 @@ public class WCCommandsFixed {
 		
 	}
 	
-	/*@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1)
+	/*@WCCommand(aliases = { "wc", "watercloset", "worldscollide" }, desc = "This method is way too long.", help = "/wc ?", min = 1, player = true)
 	public void onTheHugeWayTooLongMainWCCommand(final Player p, String[] args){
 		
 		WCPlayer wcp = main.wcm.getWCPlayer(p.getName());

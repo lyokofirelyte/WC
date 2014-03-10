@@ -16,7 +16,7 @@ public class WCHat{
 	pl = instance;
     }
 
-	  @WCCommand(aliases = {"hat"}, desc = "Put on a hat", help = "/hat", max = 0, perm = "wa.districtman")
+	  @WCCommand(aliases = {"hat"}, desc = "Put on a hat", help = "/hat", max = 0, perm = "wa.districtman", player = true)
 	  public void onHat(Player sender, String[] args){
 		  
 		  Player p = ((Player)sender);
@@ -32,7 +32,7 @@ public class WCHat{
 				  
 	  }
 				 
-	  @WCCommand(aliases = {"chestplate"}, desc = "Put on a chestplate", help = "/chestplate", max = 0, perm = "wa.districtman")
+	  @WCCommand(aliases = {"chestplate"}, desc = "Put on a chestplate", help = "/chestplate", max = 0, perm = "wa.districtman", player = true)
 	  public void onChestplate(Player p, String[] args){
 				  
 				  if (p.getItemInHand() != null){
@@ -46,7 +46,7 @@ public class WCHat{
 				  
 	  }
 	  
-	  @WCCommand(aliases = {"leggings"}, desc = "Put on leggings", help = "/leggings", max = 0, perm = "wa.districtman")
+	  @WCCommand(aliases = {"leggings"}, desc = "Put on leggings", help = "/leggings", max = 0, perm = "wa.districtman", player = true)
 	  public void onLeggings(Player p, String[] args){
 				  
 				  if (p.getItemInHand() != null){
@@ -60,7 +60,7 @@ public class WCHat{
 				  
 	  }
 	  
-	  @WCCommand(aliases = {"boots"}, desc = "Put on boots", help = "/boots", max = 0, perm = "wa.districtman")
+	  @WCCommand(aliases = {"boots"}, desc = "Put on boots", help = "/boots", max = 0, perm = "wa.districtman", player = true)
 	  public void onBoots(Player p, String[] args){
  
 				  if (p.getItemInHand() != null){

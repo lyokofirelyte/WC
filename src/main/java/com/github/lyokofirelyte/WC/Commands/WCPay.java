@@ -17,7 +17,7 @@ public class WCPay{
 	  this.pl = instance;
 	  }
 	  
-	  @WCCommand(aliases = {"pay"}, help = "Give away your money", max = 2)
+	  @WCCommand(aliases = {"pay"}, help = "Give away your money", max = 2, player = true)
 	  public void onPay(Player sender, String[] args){
 			
 			Player p = ((Player)sender);

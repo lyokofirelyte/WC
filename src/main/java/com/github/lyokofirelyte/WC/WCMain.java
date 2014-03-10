@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -291,7 +290,56 @@ public class WCMain extends WCNode {
   }
 
   private void registerCommands() {  
-	  api.reg.registerCommands(new WCExp(this), new WCCommandsFixed(this), new TimeStampEX(this), new TraceFW(this), new StaticField(this), new WACommandEx(this), new WCAFK(this), new WCBal(this), new WCChannels(this), new WCCheats(this), new WCCommands(this), new WCDisco(this), new WCHat(this), new WCHome(this), new WCInvSee(this), new WCMail(this), new WCMenus(this), new WCNear(this), new WCNewMember(this), new WCPay(this), new WCPowerTool(this), new WCPTP(this), new WCRanks(this), new WCReport(this), new WCSEEKRITPARTAY(this), new WCSeen(this), new WCSell(this), new WCSoar(this), new WCSudo(this), new WCSuicide(this), new WCSpawn(this), new WCTele(this), new WCWarps(this), new WCWB(this), new WCThis(this), new WCGcmd(this), new WCKill(this));
+	  api.reg.registerCommands(
+			  
+			  // WC Commands
+			  
+			  new WCAFK(this),
+			  new WCDisco(this),
+			  new WCExp(this),
+			  new WCGcmd(this),
+			  new WCHat(this),
+			  new WCHome(this),
+			  new WCInvSee(this),
+			  new WCKill(this),
+			  new WCMail(this),
+			  new WCNear(this),
+			  new WCNewMember(this),
+			  new WCPay(this),
+			  new WCPowerTool(this),
+			  new WCPTP(this),
+			  new WCRanks(this),
+			  new WCReport(this),
+			  new WCSell(this),
+			  new WCSoar(this),
+			  new WCSpawn(this),
+			  new WCSuicide(this),
+			  new WCThis(this),
+			  new WCWarps(this),
+			  new WCWB(this),
+			  
+			  // Main WC Commands
+			  
+			  new WACommandEx(this),
+			  new WCChannels(this),
+			  new WCCommands(this),
+			  new WCCommandsFixed(this),
+			  new WCMenus(this),
+			  
+			  // Extra Commands
+			  
+			  new StaticField(this),
+			  new TimeStampEX(this),
+			  new TraceFW(this),
+			  new WCSEEKRITPARTAY(this),
+			  
+			  // Staff Commands
+			  
+			  new WCBal(this),
+			  new WCCheats(this),
+			  new WCSeen(this),
+			  new WCSudo(this),
+			  new WCTele(this));
   }
 
   public void saveYamls() {

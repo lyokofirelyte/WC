@@ -19,7 +19,7 @@ public class WCNear {
 	pl = instance;
     }
 
-	@WCCommand(aliases = {"near"}, help = "List of players within 200 blocks", max = 0, perm = "wa.divine")
+	@WCCommand(aliases = {"near"}, help = "List of players within 200 blocks", max = 0, perm = "wa.divine", player = true)
 	  public void onNear(Player sender, String[] args){
 		  
 		  Player p = ((Player)sender);

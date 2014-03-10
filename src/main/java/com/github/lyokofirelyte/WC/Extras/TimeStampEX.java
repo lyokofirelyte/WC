@@ -21,7 +21,7 @@ public class TimeStampEX{
     this.plugin = plugin;
   }
 
-  @WCCommand(aliases = {"timestamp"}, desc = "Consol command", help = "TIMESTAMP", max = 0)
+  @WCCommand(aliases = {"timestamp"}, desc = "Consol command", help = "TIMESTAMP", max = 0, player = true)
   public void onTimeStamp(Player sender, String[] args){
 
       if ((sender instanceof Player)) {
@@ -34,7 +34,7 @@ public class TimeStampEX{
       }
     }
 
-  @WCCommand(aliases = {"getnick"}, desc = "Consol command", help = "GETNICK", max = 0)
+  @WCCommand(aliases = {"getnick"}, desc = "Consol command", help = "GETNICK", max = 0, player = true)
   public void onGetNick(Player sender, String[] args){
 
       if ((sender instanceof Player)) {
@@ -53,7 +53,7 @@ public class TimeStampEX{
       }
     }
 
-  @WCCommand(aliases = {"stringbuilder"}, desc = "Consol command", help = "STRINGBUILDER", max = 0)
+  @WCCommand(aliases = {"stringbuilder"}, desc = "Consol command", help = "STRINGBUILDER", max = 0, player = true)
   public void onStringBuilder(Player sender, String[] args){
 	  
       if ((sender instanceof Player)) {
@@ -74,7 +74,7 @@ public class TimeStampEX{
 
     }
 
-  @WCCommand(aliases = {"itemname"}, desc = "Fetch item name", help = "/itemname", min = 0)
+  @WCCommand(aliases = {"itemname"}, desc = "Fetch item name", help = "/itemname", min = 0, player = true)
   public void onItemName(Player sender, String[] args){
 
       if (!(sender instanceof Player)) {

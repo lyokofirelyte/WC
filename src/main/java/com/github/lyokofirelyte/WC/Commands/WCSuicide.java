@@ -15,7 +15,7 @@ public class WCSuicide {
 		pl = instance;
     }
 
-	  @WCCommand(aliases = {"suicide"}, help = "/suicide", desc = "Goodbye world!")
+	  @WCCommand(aliases = {"suicide"}, help = "/suicide", desc = "Goodbye world!", player = true)
 	  public void onSuicide(Player sender, String[] args){
 		  
 		  Player p = ((Player)sender);

@@ -32,7 +32,7 @@ public class WACommandEx {
   this.plugin = instance;
   }
 
-  @WCCommand(aliases = {"waa"}, desc = "WC Alliances root menu", help = "/waa")
+  @WCCommand(aliases = {"waa"}, desc = "WC Alliances root menu", help = "/waa", player = true)
   public void onWAA(Player sender, String[] args){
     if (sender instanceof Player) {
     	
@@ -1031,7 +1031,7 @@ public class WACommandEx {
   	}
   }
 
-    @WCCommand(aliases = {"rn", "realname"}, desc = "Learn the real name of a player", help = "/rn <nickname>", min = 1)
+    @WCCommand(aliases = {"rn", "realname"}, desc = "Learn the real name of a player", help = "/rn <nickname>", min = 1, player = true)
     public void onRealName(Player p, String[] args){
     	
     	if (args.length != 1){
@@ -1045,7 +1045,7 @@ public class WACommandEx {
     	}
     }
     
-    @WCCommand(aliases = {"list"}, desc = "List all players on the server", help = "/list")
+    @WCCommand(aliases = {"list"}, desc = "List all players on the server", help = "/list", player = true)
     public void onList(Player p, String[] args){
 
     	StringBuilder sb = new StringBuilder();
@@ -1057,7 +1057,7 @@ public class WACommandEx {
     	s(p, s.replace(" ", "&8, "));
     }
   
-    @WCCommand(aliases = {"nick"}, desc = "Give yourself a new nickname", help = "/nick <nick>", min = 1 , max = 1)
+    @WCCommand(aliases = {"nick"}, desc = "Give yourself a new nickname", help = "/nick <nick>", min = 1 , max = 1, player = true)
     public void onNick(Player p, String[] args){
 
     	wcp = plugin.wcm.getWCPlayer(p.getName());

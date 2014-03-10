@@ -17,7 +17,7 @@ public class WCAFK {
 		pl = instance;
     }
 	
-	@WCCommand(aliases = {"afk", "wcafk"}, help = "Toggles your AFK status!")
+	@WCCommand(aliases = {"afk", "wcafk"}, help = "Toggles your AFK status!", player = true)
 	public void afkToggle(Player p, String[] args){
 					
 			if (pl.afkers.contains(p)){

@@ -12,7 +12,7 @@ public class WCSpawn{
 	this.plugin = instance;
 	}
 	
-	@WCCommand(aliases = {"spawn", "s"}, help = "Teleport back to the server spawn point", max = 0)
+	@WCCommand(aliases = {"spawn", "s"}, help = "Teleport back to the server spawn point", max = 0, player = true)
 	public void onSpawn(Player sender, String[] args){
 		  
 			Player p = ((Player)sender);

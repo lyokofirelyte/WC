@@ -30,7 +30,7 @@ public class TraceFW{
 	pl = instance;
     }
 	
-	@WCCommand(aliases = {"bday"}, desc = "nope.jpg", help = "nope.png", perm = "wa.admin")
+	@WCCommand(aliases = {"bday"}, desc = "nope.jpg", help = "nope.png", perm = "wa.admin", player = true)
 	public void onBday(Player sender, String[] args){
 	  	  
 		  	  if (args.length == 1 && args[0].equals("clr") && sender.hasPermission("wa.admin")){

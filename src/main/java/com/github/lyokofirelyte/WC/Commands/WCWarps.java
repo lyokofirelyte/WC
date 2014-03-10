@@ -30,7 +30,7 @@ public class WCWarps{
 	plugin = instance;
 	}
 
-	@WCCommand(aliases = {"remwarp", "delwarp"}, desc = "Remove a warp", help = "/remwarp <name>", max = 1, perm = "wa.mod2")
+	@WCCommand(aliases = {"remwarp", "delwarp"}, desc = "Remove a warp", help = "/remwarp <name>", max = 1, perm = "wa.mod2", player = true)
 	public void onRemWarp(Player sender, String[] args){
 			  
 			  Player p = ((Player)sender);
@@ -56,7 +56,7 @@ public class WCWarps{
 			  WCUtils.s(p, "Warp removed. There are now &6" + fileNames.length + " &dwarps.");
 		  }
 		  
-	@WCCommand(aliases = {"setwarp"}, desc = "Create a new warp", help = "/setwarp <name>", max = 1, perm = "wa.mod2")
+	@WCCommand(aliases = {"setwarp"}, desc = "Create a new warp", help = "/setwarp <name>", max = 1, perm = "wa.mod2", player = true)
 	public void onSetWarp(Player sender, String[] args){
 			  
 			  Player p = ((Player)sender);
@@ -104,7 +104,7 @@ public class WCWarps{
 
 		  }
 	
-	@WCCommand(aliases = {"warp", "w"}, desc = "Teleport to a specified location", help = "/warp <name>", max = 1, perm = "wa.mod2")
+	@WCCommand(aliases = {"warp", "w"}, desc = "Teleport to a specified location", help = "/warp <name>", max = 1, perm = "wa.mod2", player = true)
 	public void onWarp(Player sender, String[] args){
 			  
 			  final Player p = ((Player)sender);

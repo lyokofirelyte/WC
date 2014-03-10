@@ -21,7 +21,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 	  private Connection conn;
 	  private PreparedStatement pst;
 	  
-	  @WCCommand(aliases = {"report"}, help = "Report a player for aboose with /report <playername> <reason>", min = 2)
+	  @WCCommand(aliases = {"report"}, help = "Report a player for aboose with /report <playername> <reason>", min = 2, player = true)
 	  public void onReport(Player sender, String[] args){
 
 	        String url = plugin.config.getString("url");

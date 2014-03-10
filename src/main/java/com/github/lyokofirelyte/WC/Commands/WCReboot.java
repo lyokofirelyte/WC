@@ -17,7 +17,7 @@ public class WCReboot{
     this.pl = instance;
 	}
 	
-	@WCCommand(aliases = {"reboot"}, help = "Reboot the server", perm = "wa.admin")
+	@WCCommand(aliases = {"reboot"}, help = "Reboot the server", perm = "wa.admin", player = true)
 	public void onReboot(Player sender, String[] args){
 		  
 			if (!sender.hasPermission("wa.admin")){

@@ -27,7 +27,7 @@ import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 	
 	public List<String> invUsers = new ArrayList<String>();
 	
-	@WCCommand(aliases = {"invsee"}, help = "/invsee <player>", min = 1, max = 2, perm = "wa.mod")
+	@WCCommand(aliases = {"invsee"}, help = "/invsee <player>", min = 1, max = 2, perm = "wa.mod", player = true)
 	public void onInvSee(Player sender, String[] args){
 
 			Player p = ((Player)sender);

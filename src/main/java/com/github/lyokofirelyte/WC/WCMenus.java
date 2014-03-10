@@ -123,7 +123,7 @@ public class WCMenus implements Listener{
 		}
 	}
 	
-	@WCCommand(aliases = {"root"}, help = "Open the Root menu GUI Interface. Ooooo shiney!")
+	@WCCommand(aliases = {"root"}, help = "Open the Root menu GUI Interface. Ooooo shiney!", player = true)
 	public void onRoot(final Player sender, String[] args){
 			
 			colorSelection.put(((Player)sender).getName(), "red");
@@ -139,7 +139,7 @@ public class WCMenus implements Listener{
 			pl.wcm.displayGui((Player) sender, new GuiRoot(pl));
 	}
 	
-	@WCCommand(aliases = {"qc"}, help = "Fast access to the Quick Commands")
+	@WCCommand(aliases = {"qc"}, help = "Fast access to the Quick Commands", player = true)
 	public void onQC(Player sender, String[] args){
 			
 			WCPlayer wcp = pl.wcm.getWCPlayer(((Player)sender).getName());

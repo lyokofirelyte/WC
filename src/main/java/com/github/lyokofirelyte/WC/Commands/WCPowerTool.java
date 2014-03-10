@@ -22,7 +22,7 @@ public class WCPowerTool implements Listener {
 	pl = instance;
     }
 	
-	@WCCommand(aliases = {"powertool", "pt"}, help = "Bind a command to a tool", perm = "wa.regional")
+	@WCCommand(aliases = {"powertool", "pt"}, help = "Bind a command to a tool", perm = "wa.regional", player = true)
 	public void onPowerTool(Player sender, String[] args){
 					
 			Player p = ((Player)sender);		

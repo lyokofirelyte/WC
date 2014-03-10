@@ -20,7 +20,7 @@ public class WCSeen implements Listener {
 	 this.pl = instance;
 	 }
 
-	 @WCCommand(aliases = {"seen"}, desc = "Last login information of players",help = "/seen <playername>", min = 1, max = 1, perm = "wa.settler")
+	 @WCCommand(aliases = {"seen"}, desc = "Last login information of players",help = "/seen <playername>", min = 1, max = 1, perm = "wa.settler", player = true)
 	 public void onSeen(Player sender, String[] args){
 
 			 

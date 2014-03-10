@@ -17,7 +17,7 @@ public class WCSudo {
 	 this.pl = instance;
 	 }
 	 
-	 @WCCommand(aliases = {"sudo"}, desc = "You are the puppet master", help = "/sudo <playername>", perm = "wa.mod2")
+	 @WCCommand(aliases = {"sudo"}, desc = "You are the puppet master", help = "/sudo <playername>", perm = "wa.mod2", player = true)
 	 public void onSudo(Player sender, String[] args){
 			  			
 			Player p = ((Player)sender);

@@ -26,7 +26,7 @@ public class WCDisco {
 		pl = instance;
 	}
 	
-	@WCCommand(aliases = {"ds"}, help = "WC Disco!")
+	@WCCommand(aliases = {"ds"}, help = "WC Disco!", player = true)
 	public void disco(Player sender, String[] args) {
 		
 			WCUtils.callChat(WCMessageType.BROADCAST, WCUtils.AS("&4>> &aIt's FESTIVE DISCO TIME! &4<<"));

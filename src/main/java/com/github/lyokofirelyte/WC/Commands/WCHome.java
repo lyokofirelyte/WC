@@ -26,7 +26,7 @@ public class WCHome{
 	
 	String commands = "home sethome remhome delhome";
 	
-	  @WCCommand(aliases = {"home"}, desc = "Teleports you back home", help = "/home <home name>")
+	  @WCCommand(aliases = {"home"}, desc = "Teleports you back home", help = "/home <home name>", player = true)
 	  public void onHome(Player p, String[] args){
 
 			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
@@ -37,7 +37,7 @@ public class WCHome{
 					  home(args, wcp, p, pName, homeLimit, homes);
 		}
 		  
-		@WCCommand(aliases = {"sethome"}, desc = "Set a new home", help = "/sethome <name>", min = 1, max = 1)
+		@WCCommand(aliases = {"sethome"}, desc = "Set a new home", help = "/sethome <name>", min = 1, max = 1, player = true)
 		public void onSetHome(Player p, String[] args){
 			
 			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
@@ -48,7 +48,7 @@ public class WCHome{
 				     sethome(args, wcp, p, pName, homeLimit, homes);
 		}
 		
-		@WCCommand(aliases = {"remhome", "delhome"}, desc = "Remove a home", help = "/remhome <name>", min = 1, max = 1)
+		@WCCommand(aliases = {"remhome", "delhome"}, desc = "Remove a home", help = "/remhome <name>", min = 1, max = 1, player = true)
 		public void onRemHome(Player p, String[] args){
 			
 			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());

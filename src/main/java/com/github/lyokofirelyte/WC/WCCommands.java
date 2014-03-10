@@ -64,7 +64,7 @@ public class WCCommands {
   }  	
 
 	@SuppressWarnings("deprecation")
-	@WCCommand(aliases = {"wc", "watercloset"}, desc = "WC Root Menu", help = "/wc")
+	@WCCommand(aliases = {"wc", "watercloset"}, desc = "WC Root Menu", help = "/wc", player = true)
 	public void onWC(final Player p, String[] args){
 
       wcp = plugin.wcm.getWCPlayer(p.getName());
