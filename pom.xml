@@ -60,7 +60,7 @@
 		</repository> 
 	</repositories>
 	<build>
-    <sourceDirectory>common</sourceDirectory>
+		<sourceDirectory>common</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>resources</directory>
