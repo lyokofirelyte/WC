@@ -7,7 +7,7 @@ import com.github.lyokofirelyte.WC.WCMain;
 
 import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
 
-import com.github.lyokofirelyte.WC.Util.Utils;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
 public class WCSudo {
@@ -27,8 +27,8 @@ public class WCSudo {
 			} else if (Bukkit.getPlayer(args[0]) == null){
 				s(p, "Player not found!");
 			} else {
-				Bukkit.getPlayer(args[0]).performCommand(Utils.createString(args, 1));
-				s(p, "Forced " + Bukkit.getPlayer(args[0]).getDisplayName() + " &dto run &7&o" + Utils.createString(args, 1));
+				Bukkit.getPlayer(args[0]).performCommand(createString(args, 1));
+				s(p, "Forced " + Bukkit.getPlayer(args[0]).getDisplayName() + " &dto run &7&o" + createString(args, 1));
 			}
 		
 		return;

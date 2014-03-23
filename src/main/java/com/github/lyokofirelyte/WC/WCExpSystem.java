@@ -26,7 +26,7 @@ public class WCExpSystem implements Listener {
 		  Player p = e.getPlayer();
 		  wcp = plugin.wcm.getWCPlayer(p.getName());
 		  
-		  List<String> worlds = Arrays.asList("Syracuse", "Keopi", "WACP", "Tripolis", "not_cylum");
+		  List<String> worlds = Arrays.asList("Syracuse", "Keopi", "WACP", "Tripolis", "not_cylum", "world2");
   		
   			if (!(worlds.contains(p.getWorld().getName()))){
   			

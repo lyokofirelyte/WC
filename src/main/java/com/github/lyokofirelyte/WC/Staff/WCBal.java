@@ -11,9 +11,9 @@ import com.github.lyokofirelyte.WC.WCMain;
 
 import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
+import com.github.lyokofirelyte.WCAPI.WCUtils;
 
 public class WCBal{
 
@@ -54,7 +54,7 @@ public class WCBal{
 						return;
 					}
 					
-					if (!Utils.isInteger(args[2]) || Integer.parseInt(args[2]) > 10000000 || Integer.parseInt(args[2]) < 0){
+					if (!WCUtils.isInteger(args[2]) || Integer.parseInt(args[2]) > 10000000 || Integer.parseInt(args[2]) < 0){
 						s(p, "Invalid number!");
 						return;
 					}

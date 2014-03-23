@@ -21,7 +21,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 import com.github.lyokofirelyte.WCAPI.WCSystem;
@@ -36,7 +35,7 @@ public class WCCheats {
 		pl = instance;
 	}
 	
-	@WCCommand(aliases = {"skull"}, min = 1, max = 1)
+	@WCCommand(aliases = {"skull"}, min = 1, max = 1, perm = "wa.staff")
 	public void bleh(Player p, String[] args){
 		
 		ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
@@ -74,7 +73,7 @@ public class WCCheats {
 			
 				for (EntityType e : EntityType.values()){
 					if (e.toString().toLowerCase().equals(args[0].toLowerCase())){
-						if (Utils.isInteger(args[1])){
+						if (isInteger(args[1])){
 							if (armors.contains(args[3].toLowerCase())){
 								int y = 0;
 								for (Material m : Material.values()){
@@ -83,7 +82,7 @@ public class WCCheats {
 										for (PotionEffectType pe : PotionEffectType.values()){
 											if (String.valueOf(pe).toString().toLowerCase().contains(args[5].toLowerCase())){
 												if (Bukkit.getPlayer(args[6]) != null || args[6].equals("aim")){
-													if (Utils.isInteger(args[8])){
+													if (isInteger(args[8])){
 														if (args[7].contains(",") || args[7].equals("#")){
 															List<String> passengers = new ArrayList<String>();
 															if (args[7].contains(",")){
@@ -254,7 +253,7 @@ public class WCCheats {
 				} else {
 					Location l = p.getLocation();
 					p.teleport(new Location(Bukkit.getWorld(args[0]), l.getX(), l.getY(), l.getZ(), l.getPitch(), l.getYaw()));
-					Utils.effects(p);
+					effects(p);
 					s(p, "Inter-dimensional temporal shift completed.");
 				}
 				
@@ -356,7 +355,7 @@ public class WCCheats {
 					if (m.name().toString().toLowerCase().contains(args[0])){
 						p.getInventory().addItem(new ItemStack(m, 64));
 						break;
-					} else if (Utils.isInteger(args[0]) && m.getId() == Integer.parseInt(args[0])){
+					} else if (isInteger(args[0]) && m.getId() == Integer.parseInt(args[0])){
 						p.getInventory().addItem(new ItemStack(m, 64));
 						break;
 					}
@@ -412,7 +411,7 @@ public class WCCheats {
 				
 				if (args.length != 3){
 					s(p, "/tppos x y z");
-				} else if (Utils.isInteger(args[0]) && Utils.isInteger(args[1]) && Utils.isInteger(args[2])){
+				} else if (isInteger(args[0]) && isInteger(args[1]) && isInteger(args[2])){
 					p.teleport(new Location(p.getWorld(), Double.parseDouble(args[0]), Double.parseDouble(args[1]), Double.parseDouble(args[2])));
 				} else {
 					s(p, "/tppos x y z");
@@ -423,7 +422,7 @@ public class WCCheats {
 	@WCCommand(aliases = {"speed"}, desc = "Adjust your fly/walk speed", help = "/speed <1-10>", min = 1, max = 1, perm = "wa.mod2")
 	public void onSpeed(Player p, String[] args){
 
-				if (args.length != 1 || !Utils.isInteger(args[0]) || Integer.parseInt(args[0]) > 10 || Integer.parseInt(args[0]) < 0){
+				if (args.length != 1 || !isInteger(args[0]) || Integer.parseInt(args[0]) > 10 || Integer.parseInt(args[0]) < 0){
 					s(p, "/speed <#>");
 				} else {
 					if (p.isFlying()){
@@ -442,7 +441,7 @@ public class WCCheats {
 				int radius = 1000;
 				int killed = 0;
 				
-				if (args.length > 0 && Utils.isInteger(args[0])){
+				if (args.length > 0 && isInteger(args[0])){
 					radius = Integer.parseInt(args[0]);
 				}
 				
@@ -495,7 +494,7 @@ public class WCCheats {
 			}
 			
 			le.addPotionEffect(new PotionEffect(pe, 99999, 1));
-			le.setCustomName(Utils.AS(nameTag.replaceAll("_", " ")));
+			le.setCustomName(AS(nameTag.replaceAll("_", " ")));
 			le.setCustomNameVisible(true);
 			le.getEquipment().setItemInHand(new ItemStack(m, 1));
 			le.setMaxHealth(health);

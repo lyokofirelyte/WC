@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -260,15 +261,24 @@ public class WCMain extends WCNode {
 	  }
   }
 
+  public void removeCrystals(){
+	  WCSystem wcs = wcm.getWCSystem("system");
+//	  
+//	  if(wcs.getPatrolCrystal() != null){
+//		  wcs.getPatrolCrystal().remove();
+//	  }
+//	  
+	  for (LivingEntity e : wcs.getPatrolEnts()){
+		  e.remove();
+	  }
+  }
+  
   public void onDisable() {
 	  
-	  WCSystem wcs = wcm.getWCSystem("system");
-		
-	  if (wcs.getPatrolCrystal() != null && !wcs.getPatrolCrystal().isDead()){
-		  for (LivingEntity e : wcs.getPatrolEnts()){
-			  e.remove();
-		  }
-		  wcs.getPatrolCrystal().remove();
+	  WCSystem wcs = wcm.getWCSystem("system");		
+
+	  if(wcs.getPatrolCrystal() != null){
+		  removeCrystals();
 	  }
 	  
 	  saveMarkkitInvs();
@@ -286,6 +296,7 @@ public class WCMain extends WCNode {
 	      e.printStackTrace();
 	    }
 	    
+		  wcs.getPatrolCrystal().remove();
 	  Bukkit.getServer().getScheduler().cancelTask(id);
 	  getLogger().info("WaterCloset has been disabled.");
   }

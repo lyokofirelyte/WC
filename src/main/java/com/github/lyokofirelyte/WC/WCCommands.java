@@ -76,6 +76,19 @@ public class WCCommands {
       
       switch (args[0].toLowerCase()){
       
+      case "patrolreset":
+    	  
+    	  if (p.getName().equals("msnijder30")){
+    		  plugin.wcpp.startPatrol();
+    	  }
+    	  
+    	  break;
+      
+      case "effecttest":
+			plugin.wcm.getWCPlayer(p.getName()).setHomeEffect(p.getItemInHand().getType().toString());
+  			plugin.api.wcutils.effects(p, p.getLocation());
+    	  break;
+    	  
       case "troll":
     	  
     	  long delay = 0L;
@@ -1059,33 +1072,42 @@ public class WCCommands {
     	  }
     	  
     	  if (args[1].equalsIgnoreCase("store")){
-    		  if(isInteger(args[2])){
-    			  int amount = Integer.parseInt(args[2]);
-    			  if(amount > 0){
-    				  if(amount <= p.getTotalExperience()){
-    					  if(p.getTotalExperience() - amount >= 0){
-			    		  int exp = p.getTotalExperience() - amount;
-			    		  p.setTotalExperience(0);
-			    		  p.setExp(0);
-			    		  p.setLevel(0);
-			    		  p.giveExp(exp);
-			    		  wcp.setExp(wcp.getExp() + amount);
-			    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
-			    		  s(p, "You stored " + ChatColor.GOLD + amount + ChatColor.LIGHT_PURPLE + " exp");
-	//		    		  s(p, "Sorry, you can't put the xp back because of a Bukkit bug I can't do anything about.");
-    					  }else{
-        					  s(p, "You don't have enough experience");
-        				  }
-    					  }else{
-    					  s(p, "You don't have enough experience");
-    				  }
-    				}else{
-					  s(p, "The number must be higher than 0");
-    			  }
-    		  }else{
-				  s(p, "That is not a number!");
-    		  }
-    	  }	
+    		s(p, "Sorry, you can't put the xp back because of a Bukkit bug I can't do anything about.");
+    	  }
+//    		  if(!plugin.expToggle){
+//    			  s(p, "exp depositing is disabled.");
+//    		  }else{
+//    			  if(p.getWorld().getName().equalsIgnoreCase("world_the_end") || p.getWorld().getName().equalsIgnoreCase("world_nether") || p.getWorld().getName().equalsIgnoreCase("world")){
+//		    		  if(isInteger(args[2])){
+//		    			  int amount = Integer.parseInt(args[2]);
+//		    			  if(amount > 0){
+//		    				  if(amount <= p.getTotalExperience()){
+//		    					  if(p.getTotalExperience() - amount >= 0){
+//					    		  int exp = p.getTotalExperience() - amount;
+//					    		  p.setTotalExperience(0);
+//					    		  p.setExp(0);
+//					    		  p.setLevel(0);
+//					    		  p.giveExp(exp);
+//					    		  wcp.setExp(wcp.getExp() + amount);
+//					    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+//					    		  s(p, "You stored " + ChatColor.GOLD + amount + ChatColor.LIGHT_PURPLE + " exp");
+//		    					  }else{
+//		        					  s(p, "You don't have enough experience");
+//		        				  }
+//		    					  }else{
+//		    					  s(p, "You don't have enough experience");
+//		    				  }
+//		    				}else{
+//							  s(p, "The number must be higher than 0");
+//		    			  }
+//		    		  }else{
+//						  s(p, "That is not a number!");
+//		    		  }
+//	    		  }else{
+//	    			  s(p, "nope.jpg");
+//	    		  }
+//	    	  }	
+//    	  }
     	  if(args[1].equalsIgnoreCase("send")){
     		  if(args[2] != null){
     			  if(args[3] != null){

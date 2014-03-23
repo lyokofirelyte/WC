@@ -8,6 +8,7 @@ import java.util.Random;
 import me.confuser.barapi.BarAPI;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -408,13 +409,14 @@ public class WCPatrols implements Listener {
 			@Override
 			public void run() {
 				
-				WCSystem wcs = pl.wcm.getWCSystem("system");
+				final WCSystem wcs = pl.wcm.getWCSystem("system");
 				
-				if (wcs.getPatrolCrystal() != null && !wcs.getPatrolCrystal().isDead()){
-					for (LivingEntity e : wcs.getPatrolEnts()){
-						e.remove();
-					}
+				if(wcs.getPatrolCrystal() != null){
 					wcs.getPatrolCrystal().remove();
+				}
+				
+				for (LivingEntity e : wcs.getPatrolEnts()){
+					e.remove();
 				}
 				
 				Random rand = new Random();
@@ -460,8 +462,10 @@ public class WCPatrols implements Listener {
 				}
 						
 		    	wcs.setPatrolHotSpotAreas(circle(wcs.getPatrolHotSpot(), 50, 50, false, true, 0));
+
 		    	wcs.setPatrolCrystal(Bukkit.getWorld("world").spawnEntity(wcs.getPatrolHotSpot(), EntityType.ENDER_CRYSTAL));
 		
+		    	
 				int checkTask = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(pl, new Runnable(){
 				public void run() { checkPlayers();} }, 0L, 400L);
 				

@@ -4,11 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;
-import com.github.lyokofirelyte.WC.Util.Utils;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 import com.github.lyokofirelyte.WCAPI.WCPlayer;
 
-import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.*;
 
 public class WCTele {
 
@@ -17,17 +16,19 @@ public class WCTele {
     this.pl = instance;
 	}
 	
-	String checks = ":tp: :tphere: :tpa: :tpahere:";
+	String checks = ":tp: :tphere: :tpa: :tpahere: :tpaall: :tpall:";
 	String que;
 	WCPlayer wcp;
 	WCPlayer wcpCurrent;
 	Player q;
 	
-	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere",  name = "TP")
+	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere", "tpaall", "tpall"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere",  name = "TP")
 	public void onTP(Player p, String[] args, String cmd){
 
 			wcp = pl.wcm.getWCPlayer(p.getName());
 			que = cmd.toLowerCase();
+			
+			
 			if (que.equals("tpa")){
 				if (!wcp.getTpaRequest().equals("none")){
 					if (Bukkit.getPlayer(wcp.getTpaRequest()) == null){
@@ -36,7 +37,7 @@ public class WCTele {
 						WCPlayer wcpCurrent = pl.wcm.getWCPlayer(Bukkit.getPlayer(wcp.getTpaRequest()).getName());
 						wcpCurrent.setLastLocation(Bukkit.getPlayer(wcp.getTpaRequest()).getLocation());
 						Bukkit.getPlayer(wcp.getTpaRequest()).teleport(p.getLocation());
-						q = p; Utils.effects(q); s(q, "Teleporting!"); s(p, "Accepted.");
+						q = p; pl.api.wcutils.effects(Bukkit.getPlayer(wcp.getTpaRequest()), q.getLocation()); s(q, "Teleporting!"); s(p, "Accepted.");
 						pl.wcm.updatePlayerMap(wcp.getTpaRequest(), wcpCurrent);
 						wcp.setTpaRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
@@ -51,7 +52,7 @@ public class WCTele {
 					} else {
 					    wcp.setLastLocation(p.getLocation());
 						p.teleport(Bukkit.getPlayer(wcp.getTpahereRequest()));
-						q = p; Utils.effects(q); s(p, "Teleporting!"); s(q, "Accepted.");
+						q = p; pl.api.wcutils.effects(q, q.getLocation()); s(p, "Teleporting!"); s(q, "Accepted.");
 						wcp.setTpahereRequest("none");
 						pl.wcm.updatePlayerMap(p.getName(), wcp);
 						return;
@@ -78,22 +79,24 @@ public class WCTele {
 				
 					wcp.setLastLocation(p.getLocation());
 					pl.wcm.updatePlayerMap(p.getName(), wcp);
-					p.teleport(q.getLocation());
 					s(p, "Teleporting!");
+					p.teleport(q.getLocation());
 					if (!pl.wcm.getWCSystem("system").getVanishedPlayers().contains(p.getName())){
-						Utils.effects(q);
+						pl.api.wcutils.effects(q, q.getLocation());
 					}
 				}
-				
+
 			break;
 			
 			case "tphere":
 				
-				wcpCurrent.setLastLocation(q.getLocation());
-				pl.wcm.updatePlayerMap(q.getName(), wcpCurrent);
-				q.teleport(p.getLocation());
-				s(q, "Teleporting!");
-				Utils.effects(q);
+				if (p.hasPermission("wa.mod2")){
+					wcpCurrent.setLastLocation(q.getLocation());
+					pl.wcm.updatePlayerMap(q.getName(), wcpCurrent);
+					q.teleport(p.getLocation());
+					s(q, "Teleporting!");
+					pl.api.wcutils.effects(q, q.getLocation());
+				}
 				
 			break;
 			
@@ -118,28 +121,32 @@ public class WCTele {
 			
 			case "tpaall":
 				
-				for (Player r : Bukkit.getOnlinePlayers()){
-					wcpCurrent = pl.wcm.getWCPlayer(r.getName());
-					wcpCurrent.setTpahereRequest(p.getName());
-					pl.wcm.updatePlayerMap(r.getName(), wcpCurrent);
-					s(r, p.getDisplayName() + " &dhas requested that you teleport to them. Type &6/tpahere &dto allow it.");
-					s(p, "Request sent!");
+				if (p.hasPermission("wa.mod2")){
+					for (Player r : Bukkit.getOnlinePlayers()){
+						wcpCurrent = pl.wcm.getWCPlayer(r.getName());
+						wcpCurrent.setTpahereRequest(p.getName());
+						pl.wcm.updatePlayerMap(r.getName(), wcpCurrent);
+						s(r, p.getDisplayName() + " &dhas requested that you teleport to them. Type &6/tpahere &dto allow it.");
+						s(p, "Request sent!");
+					}
 				}
 	
 			break;
 			
 			case "tpall":
 				
-				for (Player r : Bukkit.getOnlinePlayers()){
-					wcpCurrent = pl.wcm.getWCPlayer(r.getName());
-					wcpCurrent.setLastLocation(r.getLocation());
-					pl.wcm.updatePlayerMap(r.getName(), wcpCurrent);
-					r.teleport(p.getLocation());
-					s(r, "Teleporting!");
+				if (p.hasPermission("wa.admin")){
+					for (Player r : Bukkit.getOnlinePlayers()){
+						wcpCurrent = pl.wcm.getWCPlayer(r.getName());
+						wcpCurrent.setLastLocation(r.getLocation());
+						pl.wcm.updatePlayerMap(r.getName(), wcpCurrent);
+						r.teleport(p.getLocation());
+						s(r, "Teleporting!");
+					}
+					
+						
+					pl.api.wcutils.effects(q, q.getLocation());
 				}
-				
-				q = p;
-				Utils.effects(q);
 				
 			break;
 		

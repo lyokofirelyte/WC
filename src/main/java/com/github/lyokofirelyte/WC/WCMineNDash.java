@@ -64,7 +64,7 @@ public class WCMineNDash implements Listener {
 	    			Player p = e.getPlayer();
 	    			if (p.getName() != "Hugh_Jasses" && (!p.hasPermission("wa.districtman") || pl.wcm.getWCSystem("system").getMinendashActive())){
 	    				s(p, "You must be disctrictman+ for this or it's already in use.");
-	    			} else if (pl.wcm.getWCPlayer(p.getName()).getMineTimer() < System.currentTimeMillis() && pl.wcm.getWCPlayer(p.getName()).getMineTimer() != 0){
+	    			} else if (pl.wcm.getWCPlayer(p.getName()).getMineTimer() > System.currentTimeMillis() && pl.wcm.getWCPlayer(p.getName()).getMineTimer() != 0){
 	    				s(p, "You still have &6" + ((pl.wcm.getWCPlayer(p.getName()).getMineTimer()/1000L) - (System.currentTimeMillis()/1000L)) + " &dseconds left.");
 	    			} else {
 	    				pl.wcm.getWCPlayer(p.getName()).setMineTimer(System.currentTimeMillis() + 604800000L);

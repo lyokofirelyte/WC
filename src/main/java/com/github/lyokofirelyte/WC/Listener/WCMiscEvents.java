@@ -272,10 +272,11 @@ public class WCMiscEvents implements Listener {
 		        	    , delay);
 		        	}
 		        	
+
 		        	return;
 		        	
+
 			} else if (e.getDamager() instanceof Player){
-			
 				WCPlayer wcp = plugin.wcm.getWCPlayer(((Player)e.getEntity()).getName());
 				WCPlayer wcp2 = plugin.wcm.getWCPlayer(((Player)e.getDamager()).getName());
 				
@@ -283,6 +284,20 @@ public class WCMiscEvents implements Listener {
 					e.setCancelled(true);
 					WCUtils.s((Player)e.getDamager(), "That player has PVP mode turned off!");
 				}
+			}else if(e.getDamager() instanceof Projectile){
+	        		Projectile proj = (Projectile) e.getDamager();		
+	        		if(proj.getShooter() instanceof Player){
+	        			Player shooter = (Player) proj.getShooter();
+	        			if(shooter.getName() != ((Player)e.getEntity()).getName()){
+		    				WCPlayer wcp = plugin.wcm.getWCPlayer(((Player)e.getEntity()).getName());
+		    				WCPlayer wcp2 = plugin.wcm.getWCPlayer(shooter.getName());
+		    				
+		    				if (!wcp.getPVP() || !wcp2.getPVP()){
+		    					e.setCancelled(true);
+		    					WCUtils.s(shooter, "That player has PVP mode turned off!");
+		    				}
+	        			}
+	        		}
 			}
 		}
 	}

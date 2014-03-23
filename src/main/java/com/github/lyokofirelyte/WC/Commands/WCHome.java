@@ -24,9 +24,9 @@ public class WCHome{
 	
 	String bleh;
 	
-	String commands = "home sethome remhome delhome";
+	String commands = "home sethome remhome delhome h";
 	
-	  @WCCommand(aliases = {"home"}, desc = "Teleports you back home", help = "/home <home name>")
+	  @WCCommand(aliases = {"home", "h"}, desc = "Teleports you back home", help = "/home <home name>")
 	  public void onHome(Player p, String[] args){
 
 			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());
@@ -105,25 +105,12 @@ public class WCHome{
 		World world = Bukkit.getWorld(locSplit[5]);
 		Location homeLanding = new Location(world, x, y+1.2, z, yaw, pitch);
 		p.teleport(homeLanding);
-		List<Location> circleblocks = Utils.circle(p.getLocation(), 3, 1, true, false, 0);
-		List<Location> circleblocks2 = Utils.circle(p.getLocation(), 3, 1, true, false, 1);
 		
 		if (wcp.homeSounds){
 			p.getWorld().playSound(p.getLocation(), Sound.PORTAL_TRAVEL, 3.0F, 0.5F);
 		}
 			
-		for (Location l : circleblocks){
-			p.getWorld().playEffect(l, Effect.SMOKE, 0);
-			p.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
-			p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
-		}
-			
-		for (Location l : circleblocks2){
-			p.getWorld().playEffect(l, Effect.SMOKE, 0);
-			p.getWorld().playEffect(l, Effect.MOBSPAWNER_FLAMES, 0);
-			p.getWorld().playEffect(l, Effect.ENDER_SIGNAL, 0);
-		}
-		
+		plugin.api.wcutils.effects(p, p.getLocation());
 		WCUtils.s(p, "Teleported to &6" + homeName + " &dfrom &6" + xSimple + "&f, &6" + ySimple + "&f, &6" + zSimple + "&d.");
 		
 	}
