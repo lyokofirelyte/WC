@@ -1,6 +1,8 @@
 package com.github.lyokofirelyte.WC.Listener;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.AS;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.circle;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,16 +11,20 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -39,6 +45,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.vehicle.VehicleUpdateEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.Vector;
@@ -65,6 +73,84 @@ public class WCMiscEvents implements Listener {
 	public WCMiscEvents(WCMain plugin){
 		this.plugin = plugin;
 	}
+	
+	/*@SuppressWarnings("deprecation")
+	@EventHandler
+	public void onCombatAbility(PlayerInteractEntityEvent e){
+		
+		List<Material> swords = Arrays.asList(Material.WOOD_SWORD, Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.STONE_SWORD);
+		WCPlayer wcp = plugin.wcm.getWCPlayer(e.getPlayer().getName());
+		Player p = e.getPlayer();
+		Location l = p.getLocation();
+		
+		if (swords.contains(p.getItemInHand().getType()) && e.getRightClicked() instanceof Player == false){
+			for (Location ll : circle(l, 2, 60, false, false, 0)){
+				if (ll.getBlock().getType() != Material.AIR){
+					s(p, "You need to be in a more open spot for this ability.");
+					return;
+				}
+			}
+			float walkSpeed = new Float(p.getWalkSpeed());
+			float flySpeed = new Float(p.getFlySpeed());
+			p.setWalkSpeed(0);
+			p.setFlySpeed(0);
+			p.setAllowFlight(true);
+			p.setVelocity(new Vector(0, 5, 0));
+			wcp.setUsingInstaKill(true);
+			plugin.wcm.updatePlayerMap(p.getName(), wcp);
+			plugin.api.ls.callDelay("jumpDown", this, p, walkSpeed, flySpeed);
+		}
+	}
+	
+	@WCDelay(time = 40L)
+	public void jumpDown(Player p, float ws, float fs){
+		
+		p.getLocation().setPitch(0);
+		p.getLocation().setYaw(180);
+		p.setVelocity(new Vector(0, -7, 0));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 10));
+		p.getWorld().playEffect(p.getLocation(), Effect.ENDER_SIGNAL, 0);
+		plugin.api.ls.callDelay("killMonsters", this, p, ws, fs);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@WCDelay(time = 18L)
+	public void killMonsters(Player p, float ws, float fs){
+		
+		p.setWalkSpeed(ws);
+		p.setFlySpeed(fs);
+		p.setAllowFlight(false);
+		p.playSound(p.getLocation(), Sound.EXPLODE, 0.5F, 3F);
+		Location center = p.getLocation();
+		
+		for (int x = 0; x < 20; x++){
+			if (!new Location(center.getWorld(), center.getX(), center.getY()-x, center.getZ()).getBlock().getType().equals(Material.AIR)){
+				center = new Location(center.getWorld(), center.getX(), center.getY()-x, center.getZ());
+				break;
+			}
+		}
+		
+		for (Location l : circle(center, 10, 1, false, false, 0)){
+			switch (l.getBlock().getType()){
+				case GRASS: case DIRT: case STONE: case COBBLESTONE:
+					FallingBlock b = l.getWorld().spawnFallingBlock(new Location(l.getWorld(), l.getX(), l.getY()+1, l.getZ()), l.getBlock().getType(), (byte)0);
+					b.setVelocity(new Vector(0, 1.3, 0));
+					l.getBlock().setType(Material.AIR);
+				break;
+				default: break;
+			}
+		}
+		
+		for (org.bukkit.entity.Entity e : p.getNearbyEntities(10D, 10D, 10D)){
+			if (e instanceof Monster && !e.isDead()){
+				e.getWorld().playEffect(e.getLocation(), Effect.STEP_SOUND, Material.FIRE.getId());
+				e.remove();
+			}
+		}
+		
+		plugin.wcm.getWCPlayer(p.getName()).setUsingInstaKill(false);
+		s(p, "KERSPLASH!");
+	}*/
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onControl(final PlayerInteractEvent e){

@@ -1,0 +1,6 @@
+name: WaterCloset
+main: com.github.lyokofirelyte.WC.WCMain
+author: lyokofirelyte
+prefix: WCV5
+depend: [Vault, WCAPI]
+version: 5

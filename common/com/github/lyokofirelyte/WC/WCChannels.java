@@ -14,6 +14,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+
+import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.HoloManager;
 import com.github.lyokofirelyte.WC.Commands.WCMail;
 
 import static com.github.lyokofirelyte.WC.Util.Utils.*;
@@ -94,6 +97,16 @@ public class WCChannels implements Listener {
 	  
 	  p = e.getPlayer();
 	  wcp = pl.wcm.getWCPlayer(p.getName());
+	  
+	  if (wcp.getChannel() == null){
+		  wcp.setChannel("Local");
+		  pl.wcm.updatePlayerMap(p.getName(), wcp);
+	  }
+	  
+	  if (!wcp.getChannel().equals("Local")){
+		  e.setCancelled(true);
+		  return;
+	  }
 	  
 	  if (wcp.getPatrolFormCmd()){
 		  e.setCancelled(true);
@@ -190,7 +203,7 @@ public class WCChannels implements Listener {
 		  			if (s.startsWith("http") && s.length() >= 16){		
 		  				link = shorten(s);		
 		  				msg = msg.replace(s, "");
-		  			}	
+		  			}
 		  		}
 		  	}
 		  	
@@ -230,7 +243,7 @@ public class WCChannels implements Listener {
 					if (prefix == null){
 						prefix = "";
 					}
-	
+					
 					if (wcpCurrent.getPVP()){
 						
 						newDispName = new JSONChatMessage(AS("&6PvP &f// &6"), null, null);
@@ -275,16 +288,32 @@ public class WCChannels implements Listener {
 		      	}
 	
 		        callChat(bleh, WCMessageType.JSON_PLAYER, newDispName);
+		      
 			}
 		  
 			lastChat = p;
 			
 			if (rawr){
 				callChat(WCMessageType.CONSOLE, AS("&8>> " + p.getDisplayName() + "&f: " + msg));
+				pl.wcm.getWCSystem("system").getGlobalChatRecent().add(AS("&8>> " + p.getDisplayName() + "&f: " + msg));
 			} else {
 				callChat(WCMessageType.CONSOLE, AS(WCVault.chat.getPlayerSuffix(p) + " §f// " + p.getDisplayName() + "§f: " + msg));
+				pl.wcm.getWCSystem("system").getGlobalChatRecent().add(AS(WCVault.chat.getPlayerSuffix(p) + " §f// " + p.getDisplayName() + "§f: " + msg));
 			}
-		  }
+			
+			int line = pl.wcm.getWCSystem("system").getGlobalChatRecent().size();
+			int z = 0;
+			
+			if (line >= 10){
+				pl.wcm.getWCSystem("system").getGlobalChatRecent().remove(0);
+				line--;
+			}
+			
+			for (String l : pl.wcm.getWCSystem("system").getGlobalChatRecent()){
+				HoloAPI.getManager().getHologram(pl.wcm.getWCSystem("system").getHolograms().get("Spawn")).updateLine(z, l);
+				z++;
+			}
+		}
 	  }).start();}
   
   @WCCommand(aliases = {"wcstats"}, desc = "Pull stats on any player", help = "!stats <playername>", max = 1, player = true)
