@@ -26,11 +26,7 @@ public class WCHome{
 	
 	String commands = "home sethome remhome delhome h";
 	
-<<<<<<< HEAD:src/main/java/com/github/lyokofirelyte/WC/Commands/WCHome.java
-	  @WCCommand(aliases = {"home", "h"}, desc = "Teleports you back home", help = "/home <home name>")
-=======
-	  @WCCommand(aliases = {"home"}, desc = "Teleports you back home", help = "/home <home name>", player = true)
->>>>>>> FETCH_HEAD:common/com/github/lyokofirelyte/WC/Commands/WCHome.java
+	  @WCCommand(aliases = {"home", "h"}, desc = "Teleports you back home", help = "/home <home name>", player = true)
 	  public void onHome(Player p, String[] args){
 
 			  WCPlayer wcp = plugin.wcm.getWCPlayer(p.getName());

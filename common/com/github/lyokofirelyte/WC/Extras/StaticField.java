@@ -27,9 +27,7 @@ import org.bukkit.util.Vector;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WCAPI.Command.WCCommand;
 
-public class StaticField extends JavaPlugin
-  implements CommandExecutor, Listener
-{
+public class StaticField implements Listener {
   private int taskID;
   String prefix = "�aStaticField �f// �a";
   WCMain plugin;

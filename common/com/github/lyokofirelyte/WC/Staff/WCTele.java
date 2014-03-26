@@ -22,11 +22,7 @@ public class WCTele {
 	WCPlayer wcpCurrent;
 	Player q;
 	
-<<<<<<< HEAD:src/main/java/com/github/lyokofirelyte/WC/Staff/WCTele.java
-	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere", "tpaall", "tpall"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere",  name = "TP")
-=======
 	@WCCommand(aliases = {"tp", "tphere", "tpa", "tpahere"}, desc = "WC TP Command", help = "/tp, /tphere, /tpa, /tpahere",  name = "TP", player = true)
->>>>>>> FETCH_HEAD:common/com/github/lyokofirelyte/WC/Staff/WCTele.java
 	public void onTP(Player p, String[] args, String cmd){
 
 			wcp = pl.wcm.getWCPlayer(p.getName());

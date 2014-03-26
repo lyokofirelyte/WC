@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,6 +36,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.api.HologramFactory;
 import com.github.lyokofirelyte.WC.Util.WCVault;
 import com.github.lyokofirelyte.WCAPI.WCAlliance;
 import com.github.lyokofirelyte.WCAPI.WCUtils;
@@ -88,7 +91,29 @@ public class WCCommands {
 			plugin.wcm.getWCPlayer(p.getName()).setHomeEffect(p.getItemInHand().getType().toString());
   			plugin.api.wcutils.effects(p, p.getLocation());
     	  break;
+
+      case "setchathologram":
     	  
+    	  if (p.hasPermission("wa.staff")){
+    		  
+    		  Hologram hologram = new HologramFactory(plugin)
+    		    .withLocation(new Vector(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ()), "world")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .withText(".")
+    		    .build();
+    		  
+    		  plugin.wcm.getWCSystem("system").getHolograms().put("Spawn", hologram.getSaveId());
+    	  }
+    	  
+      break;
+
       case "troll":
     	  
     	  long delay = 0L;

@@ -125,6 +125,7 @@ public class WCMain extends WCNode {
   public List<Player> afkers = new ArrayList<>();
   public Map <String, WCLiftFloor> elevatorMap = new HashMap<>();
   public Map <ShapedRecipe, ItemStack> wcRecipies = new HashMap<>();
+  public Location chatDisplay;
   
   private int id = 0;
   
@@ -227,7 +228,7 @@ public class WCMain extends WCNode {
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
 	  loadMarkkitInvs();
-	  
+
 	  getLogger().log(Level.INFO, "WaterCloset is ready and has hooked with WCAPI!");
 	  
   }
@@ -352,7 +353,7 @@ public class WCMain extends WCNode {
 			  new WCSudo(this),
 			  new WCTele(this));
   }
-
+  
   public void saveYamls() {
 	  
     try{
@@ -432,7 +433,8 @@ public class WCMain extends WCNode {
 		}
   }*/
   
-  public void updateBoard(){
+  @SuppressWarnings("deprecation")
+public void updateBoard(){
 	  
 	  for (Player player : Bukkit.getOnlinePlayers()){
 		  

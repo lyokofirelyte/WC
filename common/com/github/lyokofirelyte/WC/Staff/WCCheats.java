@@ -34,11 +34,7 @@ public class WCCheats {
 		pl = instance;
 	}
 	
-<<<<<<< HEAD:src/main/java/com/github/lyokofirelyte/WC/Staff/WCCheats.java
-	@WCCommand(aliases = {"skull"}, min = 1, max = 1, perm = "wa.staff")
-=======
-	@WCCommand(aliases = {"skull"}, min = 1, max = 1, player = true)
->>>>>>> FETCH_HEAD:common/com/github/lyokofirelyte/WC/Staff/WCCheats.java
+	@WCCommand(aliases = {"skull"}, min = 1, max = 1, player = true, perm = "wa.staff")
 	public void bleh(Player p, String[] args){
 		
 		ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
