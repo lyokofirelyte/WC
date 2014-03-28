@@ -36,6 +36,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
 import com.github.lyokofirelyte.WC.Util.WCVault;
@@ -109,6 +110,9 @@ public class WCCommands {
     		    .withText(".")
     		    .build();
     		  
+    		  /*String ID = plugin.wcm.getWCSystem("system").getHolograms().get("Spawn");
+    		  Hologram holoSpawn = HoloAPI.getManager().getHologram(ID);
+    		  holoSpawn.*/
     		  plugin.wcm.getWCSystem("system").getHolograms().put("Spawn", hologram.getSaveId());
     	  }
     	  
