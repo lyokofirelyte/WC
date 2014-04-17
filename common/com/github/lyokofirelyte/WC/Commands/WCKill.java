@@ -2,7 +2,7 @@ package com.github.lyokofirelyte.WC.Commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import com.github.lyokofirelyte.WC.WCMain;

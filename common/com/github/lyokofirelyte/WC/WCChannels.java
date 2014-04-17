@@ -231,7 +231,7 @@ public class WCChannels implements Listener {
 				
 				if (lastChat != null && lastChat.equals(p)){
 					rawr = true;
-					newDispName = new JSONChatMessage(AS("&8>> "), null, null);
+					newDispName = new JSONChatMessage(AS("&8> "), null, null);
 					
 				} else {
 					
@@ -248,7 +248,9 @@ public class WCChannels implements Listener {
 						
 						newDispName = new JSONChatMessage(AS("&6PvP &f// &6"), null, null);
 						
-					} else if (prefix.toLowerCase().contains("guest")){
+					} else
+					
+					if (prefix.toLowerCase().contains("guest")){
 						
 						newDispName = new JSONChatMessage(AS("&7Guest &f// &7"), null, null);
 							
@@ -268,14 +270,29 @@ public class WCChannels implements Listener {
 				message = "&f: &" + wcp.getGlobalColor() + message;
 				
 		      	JSONChatExtra extra = new JSONChatExtra(AS(p.getDisplayName()), null, null);
-		      	extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, AS(p.getDisplayName() + " &f@ &7" + wcpCurrent.getAlliance() +
-		      	"\nStats:" +
-		      	"\n&6Balance&f: &6" + wcpCurrent.getBalance() +
-		      	"\n&6Rank&f: &6" + wcpCurrent.getRank() +
-		      	"\n&6Deaths&f: &6" + wcpCurrent.getDeathCount() +
-		      	"\n&6Exp&f: &6" + wcpCurrent.getExp() +
-		      	"\n&6Holding&f: &6" + p.getItemInHand().getType().name().toString() +
-		      	"\n&6IGN&f: &7" + p.getName()));
+		      	
+		      	if (p.hasPermission("wa.staff")){
+			      	extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, AS(p.getDisplayName() + " &f@ &7" + wcpCurrent.getAlliance() +
+			      	"\nStats:" +
+			      	"\n&3Staff: &3" + WCVault.chat.getPlayerSuffix(p) +
+			      	"\n&3Balance&f: &3" + wcpCurrent.getBalance() +
+			      	"\n&3Rank&f: &3" + wcpCurrent.getRank() +
+			      	"\n&3Deaths&f: &3" + wcpCurrent.getDeathCount() +
+			      	"\n&3Exp&f: &3" + wcpCurrent.getExp() +
+			      	"\n&3Holding&f: &3" + p.getItemInHand().getType().name().toString() +
+			      	"\n&3IGN&f: &7" + p.getName()));
+		      	} else {
+			      	extra.setHoverEvent(JSONChatHoverEventType.SHOW_TEXT, AS(p.getDisplayName() + " &f@ &7" + wcpCurrent.getAlliance() +
+			      	"\nStats:" +
+			      	"\n&6Balance&f: &6" + wcpCurrent.getBalance() +
+			      	"\n&6Rank&f: &6" + wcpCurrent.getRank() +
+			      	"\n&6Deaths&f: &6" + wcpCurrent.getDeathCount() +
+			      	"\n&6Exp&f: &6" + wcpCurrent.getExp() +
+			      	"\n&6Holding&f: &6" + p.getItemInHand().getType().name().toString() +
+			      	"\n&6World&f: &6" + p.getLocation().getWorld().getName() +
+			      	"\n&6IGN&f: &7" + p.getName()));
+		      	}
+		      	
 		      	extra.setClickEvent(JSONChatClickEventType.SUGGEST_COMMAND, "/msg " + p.getName() + " ");
 		      	newDispName.addExtra(extra);
 		      	JSONChatExtra extra2 = new JSONChatExtra(AS(message), null, null);
@@ -312,6 +329,16 @@ public class WCChannels implements Listener {
 			for (String l : pl.wcm.getWCSystem("system").getGlobalChatRecent()){
 				HoloAPI.getManager().getHologram(pl.wcm.getWCSystem("system").getHolograms().get("Spawn")).updateLine(z, l);
 				z++;
+			}
+			
+			for (int x = 0; x < 3; x++){
+				for (Player p : Bukkit.getOnlinePlayers()){
+					if (pl.wcm.getWCSystem("system").getHolograms().containsKey(p.getName())){
+						try {
+							HoloAPI.getManager().getHologram(pl.wcm.getWCSystem("system").getHolograms().get(p.getName())).updateLine(x+1, pl.wcm.getWCSystem("system").getGlobalChatRecent().get((pl.wcm.getWCSystem("system").getGlobalChatRecent().size()-3)+x));
+						} catch (Exception e){}
+					}
+				}
 			}
 		}
 	  }).start();}

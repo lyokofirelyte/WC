@@ -159,7 +159,7 @@ public class WCMain extends WCNode {
 	  pm.registerEvents(new WCMenus(this), this);
 	  pm.registerEvents(new WCMail(this),this);
 	  pm.registerEvents(new WCInvSee(this),this);
-	  pm.registerEvents(new WCTags(this),this);
+	  //pm.registerEvents(new WCTags(this),this);
 	  pm.registerEvents(new WCParagon(this),this);
 	  pm.registerEvents(new WCEmotes(this),this);
 	  pm.registerEvents(new WCScoreboard(this),this);

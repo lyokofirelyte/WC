@@ -32,7 +32,7 @@ public class WCPay{
 				return;
 			}
 			
-			if (!isInteger(args[1])){
+			if (!isInteger(args[1]) || args[1].startsWith("-")){
 				s(p, "That's not a number!");
 				return;
 			}
