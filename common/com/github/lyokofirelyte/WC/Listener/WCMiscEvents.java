@@ -152,6 +152,11 @@ public class WCMiscEvents implements Listener {
 	public void onCraft(CraftItemEvent e){
 		e.setCancelled(false);
 	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onItemPrepare(PrepareItemCraftEvent e){
+		e.getInventory().setResult(e.getRecipe().getResult());
+	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onControl(final PlayerInteractEvent e){
