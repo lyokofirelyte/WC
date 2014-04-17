@@ -1,8 +1,6 @@
 package com.github.lyokofirelyte.WC.Listener;
 
-import static com.github.lyokofirelyte.WC.Util.Utils.AS;
-import static com.github.lyokofirelyte.WCAPI.WCUtils.circle;
-import static com.github.lyokofirelyte.WCAPI.WCUtils.s;
+import static com.github.lyokofirelyte.WCAPI.WCUtils.AS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,20 +9,16 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Minecart;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Snowball;
@@ -37,6 +31,8 @@ import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -45,8 +41,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.vehicle.VehicleUpdateEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.Vector;
@@ -154,6 +148,11 @@ public class WCMiscEvents implements Listener {
 		s(p, "KERSPLASH!");
 	}*/
 	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onCraft(CraftItemEvent e){
+		e.setCancelled(false);
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onControl(final PlayerInteractEvent e){
 		
