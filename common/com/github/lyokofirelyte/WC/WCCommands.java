@@ -299,6 +299,7 @@ public class WCCommands {
         				  sellPrice = sellPrice / 2;
     				  }
     				  i.setAmount(amt);
+    				  i.setDurability(p.getItemInHand().getDurability());
     				  p.getInventory().addItem(i);
     			  }
     		  }

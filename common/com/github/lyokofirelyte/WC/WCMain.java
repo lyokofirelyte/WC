@@ -481,8 +481,9 @@ public void updateBoard(){
 		  }
 		  
 		  afkTimer.put(player.getName(), afkTimer.get(player.getName()) + 8);
-		  
-		  if (afkTimer.get(player.getName()) >= 180 && afkTimer.get(player.getName()) <= 900 && !afkers.contains(player)){
+		  WCSystem wcs = this.wcm.getWCSystem("system");
+
+		  if (afkTimer.get(player.getName()) >= 180 && afkTimer.get(player.getName()) <= 900 && !afkers.contains(player) && !wcs.getVanishedPlayers().contains(player.getName())){
 			  
 			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois afk."));
 			  
@@ -494,7 +495,7 @@ public void updateBoard(){
 			  
 			  afkers.add(player);
 			  
-		  } else if (afkTimer.get(player.getName()) >= 900 && afkers.contains(player) && !wcp.isSuperAfk()){
+		  } else if (afkTimer.get(player.getName()) >= 900 && afkers.contains(player) && !wcp.isSuperAfk() && !wcs.getVanishedPlayers().contains(player.getName())){
 			  
 			  callChat(WCMessageType.BROADCAST, AS("&7&o" + player.getDisplayName() + " &7&ois super afk."));
 			  

@@ -33,7 +33,7 @@ public class WCCheats {
 	public WCCheats(WCMain instance){
 		pl = instance;
 	}
-	
+
 	@WCCommand(aliases = {"skull"}, min = 1, max = 1, player = true, perm = "wa.staff")
 	public void bleh(Player p, String[] args){
 		
