@@ -117,6 +117,31 @@ public class WCCommands {
     	  }
     	  
       break;
+      
+      case "hud":
+    	  
+    	  if (!plugin.wcm.getWCSystem("system").getHolograms().containsKey(p.getName())){
+    	  
+	    	  Hologram hologram = new HologramFactory(plugin)
+	    	  	.withLocation(p.getEyeLocation())
+	    	  	.withText(AS("&7" + WCUtils.getTime() + " " + p.getLocation().getBlockX() + " " + p.getLocation().getBlockY() + " " + p.getLocation().getBlockZ()))
+	    	  	.withText(".")
+	    	  	.withText(".")
+	    	  	.withText(".")
+	    	  	.build();
+	    	  
+	    	  hologram.clearAllPlayerViews();
+	    	  hologram.show(p);
+	    	  
+	    	  plugin.wcm.getWCSystem("system").getHolograms().put(p.getName(), hologram.getSaveId());
+	    	  s(p, "HUD created!");
+	    	  
+    	  } else {
+    		  HoloAPI.getManager().getHologram(plugin.wcm.getWCSystem("system").getHolograms().get(p.getName())).clearAllPlayerViews();
+    		  plugin.wcm.getWCSystem("system").getHolograms().remove(p.getName());
+    	  }
+    	  
+      break;
 
       case "troll":
     	  

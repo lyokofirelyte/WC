@@ -8,7 +8,7 @@
 	<name>WC</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<bukkit>1.7.2-R0.1-SNAPSHOT</bukkit>
+		<bukkit>1.7.8-R0.1-SNAPSHOT</bukkit>
 	</properties>
 	<dependencies>
 		<dependency>

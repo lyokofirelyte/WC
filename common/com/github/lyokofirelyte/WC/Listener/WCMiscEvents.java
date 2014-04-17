@@ -51,6 +51,8 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.Vector;
 
+import com.dsh105.holoapi.HoloAPI;
+import com.dsh105.holoapi.api.Hologram;
 import com.github.lyokofirelyte.WC.WCCommands;
 import com.github.lyokofirelyte.WC.WCMain;
 import com.github.lyokofirelyte.WC.Util.Utils;
@@ -460,12 +462,48 @@ public class WCMiscEvents implements Listener {
 		p.setAllowFlight(false);
 		p.setFlying(false);
 	}
+	
+	public Location getCardinalMove(Player p) {
+		
+		double rotation = (p.getEyeLocation().getYaw() - 180) % 360;
+		
+        if (rotation < 0) {
+            rotation += 360.0;
+        }
+        if (0 <= rotation && rotation < 22.5) {
+            return new Location(p.getWorld(), p.getEyeLocation().getX(), p.getEyeLocation().getY(), p.getEyeLocation().getZ()-4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (22.5 <= rotation && rotation < 67.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX()+4, p.getEyeLocation().getY(), p.getEyeLocation().getZ()-4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (67.5 <= rotation && rotation < 112.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX()+4, p.getEyeLocation().getY(), p.getEyeLocation().getZ(), p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (112.5 <= rotation && rotation < 157.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX()+4, p.getEyeLocation().getY(), p.getEyeLocation().getZ()+4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (157.5 <= rotation && rotation < 202.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX(), p.getEyeLocation().getY(), p.getEyeLocation().getZ()+4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (202.5 <= rotation && rotation < 247.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX()-4, p.getEyeLocation().getY(), p.getEyeLocation().getZ()+4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (247.5 <= rotation && rotation < 292.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX()-4, p.getEyeLocation().getY(), p.getEyeLocation().getZ(), p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (292.5 <= rotation && rotation < 337.5) {
+        	return new Location(p.getWorld(), p.getEyeLocation().getX()-4, p.getEyeLocation().getY(), p.getEyeLocation().getZ()-4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else if (337.5 <= rotation && rotation < 360.0) {
+        	 return new Location(p.getWorld(), p.getEyeLocation().getX(), p.getEyeLocation().getY(), p.getEyeLocation().getZ()-4, p.getEyeLocation().getPitch(), p.getEyeLocation().getYaw());
+        } else {
+            return null;
+        }
+	}
       
       @EventHandler
       public void onMove(PlayerMoveEvent e){
     	  
     	  Player p = e.getPlayer();
     	  WCPlayer wcp = plugin.wcm.getWCPlayer(e.getPlayer().getName());
+    	  
+    	  if (plugin.wcm.getWCSystem("system").getHolograms().containsKey(e.getPlayer().getName())){
+    		  Hologram holo = HoloAPI.getManager().getHologram(plugin.wcm.getWCSystem("system").getHolograms().get(p.getName()));
+    		  holo.move(getCardinalMove(p));
+    		  holo.updateLine(0, AS("&7" + WCUtils.getTime() + " " + p.getLocation().getBlockX() + " " + p.getLocation().getBlockY() + " " + p.getLocation().getBlockZ()));
+    	  }
     	  
     		if (p.getGameMode() != GameMode.CREATIVE && e.getFrom().getBlock().getRelative(BlockFace.DOWN).getType() != Material.AIR){
     			if (plugin.wcm.getWCPlayer(p.getName()).getDoubleJumpTimer() <= System.currentTimeMillis()){

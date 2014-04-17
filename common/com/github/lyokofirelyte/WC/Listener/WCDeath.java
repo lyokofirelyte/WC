@@ -2,12 +2,15 @@ package com.github.lyokofirelyte.WC.Listener;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.lyokofirelyte.WC.Util.Utils;
@@ -91,6 +94,48 @@ public class WCDeath implements Listener{
 			}
 			
 			Utils.callChat(p, WCMessageType.JSON_PLAYER, msg);
+			
+			p.getLocation().getBlock().setType(Material.CHEST);
+			Chest chest = (Chest) p.getLocation().getBlock().getState();
+			
+			for (ItemStack i : p.getInventory().getContents()){
+				try {
+					chest.getInventory().addItem(i);
+				} catch (Exception ee){}
+			}
+			
+			for (ItemStack i : p.getInventory().getArmorContents()){
+				try {
+					chest.getInventory().addItem(i);
+				} catch (Exception ee){}
+			}
+			
+			plugin.wcm.getWCPlayer(p.getName()).getChests().add(p.getLocation().getBlock().getLocation());
+			e.getDrops().clear();
+			WCUtils.s(p, "Your items were added to a saftey chest at your death location.");
+	}
+	
+	@EventHandler
+	public void onOpen(PlayerInteractEvent e){
+		
+		if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType().equals(Material.CHEST)){
+			if (plugin.wcm.getWCPlayer(e.getPlayer().getName()).getChests().contains(e.getClickedBlock().getLocation())){
+				plugin.wcm.getWCPlayer(e.getPlayer().getName()).getChests().remove(e.getClickedBlock().getLocation());
+				Chest chest = (Chest) e.getClickedBlock().getState();
+				for (ItemStack i : chest.getInventory().getContents()){
+					if (i != null && !i.equals(Material.AIR)){
+						if (e.getPlayer().getInventory().firstEmpty() == -1){
+							chest.getWorld().dropItem(chest.getLocation(), i);
+						} else {
+							e.getPlayer().getInventory().addItem(i);
+						}
+					}
+				}
+				chest.getInventory().clear();
+				e.getClickedBlock().setType(Material.AIR);
+				e.getPlayer().updateInventory();
+			}
+		}
 	}
 
 	/*public String tPD(Player p, DamageCause dc){
