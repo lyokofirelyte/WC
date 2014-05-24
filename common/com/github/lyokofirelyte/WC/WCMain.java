@@ -95,6 +95,7 @@ public class WCMain extends WCNode {
   public File helpFile;
   public File file;
   public File systemFile;
+  public File markkitFile;
   
   public YamlConfiguration config;
   public YamlConfiguration datacore;
@@ -102,6 +103,7 @@ public class WCMain extends WCNode {
   public YamlConfiguration help;
   public YamlConfiguration yaml;
   public YamlConfiguration systemYaml;
+  public YamlConfiguration markkitYaml;
 
   private String url;
   private String username;
@@ -119,6 +121,7 @@ public class WCMain extends WCNode {
   public Map <String, List<Player>> playerRide = new HashMap<>();
   public Map <String, List<String>> patrols = new HashMap<>();
   public Map <String, ItemStack[]> backupInvs = new HashMap<>();
+  public HashMap<String, Inventory> market = new HashMap<String, Inventory>();
   public Map <String, Inventory> markkitInvs = new HashMap<>();
   public Map <String, Integer> afkTimer = new HashMap<>();
   public List<Entity> carts = new ArrayList<>();
@@ -227,38 +230,9 @@ public class WCMain extends WCNode {
 	  Inventory inv = Bukkit.createInventory(null, 9, "§cLOCATIONS");
 	  inv = WCMenus.addToInv(Material.FLINT, "§3PATROLS", 8, "§b< < <", 1, inv);
 	  WCMenus.invs.put("patrolLocationMenu", inv);
-	  loadMarkkitInvs();
 
 	  getLogger().log(Level.INFO, "WaterCloset is ready and has hooked with WCAPI!");
 	  
-  }
-  
-  public void saveMarkkitInvs(){
-	  
-	  Inventory inven = Bukkit.createInventory(null, 54, AS("&dMarkkit"));
-	  List<String> invs = new ArrayList<String>();
-	  
-	  for (String s : markkitInvs.keySet()){ 
-		  for (int i = 0; i < inven.getSize(); i++){
-			  datacore.set("Markkit." + s + ".item." + i, markkitInvs.get(s).getContents()[i]);
-		  }
-		  invs.add(s);
-	  }
-	  
-	  datacore.set("Markkit.LIST", invs);
-  }
-  
-  public void loadMarkkitInvs(){
-	  
-	  for (String s : datacore.getStringList("Markkit.LIST")){ 
-		  Inventory inv = Bukkit.createInventory(null, 54, AS("&dMarkkit"));
-		  ItemStack[] contents = new ItemStack[inv.getSize()];
-		  for (int i = 0; i < inv.getSize(); i++){
-			  contents[i] = datacore.getItemStack("Markkit." + s + ".item." + i); 
-		  }
-		  inv.setContents(contents);
-		  markkitInvs.put(s, inv);
-	  }
   }
 
   public void removeCrystals(){
@@ -281,7 +255,6 @@ public class WCMain extends WCNode {
 		  removeCrystals();
 	  }
 	  
-	  saveMarkkitInvs();
 	  saveYamls();
 	  
 	  getServer().clearRecipes();
@@ -362,6 +335,7 @@ public class WCMain extends WCNode {
       games.save(gamesFile);
       help.save(helpFile);
       systemYaml.save(systemFile);
+      markkitYaml.save(markkitFile);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -375,6 +349,7 @@ public class WCMain extends WCNode {
       games.load(gamesFile);
       help.load(helpFile);
       systemYaml.load(systemFile);
+      markkitYaml.load(markkitFile);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -387,10 +362,10 @@ public class WCMain extends WCNode {
 
   private void firstRun() throws Exception {
 	 
-    String files = "config help games datacore system";
+    String files = "config help games datacore system markkit";
     String[] flatFiles = files.split(" ");
     
-    for (int x = 0; x <= 4; x++){
+    for (int x = 0; x <= 5; x++){
     	file = new File("./plugins/WaterCloset/" + flatFiles[x] + ".yml");
     	if (!file.exists()){
     		file.createNewFile();
@@ -416,6 +391,10 @@ public class WCMain extends WCNode {
 	    	case 4:
 	    		systemYaml = yaml;
 	    		systemFile = file;
+	    		break;
+	    	case 5: 
+	    		markkitYaml = yaml;
+	    		markkitFile = file;
 	    		break;
     	}
     }

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,6 +27,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -334,21 +336,76 @@ public class WCCommands {
     	  
       break;
       
-      case "edit":
-    	  
-    	  if (p.hasPermission("wa.staff")){
-    		  if (wcp.getMarkkitEditMode()){
-    			  wcp.setMarkkitEditMode(false);
-    			  wcp.setCurrentMarkkitEdit("none");
-        		  s(p, "Edit mode OFF!");
-    		  } else {
-    			  wcp.setMarkkitEditMode(true);
-    			  wcp.setCurrentMarkkitEdit("none");
-        		  s(p, "Edit mode ON.");
-    		  }
-    		  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+      
+      
+      case "setmarket":
+    	  if(args.length < 4){
+    		  s(p, "Correct usage: /wc fullprice <the full buyprice> <the full sellprice> <inventory name>");
+    		  return;
     	  }
-    	  
+    	  if(!WCUtils.isInteger(args[1]) || !WCUtils.isInteger(args[2])){
+    		  s(p, "That is not a number!");
+    		  return;
+    	  }
+    	  if(!p.hasPermission("wa.staff")){
+    		  s(p, "You do not have permission!");
+    		  return;
+    	  }
+    	  if(p.getItemInHand().getAmount() == 64){
+    		  
+	    	  int buyprice = Integer.parseInt(args[1]);
+	    	  int sellprice = Integer.parseInt(args[2]);
+	    	  String name = args[3].replace("-", " ");
+	    	  ItemStack full = p.getInventory().getItem(0);
+	    	  
+	    	  
+	    	  plugin.markkitYaml.set("Items." + name, null);
+	    	  
+	    	  plugin.markkitYaml.set("Items." + name + ".ID", full.getTypeId());
+	    	  plugin.markkitYaml.set("Items." + name + ".Damage", full.getDurability());
+    		  
+	    	  plugin.markkitYaml.set("Items." + name + ".64.buyprice", buyprice);
+    		  plugin.markkitYaml.set("Items." + name + ".64.sellprice", sellprice);
+    		  
+	    	  if(sellprice/2 >= 1){
+    		  plugin.markkitYaml.set("Items." + name + ".32.buyprice", buyprice/2);
+    		  plugin.markkitYaml.set("Items." + name + ".32.sellprice", sellprice/2);
+	    	  }
+	    	  
+	    	  if(sellprice/4 >= 1){
+    		  plugin.markkitYaml.set("Items." + name + ".16.buyprice", buyprice/4);
+    		  plugin.markkitYaml.set("Items." + name + ".16.sellprice", sellprice/4);
+	    	  }
+	    	  
+	    	  if(sellprice/8 >= 1){
+    		  plugin.markkitYaml.set("Items." + name + ".8.buyprice", buyprice/8);
+    		  plugin.markkitYaml.set("Items." + name + ".8.sellprice", sellprice/8);
+	    	  }
+	    	 
+	    	  System.out.println(sellprice/64);
+	    	  
+	    	  if(sellprice/64 >= 1){
+    		  plugin.markkitYaml.set("Items." + name + ".1.buyprice", buyprice/64);
+    		  plugin.markkitYaml.set("Items." + name + ".1.sellprice", sellprice/64);
+	    	  }
+	    	  
+    	  }else if(p.getItemInHand().getAmount() == 1){
+    		  
+    		  int buyprice = Integer.parseInt(args[1]);
+    		  int sellprice = Integer.parseInt(args[2]);
+    		  String name = args[3].replace("-", " ");
+	    	  ItemStack full = p.getInventory().getItem(0);
+	    	  
+	    	  
+	    	  plugin.markkitYaml.set("Items." + name, null);
+	    	  
+	    	  plugin.markkitYaml.set("Items." + name + ".ID", full.getTypeId());
+	    	  plugin.markkitYaml.set("Items." + name + ".Damage", full.getDurability());
+    		  
+    		  plugin.markkitYaml.set("Items." + name + ".1.buyprice", buyprice);
+    		  plugin.markkitYaml.set("Items." + name + ".1.sellprice", sellprice);
+    		  
+    	  }
       break;
       
       case "revokemails":
@@ -364,6 +421,7 @@ public class WCCommands {
     	  
       break;
       
+      
       case "allowdeathmessage":
     	  
     	  if (wcp.getAllowDeathLocation()){
@@ -377,6 +435,41 @@ public class WCCommands {
     	  
       break;
       
+      case "update":
+    	  if(p.getName().equals("msnijder30")){
+	          try {
+	             plugin.markkitYaml.save(plugin.markkitFile);
+				try {
+					plugin.markkitYaml.load(plugin.markkitFile);
+				} catch (InvalidConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+          }
+    	  break;
+    	
+      case "reset":
+    	  if(p.getName().equals("msnijder30")){
+    		  plugin.markkitYaml.set("Items", null);
+	          try {
+		             plugin.markkitYaml.save(plugin.markkitFile);
+					try {
+						plugin.markkitYaml.load(plugin.markkitFile);
+					} catch (InvalidConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+    	  }
+    	  break;
+    
       case "hugdebug":
     	  
     	  if (p.getName().equals("Hugh_Jasses")){
