@@ -38,7 +38,6 @@ public class WCCheats {
 
 	@WCCommand(aliases = {"skull"}, min = 1, max = 1, player = true, perm = "wa.staff")
 	public void bleh(Player p, String[] args){
-		
 		ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 		SkullMeta sm = (SkullMeta) is.getItemMeta();
 		sm.setOwner(args[0]);

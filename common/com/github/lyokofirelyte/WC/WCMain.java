@@ -45,6 +45,7 @@ import com.github.lyokofirelyte.WC.Commands.WCReport;
 import com.github.lyokofirelyte.WC.Commands.WCSell;
 import com.github.lyokofirelyte.WC.Commands.WCSoar;
 import com.github.lyokofirelyte.WC.Commands.WCSpawn;
+import com.github.lyokofirelyte.WC.Commands.WCSuggestion;
 import com.github.lyokofirelyte.WC.Commands.WCSuicide;
 import com.github.lyokofirelyte.WC.Commands.WCThis;
 import com.github.lyokofirelyte.WC.Commands.WCWB;
@@ -302,6 +303,7 @@ public class WCMain extends WCNode {
 			  new WCThis(this),
 			  new WCWarps(this),
 			  new WCWB(this),
+			  new WCSuggestion(this),
 			  
 			  // Main WC Commands
 			  

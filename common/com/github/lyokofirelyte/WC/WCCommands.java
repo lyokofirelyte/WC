@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.Connection;
@@ -283,64 +284,20 @@ public class WCCommands {
     	  }
     	  
       break;
-      
-      case "price":
-    	  
-    	  if (p.hasPermission("wa.staff") && args.length == 3 && WCUtils.isInteger(args[1]) && WCUtils.isInteger(args[2])){
-    		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
-    			  ItemMeta im = p.getItemInHand().getItemMeta();
-    			  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), args[1], AS("&aSell"), args[2])));
-    			  im.setDisplayName(AS("&a" + p.getItemInHand().getType().name().toString()));
-    			  p.getItemInHand().setItemMeta(im);
-    			  s(p, "Updated price!");
-    		  }
-    	  } else {
-    		  s(p, "/wc price <buyPrice> <sellPrice>");
+
+      case "reloadmarkkitconfig":
+    	  if(p.hasPermission("wa.staff")){
+    		  try {
+				plugin.markkitYaml.load(plugin.markkitFile);
+			} catch (Exception e){
+				
+			}
     	  }
+    	  break;
     	  
-      break;
-      
-      case "fullprice":
-    	  
-    	  if (p.hasPermission("wa.staff") && args.length == 3 && WCUtils.isInteger(args[1]) && WCUtils.isInteger(args[2])){
-    		  if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR){
-    			  int amt = 64;
-    			  int buyPrice = Integer.parseInt(args[1]);
-    			  int sellPrice = Integer.parseInt(args[2]);
-    			  for (int x = 1; x < 6; x++){
-    				  ItemStack i = new ItemStack(p.getItemInHand().getTypeId());
-    				  ItemMeta im = i.getItemMeta();
-    				  im.setLore(new ArrayList<String>(Arrays.asList(AS("&aBuy"), buyPrice + "", AS("&aSell"), sellPrice + "")));
-    				  im.setDisplayName(AS("&a" + p.getItemInHand().getType().name().toString()));
-    				  i.setItemMeta(im);
-    				  if (x == 5){
-    					  amt = 1;
-    				  } else if (x != 1){
-    					  amt = amt/2;
-    				  }
-    				  if (x == 4){
-        				  buyPrice = buyPrice / 8;
-        				  sellPrice = sellPrice / 8;
-    				  } else {
-        				  buyPrice = buyPrice / 2;
-        				  sellPrice = sellPrice / 2;
-    				  }
-    				  i.setAmount(amt);
-    				  i.setDurability(p.getItemInHand().getDurability());
-    				  p.getInventory().addItem(i);
-    			  }
-    		  }
-    	  } else {
-    		  s(p, "/wc fullprice <buyPrice> <sellPrice>");
-    	  }
-    	  
-      break;
-      
-      
-      
       case "setmarket":
     	  if(args.length < 4){
-    		  s(p, "Correct usage: /wc fullprice <the full buyprice> <the full sellprice> <inventory name>");
+    		  s(p, "Correct usage: /wc setmarket <the full buyprice> <the full sellprice> <inventory name>");
     		  return;
     	  }
     	  if(!WCUtils.isInteger(args[1]) || !WCUtils.isInteger(args[2])){
@@ -367,24 +324,22 @@ public class WCCommands {
 	    	  plugin.markkitYaml.set("Items." + name + ".64.buyprice", buyprice);
     		  plugin.markkitYaml.set("Items." + name + ".64.sellprice", sellprice);
     		  
-	    	  if(sellprice/2 >= 1){
+	    	  if(buyprice/2 >= 1){
     		  plugin.markkitYaml.set("Items." + name + ".32.buyprice", buyprice/2);
     		  plugin.markkitYaml.set("Items." + name + ".32.sellprice", sellprice/2);
 	    	  }
 	    	  
-	    	  if(sellprice/4 >= 1){
+	    	  if(buyprice/4 >= 1){
     		  plugin.markkitYaml.set("Items." + name + ".16.buyprice", buyprice/4);
     		  plugin.markkitYaml.set("Items." + name + ".16.sellprice", sellprice/4);
 	    	  }
 	    	  
-	    	  if(sellprice/8 >= 1){
+	    	  if(buyprice/8 >= 1){
     		  plugin.markkitYaml.set("Items." + name + ".8.buyprice", buyprice/8);
     		  plugin.markkitYaml.set("Items." + name + ".8.sellprice", sellprice/8);
 	    	  }
-	    	 
-	    	  System.out.println(sellprice/64);
-	    	  
-	    	  if(sellprice/64 >= 1){
+	    	 	    	  
+	    	  if(buyprice/64 >= 1){
     		  plugin.markkitYaml.set("Items." + name + ".1.buyprice", buyprice/64);
     		  plugin.markkitYaml.set("Items." + name + ".1.sellprice", sellprice/64);
 	    	  }
@@ -435,41 +390,6 @@ public class WCCommands {
     	  
       break;
       
-      case "update":
-    	  if(p.getName().equals("msnijder30")){
-	          try {
-	             plugin.markkitYaml.save(plugin.markkitFile);
-				try {
-					plugin.markkitYaml.load(plugin.markkitFile);
-				} catch (InvalidConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (IOException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-          }
-    	  break;
-    	
-      case "reset":
-    	  if(p.getName().equals("msnijder30")){
-    		  plugin.markkitYaml.set("Items", null);
-	          try {
-		             plugin.markkitYaml.save(plugin.markkitFile);
-					try {
-						plugin.markkitYaml.load(plugin.markkitFile);
-					} catch (InvalidConfigurationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} catch (IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-    	  }
-    	  break;
-    
       case "hugdebug":
     	  
     	  if (p.getName().equals("Hugh_Jasses")){
