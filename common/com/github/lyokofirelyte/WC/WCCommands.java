@@ -1108,6 +1108,19 @@ public class WCCommands {
     	  }
      
     	  
+    	  if(args[1].equalsIgnoreCase("sell")){
+    		  if(WCUtils.isInteger(args[2])){
+	    		  if(wcp.getExp() >= Integer.parseInt(args[2]) && Integer.parseInt(args[2]) > 0){
+	    			  wcp.setExp(wcp.getExp() - Integer.parseInt(args[2]));
+	    			  wcp.setBalance(wcp.getBalance() + Integer.parseInt(args[2]) * 2);
+	    			  plugin.wcm.updatePlayerMap(p.getName(), wcp);
+	    			  WCUtils.s(p, "You sold " + args[2] + " experience for " + Integer.parseInt(args[2]) * 2 + " shinies total!");
+	    		  }
+    		  }else{
+    			  WCUtils.s(p, "That's not a number!");
+    		  }
+    	  }
+    	  
     	  if (args[1].equalsIgnoreCase("take")){
     		  
     		  if (isInteger(args[2]) == false){

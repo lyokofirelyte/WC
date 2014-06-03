@@ -45,7 +45,7 @@ import com.github.lyokofirelyte.WC.Commands.WCReport;
 import com.github.lyokofirelyte.WC.Commands.WCSell;
 import com.github.lyokofirelyte.WC.Commands.WCSoar;
 import com.github.lyokofirelyte.WC.Commands.WCSpawn;
-import com.github.lyokofirelyte.WC.Commands.WCSuggestion;
+import com.github.lyokofirelyte.WC.Commands.WCSuggest;
 import com.github.lyokofirelyte.WC.Commands.WCSuicide;
 import com.github.lyokofirelyte.WC.Commands.WCThis;
 import com.github.lyokofirelyte.WC.Commands.WCWB;
@@ -178,7 +178,7 @@ public class WCMain extends WCNode {
 	  pm.registerEvents(new WCSEEKRITPARTAY(this),this);
 	  pm.registerEvents(new WCLift(this), this);
 	  pm.registerEvents(new WCMineNDash(this), this);
-	  
+
 	  newCrafting();
 	  
 	  vaultMgr.hookSetup();
@@ -192,7 +192,7 @@ public class WCMain extends WCNode {
 	  url = config.getString("url");
 	  username = config.getString("username");
 	  password = config.getString("password");
-
+	  
 	    
 	  wcm = new WCManager(api);
 	  rm = new RebootManager(api);
@@ -303,8 +303,7 @@ public class WCMain extends WCNode {
 			  new WCThis(this),
 			  new WCWarps(this),
 			  new WCWB(this),
-			  new WCSuggestion(this),
-			  
+			  new WCSuggest(this),
 			  // Main WC Commands
 			  
 			  new WACommandEx(this),
